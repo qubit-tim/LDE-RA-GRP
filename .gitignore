@@ -28,5 +28,21 @@
 
 # Executables
 *.exe
+*.exe~
 *.out
 *.app
+
+# General
+.DS_Store
+
+# JetBrains IDEs
+.idea/
+
+# Thumbnails
+._*
+
+# IntelliJ
+out/
+
+# vscode
+.vscode/
