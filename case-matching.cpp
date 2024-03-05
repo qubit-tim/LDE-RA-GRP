@@ -42,23 +42,6 @@ std::vector<patternMatrix> loadPatterns(std::string filename)
     return patterns;
 }
 
-void duplicatePatternChecks() {
-    // Here we want to check for duplicate patterns within all of the pattern files
-    // This needs to include any rearranging of patterns and matching on transposes w/ rearrages
-    // My thought on doing this is to narrow down possibilities and then work from there
-    // - First, sort into cases
-    // - Second, compare each pattern to each other pattern in the same case
-    //   - To make this easier, the patternMatrix class could have a == operator setup
-    //   - To make that a bit quicker, we could count the number of 0s, 1s, 2s, 3s in each pattern and compare that first
-    //   - Then it might make sense to do something similar to what's done with the patterns and have a row and column count for each value
-    //   - Then we can compare those like what's done for the cases and go from there
-    //   - Actually, this makes a lot of sense.  The case matching looks at counts for 1s which could be extended into 0s, 2s, and 3s
-    //   - This will act like a signature for the pattern and make it a lot easier to compare
-    //   - I wonder if a unique signature or hash could be generated based on these counts and then do comparisons based on that
-    //   - Thinking a bit more, it might be quicker to do sort the patterns into buckets based on things we know about them, like what case they match,
-    //   - how many 0-3s they have, etc.  Then we can compare within the buckets
-}
-
 int main(int argc, char **argv) {
     std::vector<caseMatrix> cases = loadCases();
     for (caseMatrix cm : cases) {
@@ -90,7 +73,6 @@ int main(int argc, char **argv) {
                 std::cout << "Pattern " << pm.id << " matches: " << matchNumber << std::endl << std::endl;
                 matchedCasesFiles[matchNumber] << pm.id << " " << pm << std::endl;
             }
-            //pm.printDebug();
         }
         for (std::ofstream& matchedCasesFile : matchedCasesFiles) matchedCasesFile.close();
     }
