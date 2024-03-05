@@ -4,8 +4,6 @@ ztest: case-matrix.cpp pattern-matrix.cpp zmatrix.cpp ztest.cpp
 	g++ case-matrix.cpp pattern-matrix.cpp zmatrix.cpp ztest.cpp -std=c++11 -o ztest.out
 dupe-checks: case-matrix.cpp pattern-matrix.cpp zmatrix.cpp dupe-checks.cpp
 	g++ case-matrix.cpp pattern-matrix.cpp zmatrix.cpp dupe-checks.cpp -std=c++11 -o dupe-checks.out
-dupe-checks-2: case-matrix.cpp pattern-matrix.cpp zmatrix.cpp dupe-checks-2.cpp
-	g++ case-matrix.cpp pattern-matrix.cpp zmatrix.cpp dupe-checks-2.cpp -std=c++11 -o dupe-checks-2.out
 convert-patterns: case-matrix.cpp pattern-matrix.cpp zmatrix.cpp convert-patterns.cpp
 	g++ case-matrix.cpp pattern-matrix.cpp zmatrix.cpp convert-patterns.cpp -std=c++11 -o convert-patterns.out
 pattern-file-checks: case-matrix.cpp pattern-matrix.cpp zmatrix.cpp pattern-file-checks.cpp

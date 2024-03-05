@@ -81,10 +81,7 @@ rearrangedPattern setupRows(std::vector<std::vector<int>> pmRows, int curRow) {
                 break;
             case 5:
                 // now we have a fuly formed matrix that matches the case 8 b layout, so we can print it out and claim victory
-                // std::cout << "Rearranged pattern to match case 8 layout: " << std::endl;
                 return rearrangedPattern{pmRows, true};
-                // printMatrix(pmRows);
-                // Here we need to make sure that the rearranged pattern we have is unique and, if so, write it to the output file
                 break;
         }
     }
@@ -181,13 +178,6 @@ rearrangedPattern case8brearange(patternMatrix pm) {
 }
 
 int main(int argc, char **argv) {
-    /*
-    What needs to be done here...
-    First, go through the file of patterns and extract out the case 8 matches
-        or we can just load the case-8 matches from the 928 case 8 match file, which is probably a better approach
-    Then, we need to rearrange the pattern to match the case 8 layout.  There might be more than one way to do this, so we'll need to check all of them.
-        I suspect this means there will be a need for recursion.
-    */
     // std::string patternFile = "case8-test-match-pattern.txt";
     // std::string patternFile = "case8-matches-patterns785.txt";
     // std::string case8file = "case8b/case8-785-rearranged.txt";
