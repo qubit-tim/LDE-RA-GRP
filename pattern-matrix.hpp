@@ -13,6 +13,7 @@ class patternMatrix {
         int id928 = 0;   // Identifier for the 928 pattern
         int id785 = 0;   // Identifier for the 785 pattern
         int caseMatch;
+        int subCaseMatch;
         // << operator flags
         bool printID = false;
         bool printCaseMatch = false;
@@ -32,11 +33,14 @@ class patternMatrix {
         bool is23SwapT(patternMatrix other);
         void printDebug();
         friend std::ostream& operator<<(std::ostream&,const patternMatrix &);
+        void leftTGateMultiply(int p, int q);
+        void rightTGateMultiply(int p, int q);
     private:
         int rows = 6;
         int cols = 6;
         void printMatchComparison(caseMatrix cm);
         void rearrangeMatrix(caseMatrix cm);
+        int patternElementAddition(int a, int b);
 };
 
 #endif // PATTERN_MATRIX_HPP

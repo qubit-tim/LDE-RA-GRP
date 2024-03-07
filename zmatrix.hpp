@@ -11,6 +11,7 @@ class zmatrix {
         void updateMetadata();
         bool operator==(const zmatrix &) const;
         bool operator!=(const zmatrix &) const;
+        zmatrix operator*(const zmatrix &) const;
         std::vector<std::vector<int>> z;
         bool strictMatch = true;  // If true, the matrix must be an exact match for the == operator to return true
         int zSum;

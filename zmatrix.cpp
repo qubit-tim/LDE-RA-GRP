@@ -163,3 +163,20 @@ bool zmatrix::operator==(const zmatrix &other) const {
 bool zmatrix::operator!=(const zmatrix &other) const {
     return !(*this == other);
 }
+
+zmatrix zmatrix::operator*(const zmatrix &rhs) const {
+    // Check if the dimensions match for matrix multiplication
+    if (z.size() != rhs.z[0].size() || z[0].size() != rhs.z.size()) {
+        throw std::invalid_argument("Matrix dimensions do not match");
+    }
+    zmatrix result;
+    for (int i = 0; i < rhs.z.size(); i++) {
+        std::vector<int> row;
+        for (int j = 0; j < rhs.z[i].size(); j++) {
+            // multiply the elements of the row of the first matrix by the elements of the column of the second matrix
+            row.push_back(z[i][j] * rhs.z[j][i]);
+        }
+        result.z.push_back(row);
+    }
+    return result;
+}
