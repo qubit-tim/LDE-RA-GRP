@@ -9,6 +9,7 @@
 
 patternMatrix::patternMatrix(int pNum, std::string matrix) {
     caseMatch = -1;
+    subCaseMatch = -1;
     id = pNum;
     p = zmatrix(rows, cols, 3);
     pT = zmatrix(cols, rows, 3);
@@ -201,3 +202,70 @@ void patternMatrix::rearrangeMatrix(caseMatrix cm) {
     std::cout << "NOT IMPLEMENTED YET" << std::endl;
 }
 
+// Do something with factorization of the sqrt(2) and the modulo 2 addition
+//  Need to make sure that we handle all of the different outcomes as some may produce multiple
+//   See your notes for that.
+
+
+// TODO: Need to track LDEs here
+// Left T-gate multiplication means adding rows p, q and replacing both with the result
+void patternMatrix::leftTGateMultiply(int pRow, int qRow) {
+    //  Handle left T-gate multiplication
+    //  This means adding rows p, q and replacing both with the result
+    //  This might be different when p > q
+    // TODO: Need to track LDEs here
+    int result;
+    for (int i = 0; i < p.z[pRow].size(); i++) {
+        result = patternElementAddition(p.z[pRow][i], p.z[qRow][i]);
+        p.z[pRow][i] = result;
+        p.z[qRow][i] = result;
+        // Do factorization
+        // Check which case they match
+        //  If they don't match a case, then remove the pattern
+    }
+}
+
+// TODO: Need to track LDEs here
+// Right T-gate multiplication means adding columns p, q and replacing both with the result
+void patternMatrix::rightTGateMultiply(int pCol, int qCol) {
+    //  Handle right T-gate multiplication
+    //  This means adding column p, q and replacing both with the result
+    //  This might be different when p > q
+    // TODO: Need to track LDEs here
+    int result;
+    for (int i = 0; i < p.z.size(); i++) {
+        result = patternElementAddition(p.z[i][pCol], p.z[i][qCol]);
+        p.z[i][pCol] = result;
+        p.z[i][qCol] = result;
+        // Do factorization
+    }
+}
+
+// TODO: We need to return any LDE increases here
+//    which probably means returning a struct or modifying a,b by reference and returning the LDE increase
+int patternMatrix::patternElementAddition(int a, int b) {
+    // TODO: Put the logic for this someplace and reference it here
+    // This is not "real" addition here.  What's really happening is that we are
+    //  adding the modulo 2 of the N and M values from N + M*sqrt(2)
+    //  and then taking the modulo 2 of the individual results
+    //  where N is bit 1 and M is bit 0:
+    //    Examples:  0 == N=0, M=0
+    //               1 == N=0, M=1
+    //               2 == N=1, M=0
+    //               3 == N=1, M=1
+    // Pattern addition properties based on above:
+    //  0 + 0,1,2,3 = 0,1,2,3
+    //  1 + 1,2,3 = 0,3,2
+    //  2 + 2,3 = 0,1
+    //  3 + 3 = 0
+    // Each step below whittles down the possibilities so each successive if statement handles fewer cases
+    // This handles the case where a and b are the same
+    if (a == b) return 0;
+    // This handles all the remaining cases where a or b are 0
+    else if (a == 0 || b == 0) return a + b;
+    // This handles all the remaining cases where a or b are 1.  All that's left though is 1+2=3 or 1+3=2
+    else if (a == 1 || b == 1) return (a + b == 4) ? 2 : 3;
+    // Now, all that's left is 2+3=1
+    else if (a == 2 || b == 2) return 1;
+    return -1;  // This should never happen
+}
