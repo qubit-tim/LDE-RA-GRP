@@ -202,33 +202,46 @@ void patternMatrix::rearrangeMatrix(caseMatrix cm) {
     std::cout << "NOT IMPLEMENTED YET" << std::endl;
 }
 
+// Do something with factorization of the sqrt(2) and the modulo 2 addition
+//  Need to make sure that we handle all of the different outcomes as some may produce multiple
+//   See your notes for that.
+
+
+// TODO: Need to track LDEs here
+// Left T-gate multiplication means adding rows p, q and replacing both with the result
 void patternMatrix::leftTGateMultiply(int pRow, int qRow) {
     //  Handle left T-gate multiplication
     //  This means adding rows p, q and replacing both with the result
     //  This might be different when p > q
-    // TODO: We might need to track LDEs here
+    // TODO: Need to track LDEs here
     int result;
     for (int i = 0; i < p.z[pRow].size(); i++) {
         result = patternElementAddition(p.z[pRow][i], p.z[qRow][i]);
         p.z[pRow][i] = result;
         p.z[qRow][i] = result;
+        // Do factorization
+        // Check which case they match
+        //  If they don't match a case, then remove the pattern
     }
 }
 
+// TODO: Need to track LDEs here
+// Right T-gate multiplication means adding columns p, q and replacing both with the result
 void patternMatrix::rightTGateMultiply(int pCol, int qCol) {
     //  Handle right T-gate multiplication
     //  This means adding column p, q and replacing both with the result
     //  This might be different when p > q
-    // TODO: We might need to track LDEs here
+    // TODO: Need to track LDEs here
     int result;
     for (int i = 0; i < p.z.size(); i++) {
         result = patternElementAddition(p.z[i][pCol], p.z[i][qCol]);
         p.z[i][pCol] = result;
         p.z[i][qCol] = result;
+        // Do factorization
     }
 }
 
-// TODO: We might need to return any LDE increases here
+// TODO: We need to return any LDE increases here
 //    which probably means returning a struct or modifying a,b by reference and returning the LDE increase
 int patternMatrix::patternElementAddition(int a, int b) {
     // TODO: Put the logic for this someplace and reference it here

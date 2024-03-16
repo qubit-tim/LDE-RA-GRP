@@ -50,5 +50,10 @@ std::vector<patternMatrix> loadPatterns(std::string filename)
 
 int main(int argc, char **argv) {
     // Load up the case 8b pattern matrix
+    std::string case8bFile = "case8b/case8b-928-rearranged.txt";
+    std::vector<patternMatrix> patterns = loadPatterns(case8bFile);
+
+    std::cout << "WIP" << std::endl;
+    
     return 0;
 }
