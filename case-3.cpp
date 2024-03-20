@@ -168,9 +168,9 @@ int main(int argc, char **argv) {
     // Rearrange case 3 files and look for the 2 patterns on top left of page 12
     //  Then do the multiplication to see where we land
 
-    std::string patternFile = "case3-matches-patterns785.txt";
-    std::string case3File = "case3/case3-785-rearranged.txt";
-    std::string case3FileDetails = "case3/case3-785-rearranged-details.txt";
+    std::string patternFile = "case3-matches-patterns928.txt";
+    std::string case3File = "case3/case3-928-rearranged.txt";
+    std::string case3FileDetails = "case3/case3-928-rearranged-details.txt";
     std::vector<patternMatrix> patterns = loadPatterns("matched-cases/" + patternFile);
     std::ofstream case3Out(case3File);
     std::ofstream case3OutDets(case3FileDetails);
@@ -188,12 +188,12 @@ int main(int argc, char **argv) {
         if (rp.done) {
             int subCase = case3SubCase(rp.rearrangedMatrix);
             if (subCase == -1) {
-                case3OutDets << "Pattern " << pm.id << ":" << pm << " is case 3 but not a subcase we are looking for" << subCase << std::endl;
-                case3OutDets << "Rearranged pattern: " << std::endl;
-                printMatrix(case3OutDets, rp.rearrangedMatrix, true);
+                case3OutDets << "Pattern " << pm.id << ":" << pm << " is case 3 but not a subcase we are looking for " << subCase << std::endl;
+                // case3OutDets << "Rearranged pattern: " << std::endl;
+                // printMatrix(case3OutDets, rp.rearrangedMatrix, true);
                 continue;
             }
-            case3OutDets << "Pattern " << pm.id << ":" << pm << " is case 3 " << subCase << std::endl;
+            case3OutDets << "Pattern " << pm.id << ":" << pm << " is case 3-" << subCase << std::endl;
             case3OutDets << "Rearranged pattern to match case 3 layout: " << std::endl;
             printMatrix(case3OutDets, rp.rearrangedMatrix, true);
             case3Out << pm.id << " ";  // not printing the subcase here becuase it's not necessary
