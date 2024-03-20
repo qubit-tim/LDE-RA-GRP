@@ -54,30 +54,21 @@ rearrangedPattern setupColumns(std::vector<std::vector<int>> pmCols, int curColu
     std::vector<int> vTemp;
     for (int i = curColumn; i < pmCols.size(); i++) {
         switch (curColumn) {
-            // These columns must be 2s to match the first row of 8b
-            case 0: case 2: 
-                if (pmCols[i][0] != 2) break;
+            case 0: case 1: case 2: case 3: {
+                int count = 0;
+                for (int j = 0; j < pmCols[i].size(); j++) {
+                    if (pmCols[i][j] == 2 || pmCols[i][j] == 3) count++;
+                }
+                if (count != 4) break;
                 vTemp = pmCols[curColumn];
                 pmCols[curColumn] = pmCols[i];
                 pmCols[i] = vTemp;
                 return setupColumns(pmCols, curColumn + 1);
                 break;
-            // These columns must be 3s to match the first row of 8b
-            case 1: case 3:
-                if (pmCols[i][0] != 3) break;
-                vTemp = pmCols[curColumn];
-                pmCols[curColumn] = pmCols[i];
-                pmCols[i] = vTemp;
-                return setupColumns(pmCols, curColumn + 1);
-                break;
+            }
             // This column must be 0s or 1s, which, by default, it should be
             case 4:
                 // Return the first combo
-                return setupColumns(pmCols, curColumn + 1);
-                // Setup and return the final combo
-                vTemp = pmCols[curColumn];
-                pmCols[curColumn] = pmCols[i];
-                pmCols[i] = vTemp;
                 return setupColumns(pmCols, curColumn + 1);
                 break;
             // This column must be 0s or 1s, which, by default, it should be
@@ -113,7 +104,7 @@ rearrangedPattern setupRows(std::vector<std::vector<int>> pmRows, int curRow) {
             case 0: case 1: case 2: case 3: {
                 int count = 0;
                 for (int j = 0; j < pmRows[i].size(); j++) {
-                    if (pmRows[i][j] == 2 && pmRows[i][j] == 3) count++;
+                    if (pmRows[i][j] == 2 || pmRows[i][j] == 3) count++;
                 }
                 if (count != 4) break;
                 vTemp = pmRows[curRow];
@@ -132,6 +123,7 @@ rearrangedPattern setupRows(std::vector<std::vector<int>> pmRows, int curRow) {
             }
         }
     }
+    std::cout << "Rows set: " << rowsSet << std::endl;
     if (!rowsSet) return rearrangedPattern{pmRows, false};
     // Setup the columns view before trying to set the columns
     printMatrix(std::cout, pmRows, true);
@@ -140,7 +132,6 @@ rearrangedPattern setupRows(std::vector<std::vector<int>> pmRows, int curRow) {
         for (int j = 0; j < pmRows[i].size(); j++) {
             pmCols[j][i] = pmRows[i][j];
         }
-        
     }
     return setupColumns(pmCols, 0);
 }
@@ -151,16 +142,14 @@ rearrangedPattern case3rearange(patternMatrix pm) {
     rearrangedPattern rp;
     rp.done = false;
     for (int i = 0; i < pm.p.z.size(); i++) {
-        // We are going to start with columns because that's how the case 8b went and will be easier to implement
-        std::vector<std::vector<int>> pmCols = pm.pT.z;
-        rp = setupColumns(pmCols, 0);
+        std::vector<std::vector<int>> pmRows = pm.p.z;
+        rp = setupRows(pmRows, 0);
     }
     if (rp.done) return rp;
     for (int i = 0; i < pm.pT.z.size(); i++) {
-        // We are going to start with columns because that's how the case 8b went and will be easier to implement
         // But since we are doing the transpose, we need to use the original pattern matrix to start
-        std::vector<std::vector<int>> pmCols = pm.p.z;
-        rp = setupColumns(pmCols, 0);
+        std::vector<std::vector<int>> pmRows = pm.pT.z;
+        rp = setupRows(pmRows, 0);
     }
     return rp;
 }
