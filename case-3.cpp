@@ -123,10 +123,8 @@ rearrangedPattern setupRows(std::vector<std::vector<int>> pmRows, int curRow) {
             }
         }
     }
-    std::cout << "Rows set: " << rowsSet << std::endl;
     if (!rowsSet) return rearrangedPattern{pmRows, false};
     // Setup the columns view before trying to set the columns
-    printMatrix(std::cout, pmRows, true);
     std::vector<std::vector<int>> pmCols = pmRows;  // set to columns to get the correct size
     for (int i = 0; i < pmRows.size(); i++) {
         for (int j = 0; j < pmRows[i].size(); j++) {
