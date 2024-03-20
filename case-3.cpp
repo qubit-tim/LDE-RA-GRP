@@ -168,9 +168,9 @@ int main(int argc, char **argv) {
     // Rearrange case 3 files and look for the 2 patterns on top left of page 12
     //  Then do the multiplication to see where we land
 
-    std::string patternFile = "case3-matches-patterns928.txt";
-    std::string case3File = "case3/case3-928-rearranged.txt";
-    std::string case3FileDetails = "case3/case3-928-rearranged-details.txt";
+    std::string patternFile = "case3-matches-patterns785.txt";
+    std::string case3File = "case3/case3-785-rearranged.txt";
+    std::string case3FileDetails = "case3/case3-785-rearranged-details.txt";
     std::vector<patternMatrix> patterns = loadPatterns("matched-cases/" + patternFile);
     std::ofstream case3Out(case3File);
     std::ofstream case3OutDets(case3FileDetails);
