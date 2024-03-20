@@ -158,8 +158,8 @@ int case3SubCase(std::vector<std::vector<int>> z) {
     int rightSum = z[0][4] + z[0][5] + z[1][4] + z[1][5] + z[2][4] + z[2][5] + z[3][4] + z[3][5];
     int sqSum = z[4][4] + z[4][5] + z[5][4] + z[5][5];
     int bottomSum = z[4][0] + z[4][1] + z[4][2] + z[4][3] + z[5][0] + z[5][1] + z[5][2] + z[5][3];
-    if (sqSum == 4 && rightSum == 0 || bottomSum == 0) return 1;
-    else if (sqSum == 0 && rightSum == 8 || bottomSum == 8) return 2;
+    if (sqSum == 4 && (rightSum == 0 || bottomSum == 0)) return 1;
+    else if (sqSum == 0 && (rightSum == 8 || bottomSum == 8)) return 2;
     return -1; 
 }
 
