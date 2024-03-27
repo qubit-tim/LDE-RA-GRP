@@ -187,14 +187,35 @@ int main(int argc, char **argv) {
             int subCase = case3SubCase(rp.rearrangedMatrix);
             if (subCase == -1) {
                 case3OutDets << "Pattern " << pm.id << ":" << pm << " is case 3 but not a subcase we are looking for " << subCase << std::endl;
-                // case3OutDets << "Rearranged pattern: " << std::endl;
-                // printMatrix(case3OutDets, rp.rearrangedMatrix, true);
+                // Don't print the matrix for this one
                 continue;
             }
             case3OutDets << "Pattern " << pm.id << ":" << pm << " is case 3-" << subCase << std::endl;
             case3OutDets << "Rearranged pattern to match case 3 layout: " << std::endl;
             printMatrix(case3OutDets, rp.rearrangedMatrix, true);
-            case3Out << pm.id << " ";  // not printing the subcase here becuase it's not necessary
+            // We are only concerned with the first 4 rows of case 3
+            for (int i = 0; i < 4; i++) {
+                for (int j = i+1; j < 4; j++) {
+                    if (rp.rearrangedMatrix[i] == rp.rearrangedMatrix[j]) {
+                        case3OutDets << "Rows " << i+1 << " and " << j+1 << " are duplicates." << std::endl;
+                    }
+                }
+            }
+            std::vector<std::vector<int>> pmCols = rp.rearrangedMatrix;  // set to columns to get the correct size
+            for (int i = 0; i < rp.rearrangedMatrix.size(); i++) {
+                for (int j = 0; j < rp.rearrangedMatrix[i].size(); j++) {
+                    pmCols[j][i] = rp.rearrangedMatrix[i][j];
+                }
+            }
+            // We are only concerned with the first 4 columns of case 3
+            for (int i = 0; i < 4; i++) {
+                for (int j = i+1; j < 4; j++) {
+                    if (pmCols[i] == pmCols[j]) {
+                        case3OutDets << "Columns " << i+1 << " and " << j+1 << " are duplicates." << std::endl;
+                    }
+                }
+            }
+            case3Out << pm.id << " ";
             printMatrix(case3Out, rp.rearrangedMatrix, false);
         }
     }
