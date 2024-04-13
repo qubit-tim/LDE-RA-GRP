@@ -260,6 +260,18 @@ int patternMatrix::patternElementAddition(int a, int b) {
     //  3 + 3 = 0
     // Each step below whittles down the possibilities so each successive if statement handles fewer cases
     // This handles the case where a and b are the same
+    // After pulling sqrt(2) out immediately...
+    //  0 + 0 = 0,0 or 1,1 (same parity)
+    //  1 + 1 = 0,0 or 1,1 (same parity)
+    //  2 + 2 = 0,1 or 1,0 (different parity)
+    //  3 + 3 = 0,1 or 1,0 (different parity)
+    //  2 + 3 = 2,3 or 3,2 (different parity)
+    // These you cannot pull the sqrt(2) out immediatley and need another T
+    //    Try to avoid these!!!
+    //  1 + 2 = 3
+    //  1 + 3 = 2
+    // Note from Ming
+    // (“0”+-”1”)/sqrt2 is “2” and “2” or “3” and “3” ( same parity)
     if (a == b) return 0;
     // This handles all the remaining cases where a or b are 0
     else if (a == 0 || b == 0) return a + b;
