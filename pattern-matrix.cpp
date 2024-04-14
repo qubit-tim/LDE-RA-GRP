@@ -7,32 +7,32 @@
 #include "pattern-matrix.hpp"
 #include "zmatrix.hpp"
 
+
+patternMatrix::patternMatrix() {
+    init();
+}
+
 patternMatrix::patternMatrix(int pNum, std::string matrix) {
-    caseMatch = -1;
-    subCaseMatch = -1;
+    init();
     id = pNum;
-    p = zmatrix(rows, cols, 3);
-    pT = zmatrix(cols, rows, 3);
-    swap23 = zmatrix(rows, cols, 3);
-    swap23T = zmatrix(cols, rows, 3);
-    cV = zmatrix(rows, cols, 1);
-    cV.strictMatch = false;  // case matrices do not need to match element to element since they can be rearranged to match
-    cVT = zmatrix(cols, rows, 1);
-    cVT.strictMatch = false;  // case matrices do not need to match element to element since they can be rearranged to match
     loadFromString(matrix);
 }
 
 void patternMatrix::loadFromString(std::string m) {
+    if (m.size() == 0) throw std::runtime_error("Empty pattern string");
+    std::cout << "Pattern String: " << m << std::endl;
     std::stringstream ms(m);
     std::string r;
     int row = 0;
     while(std::getline(ms, r, ']')) {
         if(row == rows) throw std::runtime_error("Too many rows in pattern string");
+        std::cout << "here1" << std::endl;
         std::stringstream rs(r);
         std::string v;
         int mv;
         int col = 0;
         while(std::getline(rs, v, ',')) {
+            std::cout << "here2" << std::endl;
             if(col == cols) throw std::runtime_error("Too many columns in pattern string");
             if(v[0] == '[') v.erase(0,1);
             
@@ -51,7 +51,7 @@ void patternMatrix::loadFromString(std::string m) {
                 vErr << "Invalid value in pattern string: " << v ;
                 throw std::runtime_error(vErr.str());
             }
-
+            std::cout << "row: " << row << " col: " << col << " mv: " << mv << std::endl;
             p.z[row][col] = mv;
             pT.z[col][row] = mv;
             swap23.z[row][col] = (mv == 2) ? 3 : (mv == 3) ? 2 : mv;
@@ -72,6 +72,7 @@ void patternMatrix::loadFromString(std::string m) {
         rowErr << "Too few rows in pattern string: " << row << " instead of " << rows;
         throw std::runtime_error(rowErr.str());
     } 
+    std::cout << "here4" << std::endl;
     p.updateMetadata();
     pT.updateMetadata();
     cV.updateMetadata();
@@ -280,4 +281,18 @@ int patternMatrix::patternElementAddition(int a, int b) {
     // Now, all that's left is 2+3=1
     else if (a == 2 || b == 2) return 1;
     return -1;  // This should never happen
+}
+
+void patternMatrix::init() {
+    id = 0;
+    caseMatch = -1;
+    subCaseMatch = -1;
+    p = zmatrix(rows, cols, 3);
+    pT = zmatrix(cols, rows, 3);
+    swap23 = zmatrix(rows, cols, 3);
+    swap23T = zmatrix(cols, rows, 3);
+    cV = zmatrix(rows, cols, 1);
+    cV.strictMatch = false;  // case matrices do not need to match element to element since they can be rearranged to match
+    cVT = zmatrix(cols, rows, 1);
+    cVT.strictMatch = false;  // case matrices do not need to match element to element since they can be rearranged to match
 }
