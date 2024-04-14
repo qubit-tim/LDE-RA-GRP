@@ -6,6 +6,7 @@
 
 class patternMatrix {
     public:
+        patternMatrix();
         patternMatrix(int patternNumber, std::string matrix);
         int id;  // Primary identifier for the pattern
         // These identifiers start at 1 and increase with 0 meaning it's not in the file
@@ -35,12 +36,14 @@ class patternMatrix {
         friend std::ostream& operator<<(std::ostream&,const patternMatrix &);
         void leftTGateMultiply(int p, int q);
         void rightTGateMultiply(int p, int q);
-    private:
-        int rows = 6;
-        int cols = 6;
+        // These could be private but are public for testing
         void printMatchComparison(caseMatrix cm);
         void rearrangeMatrix(caseMatrix cm);
         int patternElementAddition(int a, int b);
+    private:
+        void init();
+        int rows = 6;
+        int cols = 6;
 };
 
 #endif // PATTERN_MATRIX_HPP

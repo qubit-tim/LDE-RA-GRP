@@ -25,3 +25,5 @@ Code written to take pattern files, match them to cases, and then work through t
 28 Feb 2024 - This code is a bit messy and could use some clean up / refactoring.  I'd also like to have this as a pipeline where a pattern can go through all the steps in one go.  Perhaps one day when I have more time.
 
 16 Mar 2024 - The case matching should be moved into the pattern matrix class along with the concept of case traversal.  Oh, and adding tests would be nice.
+
+14 Apr 2024 - Need to add some verbiage for Bazel and running tests.  Will do that after more tests are done.  Also things could be moved around and cleaned up to adhere to https://google.github.io/styleguide/cppguide.html.
