@@ -23,7 +23,6 @@ cc_library(
     hdrs = ["zmatrix.hpp"],
 )
 
-# This is just an example at this point
 cc_test(
   name = "pattern-matrix_test",
   size = "small",
@@ -31,5 +30,25 @@ cc_test(
   deps = [
       "@googletest//:gtest_main",
       ":pattern-matrix",
+      ],
+)
+
+cc_test(
+  name = "zmatrix_test",
+  size = "small",
+  srcs = ["zmatrix_test.cpp"],
+  deps = [
+      "@googletest//:gtest_main",
+      ":zmatrix",
+      ],
+)
+
+cc_test(
+  name = "case-matrix_test",
+  size = "small",
+  srcs = ["case-matrix_test.cpp"],
+  deps = [
+      "@googletest//:gtest_main",
+      ":case-matrix",
       ],
 )
