@@ -172,7 +172,10 @@ std::ostream& operator<<(std::ostream& os, const zmatrix &zm) {
     }
     return os;
 }
-
+// Check if two matrices are considered equal
+//  This means that the matrices can be rearranged to match but don't have to be in the same order
+//  This does not mean that the matrices are exactly the same
+//  Also, this does not check for transposition equality
 bool zmatrix::operator==(const zmatrix &other) const {
     if (zSum != other.zSum) return false;
     if (zNumCounts != other.zNumCounts) return false;
