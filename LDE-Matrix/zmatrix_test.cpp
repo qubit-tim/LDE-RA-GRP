@@ -428,10 +428,21 @@ TEST(ZMatrixTest, ZMatrixEqualityOperator) {
     z2.z = CASE7;
     z2.updateMetadata();
     EXPECT_FALSE(z1 == z2);
-    // TODO - Add tests for these cases
-    // if (rows != other.rows) return false;
-    // if (cols != other.cols) return false;
-    // if (maxValue != other.maxValue) return false;
+    // Test for different size matrices and different max values
+    zmatrix t1 = zmatrix(2, 2, 2);
+    t1.z = {{1, 1}, {1, 1}};
+    zmatrix t2 = zmatrix(3, 2, 2);
+    t2.z = {{1, 1}, {1, 1}, {1, 1}};
+    zmatrix t3 = zmatrix(2, 3, 2);
+    t3.z = {{1, 1, 1}, {1, 1, 1}};
+    zmatrix t4 = zmatrix(2, 2, 3);
+    t3.z = {{1, 1}, {1, 1}};
+    EXPECT_FALSE(t1 == t2); // Row counts don't match
+    EXPECT_FALSE(t1 == t3); // Columns counts don't match
+    EXPECT_FALSE(t1 == t4); // Max Values don't match
+    EXPECT_FALSE(t2 == t3); // Row and Column counts don't match
+    EXPECT_FALSE(t2 == t4); // Row counts and Max Values don't match
+    EXPECT_FALSE(t3 == t4); // Column counts and Max Values don't match
 }
 
 TEST(ZMatrixTest, ZMatrixStrictMatch) {
