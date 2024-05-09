@@ -177,6 +177,9 @@ std::ostream& operator<<(std::ostream& os, const zmatrix &zm) {
 //  This does not mean that the matrices are exactly the same
 //  Also, this does not check for transposition equality
 bool zmatrix::operator==(const zmatrix &other) const {
+    if (rows != other.rows) return false;
+    if (cols != other.cols) return false;
+    if (maxValue != other.maxValue) return false;
     if (zSum != other.zSum) return false;
     if (zNumCounts != other.zNumCounts) return false;
     if (zRowCounts.size() != other.zRowCounts.size()) return false;

@@ -428,6 +428,10 @@ TEST(ZMatrixTest, ZMatrixEqualityOperator) {
     z2.z = CASE7;
     z2.updateMetadata();
     EXPECT_FALSE(z1 == z2);
+    // TODO - Add tests for these cases
+    // if (rows != other.rows) return false;
+    // if (cols != other.cols) return false;
+    // if (maxValue != other.maxValue) return false;
 }
 
 TEST(ZMatrixTest, ZMatrixStrictMatch) {

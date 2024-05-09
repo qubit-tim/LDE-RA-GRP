@@ -14,6 +14,7 @@ caseMatrix::caseMatrix(int caseNumber, std::string matrix) {
 }
 
 void caseMatrix::loadFromString(std::string m) {
+    if (m.size() == 0) throw std::runtime_error("Empty pattern string");
     std::stringstream ms(m);
     std::string r;
     int row = 0;

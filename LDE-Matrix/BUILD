@@ -7,14 +7,6 @@ cc_library(
     hdrs = ["zmatrix.hpp"],
 )
 
-cc_library(
-    name = "case-matrix",
-    srcs = ["case-matrix.cpp"],
-    hdrs = ["case-matrix.hpp"],
-    deps = [":zmatrix"],
-)
-
-# Tests
 cc_test(
   name = "zmatrix_test",
   size = "small",
@@ -25,6 +17,13 @@ cc_test(
       ],
 )
 
+cc_library(
+    name = "case-matrix",
+    srcs = ["case-matrix.cpp"],
+    hdrs = ["case-matrix.hpp"],
+    deps = [":zmatrix"],
+)
+
 cc_test(
   name = "case-matrix_test",
   size = "small",
@@ -32,5 +31,25 @@ cc_test(
   deps = [
       "@googletest//:gtest_main",
       ":case-matrix",
+      ],
+)
+
+cc_library(
+    name = "pattern-matrix",
+    srcs = ["pattern-matrix.cpp"],
+    hdrs = ["pattern-matrix.hpp"],
+    deps = [
+        ":case-matrix",
+        ":zmatrix",
+        ],
+)
+
+cc_test(
+  name = "pattern-matrix_test",
+  size = "small",
+  srcs = ["pattern-matrix_test.cpp"],
+  deps = [
+      "@googletest//:gtest_main",
+      ":pattern-matrix",
       ],
 )
