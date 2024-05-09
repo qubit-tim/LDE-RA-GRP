@@ -16,6 +16,15 @@ std::vector<std::vector<int>> CASE1 = {
     {0, 0, 0, 0, 0, 0}
 };
 
+std::vector<std::vector<int>> CASE1_REARRANGED = {
+    {0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0},
+    {0, 0, 1, 1, 0, 0},
+    {0, 0, 1, 1, 0, 0},
+    {0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0}
+};
+
 std::vector<std::vector<int>> CASE7 = {
     {1, 1, 0, 0, 0, 0},
     {1, 1, 0, 0, 0, 0},
@@ -36,6 +45,15 @@ std::vector<std::vector<int>> PATTERN_A = {
 
 std::vector<std::vector<int>> PATTERN_B = {
     {3, 2, 0, 0, 0, 0},
+    {3, 2, 0, 0, 0, 0},
+    {1, 1, 3, 3, 1, 1},
+    {1, 1, 3, 3, 1, 1},
+    {0, 0, 0, 0, 3, 2},
+    {0, 0, 0, 0, 2, 3}
+};
+
+std::vector<std::vector<int>> NEGATIVE_VALUE_PATTERN = {
+    {-1, -1, 0, 0, 0, 0},
     {3, 2, 0, 0, 0, 0},
     {1, 1, 3, 3, 1, 1},
     {1, 1, 3, 3, 1, 1},
@@ -385,21 +403,66 @@ TEST(ZMatrixTest, ZMatrixUpdateMetadata) {
             }
         }
     }
+    // Test Max Value Exception
+    zmatrix zMaxValueException = zmatrix(ROWS, COLS, PATTERN_MAX_VALUE-1);
+    // Load a pattern with a value equal to the max value
+    zMaxValueException.z = PATTERN_A;
+    EXPECT_THROW(zMaxValueException.updateMetadata(),std::runtime_error);
+    // Test Negative Value Exception
+    zmatrix zNegativeValueException = zmatrix(ROWS, COLS, PATTERN_MAX_VALUE);
+    zNegativeValueException.z = NEGATIVE_VALUE_PATTERN;
+    EXPECT_THROW(zNegativeValueException.updateMetadata(),std::runtime_error);
+}
+
+TEST(ZMatrixTest, ZMatrixEqualityOperator) {
+    zmatrix z1 = zmatrix(ROWS, COLS, CASE_MAX_VALUE);
+    zmatrix z2 = zmatrix(ROWS, COLS, CASE_MAX_VALUE);
+    z1.z = CASE1;
+    z2.z = CASE1;
+    z1.updateMetadata();
+    z2.updateMetadata();
+    EXPECT_TRUE(z1 == z2);
+    z2.z = CASE1_REARRANGED;
+    z2.updateMetadata();
+    EXPECT_TRUE(z1 == z2);
+    z2.z = CASE7;
+    z2.updateMetadata();
+    EXPECT_FALSE(z1 == z2);
+}
+
+TEST(ZMatrixTest, ZMatrixStrictMatch) {
+    zmatrix z1 = zmatrix(ROWS, COLS, CASE_MAX_VALUE);
+    zmatrix z2 = zmatrix(ROWS, COLS, CASE_MAX_VALUE);
+    z1.z = CASE1;
+    z2.z = CASE1;
+    z1.updateMetadata();
+    z2.updateMetadata();
+    EXPECT_TRUE(z1.strictMatch(z2));
+    z2.z = CASE1_REARRANGED;
+    z2.updateMetadata();
+    EXPECT_FALSE(z1.strictMatch(z2));
+    z2.z = CASE7;
+    z2.updateMetadata();
+    EXPECT_FALSE(z1.strictMatch(z2));
+}
+
+TEST(ZMatrixTest, ZMatrixNotEqualOperator) {
+    zmatrix z1 = zmatrix(ROWS, COLS, CASE_MAX_VALUE);
+    zmatrix z2 = zmatrix(ROWS, COLS, CASE_MAX_VALUE);
+    z1.z = CASE1;
+    z2.z = CASE1;
+    z1.updateMetadata();
+    z2.updateMetadata();
+    EXPECT_FALSE(z1 != z2);
+    z2.z = CASE1_REARRANGED;
+    z2.updateMetadata();
+    EXPECT_FALSE(z1 != z2);
+    z2.z = CASE7;
+    z2.updateMetadata();
+    EXPECT_TRUE(z1 != z2);
 }
 
 /*
-zmatrix();
-        bool operator==(const zmatrix &) const;
-        bool operator!=(const zmatrix &) const;
-        zmatrix operator*(const zmatrix &) const;
-        std::vector<std::vector<int>> z;
-        bool strictMatch = true;  // If true, the matrix must be an exact match for the == operator to return true
-        int zSum;
-        std::vector<int> zNumCounts; // Count of the number of 0s, 1s, 2s, 3s, ..., n's in the matrix
-        std::vector<std::vector<int>> zRowCounts;  // Count of the number of 0s, 1s, 2s, 3s, ..., n's in each row
-        std::vector<std::vector<int>> zColCounts;  // Count of the number of 0s, 1s, 2s, 3s, ..., n's in each column
-        std::vector<std::vector<int>> zCountRows;  // Number of rows with a count of  0, 1, 2, 3, 4, 5, 6, ..n (based on columns) of 0s, 1s, 2s, 3s, ..., n's
-        std::vector<std::vector<int>> zCountCols;  // Number of columns with a count of 0, 1, 2, 3, 4, 5, 6, ..n (based on rows) of 0s, 1s, 2s, 3s, ..., n's
 
         void printDebug();
         friend std::ostream& operator<<(std::ostream&,const zmatrix &);

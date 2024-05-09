@@ -92,67 +92,71 @@ void zmatrix::updateMetadata() {
     }
 }
 
-// This should really be encompassed into unit tests
-void zmatrix::printDebug() {
+// Print a debug of the matrix
+void zmatrix::printDebug(std::ostream& os) {
     
     // Print the matrix
-    std::cout << "Matrix: " << std::endl;
+    os << "Matrix: " << std::endl;
     for (int i = 0; i < z.size(); i++) {
-        std::cout << "["; // Print opening bracket for the row
+        os << "["; // Print opening bracket for the row
         for (int j = 0; j < z[i].size(); j++) {
-            std::cout << z[i][j]; // Print element
-            if (j != z[i].size()-1) std::cout << ", "; // Don't print a comma after the last element
+            os << z[i][j]; // Print element
+            if (j != z[i].size()-1) os << ", "; // Don't print a comma after the last element
         }
-        std::cout << "]" << std::endl; // Print closing bracket for the row
+        os << "]" << std::endl; // Print closing bracket for the row
     }
+    os << "Summary: " << std::endl;
+    os << "Rows: " << rows << std::endl;
+    os << "Cols: " << cols << std::endl;
+    os << "Max Value: " << maxValue << std::endl;
     // Print the sum
-    std::cout << "Sum: " << zSum << std::endl;
+    os << "Sum: " << zSum << std::endl;
     // Print the number counts
-    std::cout << "Number Counts: [";
+    os << "Number Counts: [";
     for (int i = 0; i < zNumCounts.size(); i++) {
-        std::cout << i << "=" << zNumCounts[i]; 
-        if(i != zNumCounts.size()-1) std::cout << ", ";
+        os << i << "=" << zNumCounts[i]; 
+        if(i != zNumCounts.size()-1) os << ", ";
     }
-    std::cout << "]" << std::endl;
+    os << "]" << std::endl;
     // Print the row counts
-    std::cout << "Row Counts: " << std::endl;
+    os << "Row Counts: " << std::endl;
     for (int i = 0; i < zRowCounts.size(); i++) {
-        std::cout << "Row " << i+1 << " = [";
+        os << "Row " << i+1 << " = [";
         for (int j = 0; j < zRowCounts[i].size(); j++) {
-            std::cout << j << "=" << zRowCounts[i][j];
-            if (j != zRowCounts[i].size()-1) std::cout << ", ";
+            os << j << "=" << zRowCounts[i][j];
+            if (j != zRowCounts[i].size()-1) os << ", ";
         }
-        std::cout << "]" << std::endl;
+        os << "]" << std::endl;
     }
     // Print the column counts
-    std::cout << "Column Counts: " << std::endl;
+    os << "Column Counts: " << std::endl;
     for (int i = 0; i < zColCounts.size(); i++) {
-        std::cout << "Column " << i+1 << " = [";
+        os << "Column " << i+1 << " = [";
         for (int j = 0; j < zColCounts[i].size(); j++) {
-            std::cout << j << "=" << zColCounts[i][j];
-            if (j != zColCounts[i].size()-1) std::cout << ", ";
+            os << j << "=" << zColCounts[i][j];
+            if (j != zColCounts[i].size()-1) os << ", ";
         }
-        std::cout << "]" << std::endl;
+        os << "]" << std::endl;
     }
     // Print the count of rows
-    std::cout << "Count of Rows with: " << std::endl;
+    os << "Count of Rows with: " << std::endl;
     for (int i = 0; i < zCountRows.size(); i++) {
-        std::cout << "Value " << i << " = [";
+        os << "Value " << i << " = [";
         for (int j = 0; j < zCountRows[i].size(); j++) {
-            std::cout << j << "=" << zCountRows[i][j];
-            if (j != zCountRows[i].size()-1) std::cout << ", ";
+            os << j << "=" << zCountRows[i][j];
+            if (j != zCountRows[i].size()-1) os << ", ";
         }
-        std::cout << "]" << std::endl;
+        os << "]" << std::endl;
     }
     // Print the count of columns
-    std::cout << "Count of Columns with: " << std::endl;
+    os << "Count of Columns with: " << std::endl;
     for (int i = 0; i < zCountCols.size(); i++) {
-        std::cout << "Value " << i << " = [";
+        os << "Value " << i << " = [";
         for (int j = 0; j < zCountCols[i].size(); j++) {
-            std::cout << j << "=" << zCountCols[i][j];
-            if (j != zCountCols[i].size()-1) std::cout << ", ";
+            os << j << "=" << zCountCols[i][j];
+            if (j != zCountCols[i].size()-1) os << ", ";
         }
-        std::cout << "]" << std::endl;
+        os << "]" << std::endl;
     }
 }
 
@@ -184,32 +188,21 @@ bool zmatrix::operator==(const zmatrix &other) const {
     for (int i = 0; i < zCountCols.size(); i++) {
         if (zCountCols[i] != other.zCountCols[i]) return false;
     }
-    if (strictMatch || other.strictMatch) {
-        // We only need to check the rows here as the vector type will handle the individual values
-        for (int i = 0; i < z.size(); i++) {
-            if (z[i] != other.z[i]) return false;
-        }
+    return true;
+}
+
+bool zmatrix::strictMatch(const zmatrix &other) {
+    // Check if the matrices are the same size but possibly arranged differently
+    if (operator!=(other)) {
+        return false;
+    }
+    // Check if the matrices have the same values
+    for (int i = 0; i < z.size(); i++) {
+        if (z[i] != other.z[i]) return false;
     }
     return true;
 }
 
 bool zmatrix::operator!=(const zmatrix &other) const {
     return !(*this == other);
-}
-
-zmatrix zmatrix::operator*(const zmatrix &rhs) const {
-    // Check if the dimensions match for matrix multiplication
-    if (z.size() != rhs.z[0].size() || z[0].size() != rhs.z.size()) {
-        throw std::invalid_argument("Matrix dimensions do not match");
-    }
-    zmatrix result;
-    for (int i = 0; i < rhs.z.size(); i++) {
-        std::vector<int> row;
-        for (int j = 0; j < rhs.z[i].size(); j++) {
-            // multiply the elements of the row of the first matrix by the elements of the column of the second matrix
-            row.push_back(z[i][j] * rhs.z[j][i]);
-        }
-        result.z.push_back(row);
-    }
-    return result;
 }
