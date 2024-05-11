@@ -125,6 +125,24 @@ TEST(PatternMatrixTest,PatternMatrixIs23SwapT) {
     EXPECT_TRUE(pm1.is23SwapT(pm8));
 }
 
+TEST(PatternMatrixTest,PatternMatrixLoadCases) {
+    patternMatrix pm1 = patternMatrix(1, "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]");
+    // These are the cases we expect to have and the test is to ensure we load all the cases we intend to
+    std::vector<caseMatrix> baseCases;
+    baseCases.push_back(caseMatrix(1, "[1,1,0,0,0,0][1,1,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"));
+    baseCases.push_back(caseMatrix(2, "[1,1,0,0,0,0][1,1,0,0,0,0][1,1,0,0,0,0][1,1,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"));
+    baseCases.push_back(caseMatrix(3, "[1,1,1,1,0,0][1,1,1,1,0,0][1,1,1,1,0,0][1,1,1,1,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"));
+    baseCases.push_back(caseMatrix(4, "[1,1,1,1,0,0][1,1,1,1,0,0][1,1,0,0,0,0][1,1,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"));
+    baseCases.push_back(caseMatrix(5, "[1,1,0,0,0,0][1,1,0,0,0,0][0,0,1,1,0,0][0,0,1,1,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"));
+    baseCases.push_back(caseMatrix(6, "[1,1,1,1,0,0][1,1,1,1,0,0][1,1,0,0,1,1][1,1,0,0,1,1][0,0,0,0,0,0][0,0,0,0,0,0]"));
+    baseCases.push_back(caseMatrix(7, "[1,1,0,0,0,0][1,1,0,0,0,0][0,0,1,1,0,0][0,0,1,1,0,0][0,0,0,0,1,1][0,0,0,0,1,1]"));
+    baseCases.push_back(caseMatrix(8, "[1,1,1,1,0,0][1,1,1,1,0,0][1,1,0,0,1,1][1,1,0,0,1,1][0,0,1,1,1,1][0,0,1,1,1,1]"));
+    for (int i = 0; i < baseCases.size(); i++) {
+        EXPECT_TRUE(pm1.cases[i].id == baseCases[i].id);
+        EXPECT_TRUE(pm1.cases[i].c == baseCases[i].c);
+        EXPECT_TRUE(pm1.cases[i].cT == baseCases[i].cT);
+    }
+}
 /*
 TEST(PatternMatrixTest,PatternMatrixMatchedCase) {
     FAIL() << "Not implemented";

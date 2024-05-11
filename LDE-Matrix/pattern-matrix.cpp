@@ -12,6 +12,19 @@ patternMatrix::patternMatrix() {
     init();
 }
 
+void patternMatrix::init() {
+    id = 0;
+    caseMatch = -1;
+    subCaseMatch = -1;
+    p = zmatrix(rows, cols, 3);
+    pT = zmatrix(cols, rows, 3);
+    swap23 = zmatrix(rows, cols, 3);
+    swap23T = zmatrix(cols, rows, 3);
+    cV = zmatrix(rows, cols, 1);
+    cVT = zmatrix(cols, rows, 1);
+    loadCases();
+}
+
 patternMatrix::patternMatrix(int pNum, std::string matrix) {
     init();
     id = pNum;
@@ -278,14 +291,15 @@ int patternMatrix::patternElementAddition(int a, int b) {
     return -1;  // This should never happen
 }
 
-void patternMatrix::init() {
-    id = 0;
-    caseMatch = -1;
-    subCaseMatch = -1;
-    p = zmatrix(rows, cols, 3);
-    pT = zmatrix(cols, rows, 3);
-    swap23 = zmatrix(rows, cols, 3);
-    swap23T = zmatrix(cols, rows, 3);
-    cV = zmatrix(rows, cols, 1);
-    cVT = zmatrix(cols, rows, 1);
+void patternMatrix::loadCases() {
+    // Loading from a file is another way to do this but, with only 8 of them and only being used for the patterns, this is fine
+    // These are going to be offset from the case number by 1
+    cases.push_back(caseMatrix(1, "[1,1,0,0,0,0][1,1,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"));
+    cases.push_back(caseMatrix(2, "[1,1,0,0,0,0][1,1,0,0,0,0][1,1,0,0,0,0][1,1,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"));
+    cases.push_back(caseMatrix(3, "[1,1,1,1,0,0][1,1,1,1,0,0][1,1,1,1,0,0][1,1,1,1,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"));
+    cases.push_back(caseMatrix(4, "[1,1,1,1,0,0][1,1,1,1,0,0][1,1,0,0,0,0][1,1,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"));
+    cases.push_back(caseMatrix(5, "[1,1,0,0,0,0][1,1,0,0,0,0][0,0,1,1,0,0][0,0,1,1,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"));
+    cases.push_back(caseMatrix(6, "[1,1,1,1,0,0][1,1,1,1,0,0][1,1,0,0,1,1][1,1,0,0,1,1][0,0,0,0,0,0][0,0,0,0,0,0]"));
+    cases.push_back(caseMatrix(7, "[1,1,0,0,0,0][1,1,0,0,0,0][0,0,1,1,0,0][0,0,1,1,0,0][0,0,0,0,1,1][0,0,0,0,1,1]"));
+    cases.push_back(caseMatrix(8, "[1,1,1,1,0,0][1,1,1,1,0,0][1,1,0,0,1,1][1,1,0,0,1,1][0,0,1,1,1,1][0,0,1,1,1,1]"));
 }

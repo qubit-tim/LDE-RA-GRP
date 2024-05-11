@@ -13,6 +13,7 @@ class patternMatrix {
         int id2704 = 0;  // Identifier for the 2704 pattern
         int id928 = 0;   // Identifier for the 928 pattern
         int id785 = 0;   // Identifier for the 785 pattern
+        std::vector<caseMatrix> cases;
         int caseMatch;
         int subCaseMatch;
         // << operator flags
@@ -42,6 +43,7 @@ class patternMatrix {
         int patternElementAddition(int a, int b);
     private:
         void init();
+        void loadCases();
         int rows = 6;
         int cols = 6;
 };
