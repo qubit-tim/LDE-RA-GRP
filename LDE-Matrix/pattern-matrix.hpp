@@ -1,6 +1,8 @@
 #ifndef PATTERN_MATRIX_HPP
 #define PATTERN_MATRIX_HPP
 
+#include <map>
+
 #include "case-matrix.hpp"
 #include "zmatrix.hpp"
 
@@ -28,8 +30,8 @@ class patternMatrix {
         zmatrix cV;  // This is the pattern matrix changed to match the case style, 0s for 0,1 and 1s for 2,3
         zmatrix cVT;  // This is the transposed pattern matrix changed to match the case style, 0s for 0,1 and 1s for 2,3
         void loadFromString(std::string m);
-        int matchedCase(std::vector<caseMatrix> cases);
-        bool matchesCase(caseMatrix cm);
+        void matchOnCases();
+        bool matchesCase(int caseIndex);
         bool isTranspose(patternMatrix other);
         bool is23Swap(patternMatrix other);
         bool is23SwapT(patternMatrix other);

@@ -89,24 +89,23 @@ void patternMatrix::loadFromString(std::string m) {
     swap23T.updateMetadata();
 }
 
-int patternMatrix::matchedCase(std::vector<caseMatrix> cases) {
+void patternMatrix::matchOnCases() {
     caseMatch = -1;
-    for (caseMatrix cm : cases) {
-        if (matchesCase(cm)) {
+    for (int i = 0; i < cases.size(); i++) {
+        if (matchesCase(i)) {
             if (caseMatch != -1) {
                 std::ostringstream caseErr;
-                std::cerr << "Pattern " << id << " matches more than 1 case: " << caseMatch << " and " << cm.id << std::endl;
-                throw std::runtime_error("Pattern matches more than 1 case: Exiting");
+                caseErr << "Pattern " << id << " matches more than 1 case: " << caseMatch << " and " << cases[i].id << std::endl;
+                throw std::runtime_error(caseErr.str());
             }
-            caseMatch = cm.id;
+            caseMatch = cases[i].id;
         }
     }
-    return caseMatch;
 }
 
-bool patternMatrix::matchesCase(caseMatrix cm) {
-    if (cV == cm.c) return true; // pattern matrix case style matches the case matrix
-    if (cVT == cm.c) return true; // transposed pattern matrix case style matches the case matrix
+bool patternMatrix::matchesCase(int caseIndex) {
+    if (cV == cases[caseIndex].c) return true; // pattern matrix case style matches the case matrix
+    if (cVT == cases[caseIndex].c) return true; // transposed pattern matrix case style matches the case matrix
     return false;
 }
 
@@ -293,7 +292,8 @@ int patternMatrix::patternElementAddition(int a, int b) {
 
 void patternMatrix::loadCases() {
     // Loading from a file is another way to do this but, with only 8 of them and only being used for the patterns, this is fine
-    // These are going to be offset from the case number by 1
+    // Case 0 is the root case and is all 0s
+    cases.push_back(caseMatrix(0, "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"));
     cases.push_back(caseMatrix(1, "[1,1,0,0,0,0][1,1,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"));
     cases.push_back(caseMatrix(2, "[1,1,0,0,0,0][1,1,0,0,0,0][1,1,0,0,0,0][1,1,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"));
     cases.push_back(caseMatrix(3, "[1,1,1,1,0,0][1,1,1,1,0,0][1,1,1,1,0,0][1,1,1,1,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"));

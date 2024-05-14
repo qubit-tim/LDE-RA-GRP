@@ -3,6 +3,15 @@
 
 #include <gtest/gtest.h>
 
+std::string TOO_FEW_ROWS = "[0 0,0 0,0 0,0 0,0 0,0 0]";
+std::string TOO_FEW_COLUMNS = "[0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0]";
+std::string VALID_BINARY_PATTERN = "[0 0,0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0,0 0][0 1,0 1,0 1,0 1,0 1,0 1][1 0,1 0,1 0,1 0,1 0,1 0][1 1,1 1,1 1,1 1,1 1,1 1]";
+std::string VALID_NUMERICAL_PATTERN = "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][1,1,1,1,1,1][2,2,2,2,2,2][3,3,3,3,3,3]";
+std::string ALL_ZEROS_PATTERN = "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]";
+
+// TODO
+// Insert a map of pattern matrix and the case they match here
+
 
 TEST(PatternMatrixTest, PatternDefaultMatrixConstructor) {
     patternMatrix pm = patternMatrix();
@@ -26,22 +35,18 @@ TEST(PatternMatrixTest, PatternDefaultMatrixConstructor) {
 }
 
 TEST(PatternMatrixTest, PatternMatrixLoadFromString) {
-    std::string tooFewRows = "[0 0,0 0,0 0,0 0,0 0,0 0]";
-    std::string tooFewColumns = "[0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0]";
-    std::string validPattern = "[0 0,0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0,0 0][0 1,0 1,0 1,0 1,0 1,0 1][1 0,1 0,1 0,1 0,1 0,1 0][1 1,1 1,1 1,1 1,1 1,1 1]";
-    std::string validNumericalPattern = "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][1,1,1,1,1,1][2,2,2,2,2,2][3,3,3,3,3,3]";
     patternMatrix pm = patternMatrix();
     EXPECT_THROW(pm.loadFromString(""),std::runtime_error);
-    EXPECT_THROW(pm.loadFromString(tooFewRows),std::runtime_error);
-    EXPECT_THROW(pm.loadFromString(tooFewColumns),std::runtime_error);
+    EXPECT_THROW(pm.loadFromString(TOO_FEW_ROWS),std::runtime_error);
+    EXPECT_THROW(pm.loadFromString(TOO_FEW_COLUMNS),std::runtime_error);
 
     // TODO - add more tests to validate the pattern matrix is populated correctly for these cases
-    EXPECT_NO_THROW(pm.loadFromString(validPattern));
-    EXPECT_NO_THROW(pm.loadFromString(validNumericalPattern));
+    EXPECT_NO_THROW(pm.loadFromString(VALID_BINARY_PATTERN));
+    EXPECT_NO_THROW(pm.loadFromString(VALID_NUMERICAL_PATTERN));
 }
 
 TEST(PatternMatrixTest,PatternMatrixStringConstructor) {
-    patternMatrix pm = patternMatrix(1, "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]");
+    patternMatrix pm = patternMatrix(1, ALL_ZEROS_PATTERN);
     zmatrix pmz = zmatrix(6,6,3);
     pmz.updateMetadata();
     zmatrix cz = zmatrix(6,6,1);
@@ -126,9 +131,10 @@ TEST(PatternMatrixTest,PatternMatrixIs23SwapT) {
 }
 
 TEST(PatternMatrixTest,PatternMatrixLoadCases) {
-    patternMatrix pm1 = patternMatrix(1, "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]");
+    patternMatrix pm1 = patternMatrix(1, ALL_ZEROS_PATTERN);
     // These are the cases we expect to have and the test is to ensure we load all the cases we intend to
     std::vector<caseMatrix> baseCases;
+    baseCases.push_back(caseMatrix(0, "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"));
     baseCases.push_back(caseMatrix(1, "[1,1,0,0,0,0][1,1,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"));
     baseCases.push_back(caseMatrix(2, "[1,1,0,0,0,0][1,1,0,0,0,0][1,1,0,0,0,0][1,1,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"));
     baseCases.push_back(caseMatrix(3, "[1,1,1,1,0,0][1,1,1,1,0,0][1,1,1,1,0,0][1,1,1,1,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"));
@@ -143,8 +149,9 @@ TEST(PatternMatrixTest,PatternMatrixLoadCases) {
         EXPECT_TRUE(pm1.cases[i].cT == baseCases[i].cT);
     }
 }
+
 /*
-TEST(PatternMatrixTest,PatternMatrixMatchedCase) {
+TEST(PatternMatrixTest,PatternMatrixMatchOnCases) {
     FAIL() << "Not implemented";
 }
 
@@ -152,6 +159,7 @@ TEST(PatternMatrixTest,PatternMatrixMatchesCase) {
     FAIL() << "Not implemented";
 }
 
+/*
 TEST(PatternMatrixTest,PatternMatrixLeftTGateMultiply) {
     FAIL() << "Not implemented";
 }
