@@ -370,20 +370,20 @@ TEST(PatternMatrixTest,PatternMatrixRearrangeMatrixShort) {
     }
 }
 
-/*
+
+// TODO: Implement the following tests
 TEST(PatternMatrixTest,PatternMatrixLeftTGateMultiply) {
-    FAIL() << "Not implemented";
+    GTEST_SKIP() << "Not implemented yet";
 }
 
 TEST(PatternMatrixTest,PatternMatrixRightTGateMultiply) {
-    FAIL() << "Not implemented";
+    GTEST_SKIP() << "Not implemented yet";
 }
 
 TEST(PatternMatrixTest,PatternMatrixPrintMatchComparison) {
-    FAIL() << "Not implemented";
+    GTEST_SKIP() << "Not implemented yet";
 }
 
 TEST(PatternMatrixTest,PatternMatrixPatternElementAddition) {
-    FAIL() << "Not implemented";
+    GTEST_SKIP() << "Not implemented yet";
 }
-*/

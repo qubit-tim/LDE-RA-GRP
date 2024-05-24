@@ -477,11 +477,11 @@ TEST(ZMatrixTest, ZMatrixNotEqualOperator) {
     EXPECT_TRUE(z1 != z2);
 }
 
-/*
-TODO: Implement the following tests
-TEST(ZMatrixTest, ZMatrixSwapRows)
-TEST(ZMatrixTest, ZMatrixSwapCols)
+// TODO: Implement the following tests
+TEST(ZMatrixTest, ZMatrixSwapCols) {
+    GTEST_SKIP() << "Not implemented yet";
+}
 
-        void printDebug();
-        friend std::ostream& operator<<(std::ostream&,const zmatrix &);
-*/
+TEST(ZMatrixTest, ZMatrixSwapRows) {
+    GTEST_SKIP() << "Not implemented yet";
+}
