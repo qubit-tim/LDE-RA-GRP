@@ -10,8 +10,17 @@ std::string VALID_NUMERICAL_PATTERN = "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][1
 std::string ALL_ZEROS_PATTERN = "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]";
 
 
-// TODO - add more test cases or introduce a way to generate test cases
+// These are a base test set which are guaranteed to be valid
 std::map <int, std::vector<std::string>> CASE_TO_VALID_PATTERN_MAP = {
+    {
+        -1,  // The case where the pattern is not a valid pattern
+        {
+            "[0,0,0,0,0,2][0,0,0,0,2,0][0,0,0,2,0,0][0,0,2,0,0,0][0,2,0,0,0,0][2,0,0,0,0,0]",
+            "[2,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]",
+            "[2,2,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][1,1,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]",
+            "[3,1,1,1,1,1][3,1,1,1,1,1][1,1,1,1,1,1][1,1,1,1,1,1][1,1,1,1,1,1][1,1,1,1,1,1]",
+        }
+    },
     {
         0,
         {
@@ -237,21 +246,30 @@ TEST(PatternMatrixTest,PatternMatrixLoadCases) {
     }
 }
 
+// TODO - Use the test data as well
 TEST(PatternMatrixTest,PatternMatrixMatchesCase) {
     for (auto const& [caseNumber, patterns] : CASE_TO_VALID_PATTERN_MAP) {
+        // Skip cases that are not valid here
+        if (caseNumber == -1) {
+            continue;
+        }
         for (auto const& pattern : patterns) {
             patternMatrix pm = patternMatrix(1, pattern);
-                EXPECT_TRUE(pm.matchesCase(caseNumber)) << "Case: " << caseNumber << " Pattern: " << pattern;
+            EXPECT_TRUE(pm.matchesCase(caseNumber)) << "Case: " << caseNumber << " Pattern: " << pattern;
         }
     }    
 }
 
-/*
+// TODO - Use the test data as well
 TEST(PatternMatrixTest,PatternMatrixMatchOnCases) {
-    FAIL() << "Not implemented";
+    for (auto const& [caseNumber, patterns] : CASE_TO_VALID_PATTERN_MAP) {
+        for (auto const& pattern : patterns) {
+            patternMatrix pm = patternMatrix(1, pattern);
+            pm.matchOnCases();
+            EXPECT_TRUE(pm.caseMatch == caseNumber) << "Expected: " << caseNumber << " Got: " << pm.caseMatch << " with Pattern: " << pattern;
+        }
+    }
 }
-
-
 
 /*
 TEST(PatternMatrixTest,PatternMatrixLeftTGateMultiply) {
