@@ -6,6 +6,7 @@
 std::string TOO_FEW_ROWS = "[0 0,0 0,0 0,0 0,0 0,0 0]";
 std::string TOO_FEW_COLUMNS = "[0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0]";
 std::string VALID_BINARY_PATTERN = "[0 0,0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0,0 0][0 1,0 1,0 1,0 1,0 1,0 1][1 0,1 0,1 0,1 0,1 0,1 0][1 1,1 1,1 1,1 1,1 1,1 1]";
+std::string VALID_BINARY_PATTERN_IN_NUMERICAL_FORM = "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][1,1,1,1,1,1][2,2,2,2,2,2][3,3,3,3,3,3]";
 std::string VALID_NUMERICAL_PATTERN = "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][1,1,1,1,1,1][2,2,2,2,2,2][3,3,3,3,3,3]";
 std::string ALL_ZEROS_PATTERN = "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]";
 
@@ -128,6 +129,7 @@ TEST(PatternMatrixTest, PatternDefaultMatrixConstructor) {
     EXPECT_EQ(pm.swap23T, pmz);
     EXPECT_EQ(pm.cV, cz);
     EXPECT_EQ(pm.cVT, cz);
+    EXPECT_EQ(pm.originalMatrix, "[0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0]");
 }
 
 TEST(PatternMatrixTest, PatternMatrixLoadFromString) {
@@ -156,12 +158,16 @@ TEST(PatternMatrixTest,PatternMatrixStringConstructor) {
     EXPECT_EQ(pm.printID, false);
     EXPECT_EQ(pm.printCaseMatch, false);
     EXPECT_EQ(pm.printAllIDs, false);
+    EXPECT_EQ(pm.originalMatrix, ALL_ZEROS_PATTERN);
     EXPECT_TRUE(pm.p == pmz);
     EXPECT_TRUE(pm.pT == pmz);
     EXPECT_TRUE(pm.swap23 == pmz);
     EXPECT_TRUE(pm.swap23T == pmz);
     EXPECT_TRUE(pm.cV == cz);
     EXPECT_TRUE(pm.cVT == cz);
+    // Make sure that the originalMatrix is converted properly
+    patternMatrix pm2 = patternMatrix(1, VALID_BINARY_PATTERN);
+    EXPECT_EQ(pm2.originalMatrix, VALID_BINARY_PATTERN_IN_NUMERICAL_FORM);
 }
 
 TEST(PatternMatrixTest,PatternMatrixIsTranspose) {

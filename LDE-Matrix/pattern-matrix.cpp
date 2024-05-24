@@ -22,6 +22,7 @@ void patternMatrix::init() {
     swap23T = zmatrix(cols, rows, 3);
     cV = zmatrix(rows, cols, 1);
     cVT = zmatrix(cols, rows, 1);
+    originalMatrix = "[0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0]";
     loadCases();
 }
 
@@ -87,6 +88,8 @@ void patternMatrix::loadFromString(std::string m) {
     cVT.updateMetadata();
     swap23.updateMetadata();
     swap23T.updateMetadata();
+    // Now we know we have a valid matrix string so let's save it
+    originalMatrix = toString();
 }
 
 void patternMatrix::matchOnCases() {
@@ -206,10 +209,6 @@ void patternMatrix::printMatchComparison(caseMatrix cm) {
     std::cout << "NOT IMPLEMENTED YET" << std::endl;
 }
 
-void patternMatrix::rearrangeMatrix(caseMatrix cm) {
-    std::cout << "NOT IMPLEMENTED YET" << std::endl;
-}
-
 // Do something with factorization of the sqrt(2) and the modulo 2 addition
 //  Need to make sure that we handle all of the different outcomes as some may produce multiple
 //   See your notes for that.
@@ -302,4 +301,38 @@ void patternMatrix::loadCases() {
     cases.push_back(caseMatrix(6, "[1,1,1,1,0,0][1,1,1,1,0,0][1,1,0,0,1,1][1,1,0,0,1,1][0,0,0,0,0,0][0,0,0,0,0,0]"));
     cases.push_back(caseMatrix(7, "[1,1,0,0,0,0][1,1,0,0,0,0][0,0,1,1,0,0][0,0,1,1,0,0][0,0,0,0,1,1][0,0,0,0,1,1]"));
     cases.push_back(caseMatrix(8, "[1,1,1,1,0,0][1,1,1,1,0,0][1,1,0,0,1,1][1,1,0,0,1,1][0,0,1,1,1,1][0,0,1,1,1,1]"));
+}
+
+std::string patternMatrix::toString() {
+    std::ostringstream os;
+    os << p;
+    return os.str();
+}
+
+struct rearrangedPattern
+{
+   std::vector<std::vector<int>> rearrangedMatrix;
+   bool done;
+};
+
+bool patternMatrix::rearrangeMatrix() {
+    if (caseMatch == -1) {
+        // Attempt to match the pattern to a case
+        matchOnCases();
+        // If there's still no match, then we can't rearrange the matrix
+        if (caseMatch == -1) {
+            return false;
+        }
+    }
+    // Case 0 is the base case and doesn't need to be rearranged
+    // TODO - we might need to rearrange case 0 at some point but not now
+    if (caseMatch == 0) {
+        return false;
+    }
+    // Now we need to rearrange the pattern matrix to match the case matrix
+    // We want to alternate between columns and rows finding potential matches and using them
+    //  but also doing every possible combo
+    //  We also need to try both the pattern and the transposed pattern
+    bool checkP = cV == cases[caseMatch].c;
+    bool checkPT = cVT == cases[caseMatch].c;
 }

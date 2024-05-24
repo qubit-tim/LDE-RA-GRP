@@ -2,6 +2,7 @@
 #define PATTERN_MATRIX_HPP
 
 #include <map>
+#include <string>
 
 #include "case-matrix.hpp"
 #include "zmatrix.hpp"
@@ -29,6 +30,8 @@ class patternMatrix {
         zmatrix swap23T;  // This is the transposed pattern matrix with 2s swapped for 3s and 3s swapped for 2s
         zmatrix cV;  // This is the pattern matrix changed to match the case style, 0s for 0,1 and 1s for 2,3
         zmatrix cVT;  // This is the transposed pattern matrix changed to match the case style, 0s for 0,1 and 1s for 2,3
+        std::string originalMatrix; // This is the original matrix string
+        std::map<std::string, bool> caseRearrangements; // This is a map of all the possible case rearrangements
         void loadFromString(std::string m);
         void matchOnCases();
         bool matchesCase(int caseIndex);
@@ -41,8 +44,9 @@ class patternMatrix {
         void rightTGateMultiply(int p, int q);
         // These could be private but are public for testing
         void printMatchComparison(caseMatrix cm);
-        void rearrangeMatrix(caseMatrix cm);
+        bool rearrangeMatrix();
         int patternElementAddition(int a, int b);
+        std::string toString();
     private:
         void init();
         void loadCases();
