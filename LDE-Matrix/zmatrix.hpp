@@ -18,6 +18,9 @@ class zmatrix {
         std::vector<std::vector<int>> zCountCols;  // Number of columns with a count of 0, 1, 2, 3, 4, 5, 6, ..n (based on rows) of 0s, 1s, 2s, 3s, ..., n's
 
         void updateMetadata();
+        void swapRows(int i, int j);
+        void swapColumns(int i, int j);
+
         bool operator==(const zmatrix &) const;  // Read the comments in zmatrix.cpp for more information on what equality means
         bool operator!=(const zmatrix &) const;
         bool strictMatch(const zmatrix &other);

@@ -315,6 +315,7 @@ struct rearrangedPattern
    bool done;
 };
 
+// TODO - This might not need a return value so remove?
 bool patternMatrix::rearrangeMatrix() {
     if (caseMatch == -1) {
         // Attempt to match the pattern to a case
@@ -333,6 +334,59 @@ bool patternMatrix::rearrangeMatrix() {
     // We want to alternate between columns and rows finding potential matches and using them
     //  but also doing every possible combo
     //  We also need to try both the pattern and the transposed pattern
-    bool checkP = cV == cases[caseMatch].c;
-    bool checkPT = cVT == cases[caseMatch].c;
+    if (cV == cases[caseMatch].c) {
+        rearrangeColumns(p, cV, 0);
+    }
+    if (cVT == cases[caseMatch].c) {
+        rearrangeColumns(pT, cVT, 0);
+    }
+    return true;
+}
+
+void patternMatrix::rearrangeColumns(zmatrix patternVersion, zmatrix caseVersion, int curCol) {
+    for (int i = curCol; i < cols; i++) {
+        // If the column is all 0s, then we don't need to do anything
+        if (cases[caseMatch].c.zColCounts[curCol][1] == 0) {
+            curCol++;
+            continue;
+        }
+        // swap columns
+        if (cases[caseMatch].c.zColCounts[curCol][1] == caseVersion.zColCounts[i][1]) {
+            zmatrix myPattern = patternVersion;
+            zmatrix myCase = caseVersion;
+            if (curCol != i) {
+                myPattern.swapColumns(curCol, i);
+                myCase.swapColumns(curCol, i);
+            }
+            rearrangeColumns(myPattern, myCase, curCol+1);
+        }
+    }
+    if (curCol == cols && caseVersion.zColCounts == cases[caseMatch].c.zColCounts) {
+        rearrangeRows(patternVersion, caseVersion, 0);
+    }
+}
+
+void patternMatrix::rearrangeRows(zmatrix patternVersion, zmatrix caseVersion, int curRow) {
+    for (int i = curRow; i < rows; i++) {
+        // If the row is all 0s, then we don't need to do anything
+        if (cases[caseMatch].c.zRowCounts[curRow][1] == 0) {
+            curRow++;
+            continue;
+        }
+        // swap rows
+        if (cases[caseMatch].c.zRowCounts[curRow][1] == caseVersion.zRowCounts[i][1]) {
+            zmatrix myPattern = patternVersion;
+            zmatrix myCase = caseVersion;
+            if (curRow != i) {
+                myPattern.swapRows(curRow, i);
+                myCase.swapRows(curRow, i);
+            }
+            rearrangeRows(myPattern, myCase, curRow+1);
+        }
+    }
+    if (curRow == rows && caseVersion.strictMatch(cases[caseMatch].c)) {
+        std::ostringstream os;
+        os << patternVersion;
+        caseRearrangements[os.str()] = true;
+    }
 }

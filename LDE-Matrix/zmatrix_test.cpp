@@ -478,6 +478,9 @@ TEST(ZMatrixTest, ZMatrixNotEqualOperator) {
 }
 
 /*
+TODO: Implement the following tests
+TEST(ZMatrixTest, ZMatrixSwapRows)
+TEST(ZMatrixTest, ZMatrixSwapCols)
 
         void printDebug();
         friend std::ostream& operator<<(std::ostream&,const zmatrix &);

@@ -92,6 +92,25 @@ void zmatrix::updateMetadata() {
     }
 }
 
+void zmatrix::swapRows(int i, int j) {
+    std::vector<int> temp;
+    temp = z[i];
+    z[i] = z[j];
+    z[j] = temp;
+    // TODO - This is not the most efficient way to update the metadata, so it should be improved
+    updateMetadata();    
+}
+
+void zmatrix::swapColumns(int i, int j) {
+    for (int k = 0; k < cols; k++) {
+        int temp = z[k][i];
+        z[k][i] = z[k][j];
+        z[k][j] = temp;
+    }
+    // TODO - This is not the most efficient way to update the metadata, so it should be improved
+    updateMetadata();
+}
+
 // Print a debug of the matrix
 void zmatrix::printDebug(std::ostream& os) {
     

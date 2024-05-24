@@ -45,6 +45,8 @@ class patternMatrix {
         // These could be private but are public for testing
         void printMatchComparison(caseMatrix cm);
         bool rearrangeMatrix();
+        void rearrangeColumns(zmatrix patternVersion, zmatrix caseVersion, int currentColumn);
+        void rearrangeRows(zmatrix patternVersion, zmatrix caseVersion, int currentRow);
         int patternElementAddition(int a, int b);
         std::string toString();
     private:

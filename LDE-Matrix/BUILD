@@ -53,3 +53,13 @@ cc_test(
       ":pattern-matrix",
       ],
 )
+
+cc_test(
+  name = "pattern-matrix_test-rearrangements",
+  size = "large",
+  srcs = ["pattern-matrix_test-rearrangements.cpp"],
+  deps = [
+      "@googletest//:gtest_main",
+      ":pattern-matrix",
+      ],
+)

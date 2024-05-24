@@ -109,6 +109,70 @@ std::map <int, std::vector<std::string>> CASE_TO_VALID_PATTERN_MAP = {
     },
 };
 
+// TODO - Rearrangement Refactor + Test Overhaul
+// These are a limited set of the patterns which are guaranteed to be valid
+std::map <int, std::vector<std::string>> REARRANGE_CASES_SHORT = {
+    {
+        1, // "[1,1,0,0,0,0][1,1,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"
+        {
+            "[0,0,0,0,0,0][0,0,3,3,0,0][0,0,0,0,0,0][0,0,3,3,0,0][0,0,0,0,0,0][0,0,0,0,0,0]",
+            "[0,0,0,0,0,0][0,0,0,0,0,0][0,2,0,0,2,0][0,0,0,0,0,0][0,2,0,0,2,0][0,0,0,0,0,0]",
+        }
+    },
+    {
+        2, // "[1,1,0,0,0,0][1,1,0,0,0,0][1,1,0,0,0,0][1,1,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"
+        {
+            "[0,0,3,0,0,3][0,0,0,0,0,0][0,0,2,0,0,2][0,0,0,0,0,0][0,0,3,0,0,2][0,0,2,0,0,3]",
+            "[0,0,0,0,0,0][0,0,0,0,0,0][2,0,3,0,2,3][0,0,0,0,0,0][3,0,2,0,3,2][0,0,0,0,0,0]",
+        }
+    },
+    {
+        3, // "[1,1,1,1,0,0][1,1,1,1,0,0][1,1,1,1,0,0][1,1,1,1,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"
+        {
+            "[2,0,3,2,0,3][0,0,0,0,0,0][0,0,0,0,0,0][3,0,3,2,0,2][2,0,2,2,0,2][3,0,3,3,0,3]",
+            "[2,3,0,0,2,3][0,0,0,0,0,0][3,3,0,0,2,2][0,0,0,0,0,0][2,2,0,0,2,2][3,3,0,0,3,3]",
+        }
+    },
+    {
+        4,  // "[1,1,1,1,0,0][1,1,1,1,0,0][1,1,0,0,0,0][1,1,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"
+        {
+            "[2,3,0,0,2,2][3,2,0,0,0,0][0,0,0,0,0,0][3,2,0,0,0,0][0,0,0,0,0,0][2,2,0,0,3,2]",
+            "[2,0,3,0,3,2][2,0,3,0,0,0][0,0,0,0,0,0][2,0,3,0,0,0][0,0,0,0,0,0][3,0,2,0,2,2]",
+        }
+    },
+    {
+        5, // "[1,1,0,0,0,0][1,1,0,0,0,0][0,0,1,1,0,0][0,0,1,1,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"
+        {
+            "[2,3,0,0,0,0][0,0,3,2,0,0][0,0,0,0,0,0][3,2,0,0,0,0][0,0,0,0,0,0][0,0,2,3,0,0]",
+            "[0,0,0,0,2,3][0,0,0,0,0,0][0,0,0,0,3,2][3,2,0,0,0,0][2,3,0,0,0,0][0,0,0,0,0,0]",
+        }
+    },
+    {
+        6, // "[1,1,1,1,0,0][1,1,1,1,0,0][1,1,0,0,1,1][1,1,0,0,1,1][0,0,0,0,0,0][0,0,0,0,0,0]"
+        {
+            "[3,2,3,0,0,3][2,3,0,3,3,0][0,0,0,0,0,0][3,2,0,3,3,0][0,0,0,0,0,0][3,2,3,0,0,3]",
+        }
+    },
+    // TODO - Rearrangement Refactor + Test Overhaul
+    /* Case 7 and Case 8 take a long time to run, like 5+ minutes for both of them with only 1 case each
+       Because of this, they are removed from this short list and are included in the full rearrange test.
+    {
+        // This test case can take a very long time to complete
+        7, // "[1,1,0,0,0,0][1,1,0,0,0,0][0,0,1,1,0,0][0,0,1,1,0,0][0,0,0,0,1,1][0,0,0,0,1,1]"
+        {
+            "[2,3,0,0,0,0][0,0,0,0,3,2][0,0,3,3,0,0][3,3,0,0,0,0][0,0,2,3,0,0][0,0,0,0,3,2]",
+        }
+    },
+    {
+        // This test case can take a very long time to complete
+        8, // "[1,1,1,1,0,0][1,1,1,1,0,0][1,1,0,0,1,1][1,1,0,0,1,1][0,0,1,1,1,1][0,0,1,1,1,1]"
+        {
+            "[3,3,0,0,3,2][0,0,2,3,3,3][2,3,0,0,3,3][3,2,3,2,0,0][0,0,3,3,2,3][3,2,3,3,0,0]",
+        }
+    },
+    */
+};
+
 
 TEST(PatternMatrixTest, PatternDefaultMatrixConstructor) {
     patternMatrix pm = patternMatrix();
@@ -277,6 +341,35 @@ TEST(PatternMatrixTest,PatternMatrixMatchOnCases) {
     }
 }
 
+// TODO - Rearrangement Refactor + Test Overhaul
+//  This is a shortened version of the rearrangement test
+//  To do a full up test, run the test file dedicated to rearrangements
+TEST(PatternMatrixTest,PatternMatrixRearrangeMatrixShort) {
+    for (auto const& [caseNumber, patterns] : REARRANGE_CASES_SHORT) {
+        if (caseNumber == -1 || caseNumber == 0) {
+            continue;
+        }
+        // Uncomment this to when printing rearrangements
+        //std::cout << "Case: " << caseNumber << std::endl;
+        for (auto const& pattern : patterns) {
+            patternMatrix pm = patternMatrix(1, pattern);
+            EXPECT_TRUE(pm.rearrangeMatrix());
+            /*  Uncomment this to see the first rearrangement for each case
+            std::cout << "Pattern: " << pattern << " has " << pm.caseRearrangements.size() << " rearrangements" << std::endl;
+            bool print = true;
+            for (auto const& pair : pm.caseRearrangements) {
+                if (!print) {
+                    break;
+                }
+                auto key = pair.first;
+                std::cout << key << std::endl;
+                print = false;
+            }
+            */
+        }
+    }
+}
+
 /*
 TEST(PatternMatrixTest,PatternMatrixLeftTGateMultiply) {
     FAIL() << "Not implemented";
@@ -287,10 +380,6 @@ TEST(PatternMatrixTest,PatternMatrixRightTGateMultiply) {
 }
 
 TEST(PatternMatrixTest,PatternMatrixPrintMatchComparison) {
-    FAIL() << "Not implemented";
-}
-
-TEST(PatternMatrixTest,PatternMatrixRearrangeMatrix) {
     FAIL() << "Not implemented";
 }
 
