@@ -384,6 +384,27 @@ TEST(PatternMatrixTest,PatternMatrixPrintMatchComparison) {
     GTEST_SKIP() << "Not implemented yet";
 }
 
+// TODO - This might be better to put outside of the PatternMatrix and into another file
+//  But should be determined after figuring out how to handle LDEs
 TEST(PatternMatrixTest,PatternMatrixPatternElementAddition) {
-    GTEST_SKIP() << "Not implemented yet";
+    patternMatrix pm = patternMatrix(1, ALL_ZEROS_PATTERN);
+    //GTEST_SKIP() << "Not implemented yet";
+    // Pattern addition properties based on above:
+    //  0 + 0,1,2,3 = 0,1,2,3
+    //  1 + 1,2,3 = 0,3,2
+    //  2 + 2,3 = 0,1
+    //  3 + 3 = 0
+    std::vector<std::vector<int>> results = {
+        // 0, 1, 2, 3
+        {0, 1, 2, 3}, // 0
+        {1, 0, 3, 2}, // 1
+        {2, 3, 0, 1}, // 2
+        {3, 2, 1, 0}, // 3
+    };
+    for (int i=0; i < results.size(); i++) {
+        for (int j=0; j < results[i].size(); j++) {
+            // Test the addition of the pattern elements
+            EXPECT_EQ(results[i][j], pm.patternElementAddition(i,j)) << "i: " << i << " j: " << j;
+        }
+    }
 }

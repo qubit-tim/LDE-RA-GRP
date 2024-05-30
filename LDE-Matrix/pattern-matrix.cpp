@@ -248,6 +248,7 @@ void patternMatrix::rightTGateMultiply(int pCol, int qCol) {
     }
 }
 
+// TODO: Maybe move this out of the class?  It might need to stay in the class depending on how we handle the LDEs
 // TODO: We need to return any LDE increases here
 //    which probably means returning a struct or modifying a,b by reference and returning the LDE increase
 int patternMatrix::patternElementAddition(int a, int b) {
