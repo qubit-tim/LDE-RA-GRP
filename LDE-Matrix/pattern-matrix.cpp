@@ -214,7 +214,15 @@ void patternMatrix::printMatchComparison(caseMatrix cm) {
 //   See your notes for that.
 
 
-// TODO: Need to track LDEs here
+
+// ====== MULTIPLICATION BY T-GATES ======
+// TODO: THIS IS FOR BOTH LEFT AND RIGHT MULTIPLICATION
+// TODO: Track LDEs during this process
+// TODO: Verify that columns and rows are orthogonal
+//  col(i) * col(j) -> i==j then 2^k, i!=j then 0 (covers both orthogonal and normalized)
+//  row(i) * row(j) -> i==j then 2^k, i!=j then 0 (covers both orthogonal and normalized)
+// TODO: Normalized columns and rows = 2^k
+
 // Left T-gate multiplication means adding rows p, q and replacing both with the result
 void patternMatrix::leftTGateMultiply(int pRow, int qRow) {
     //  Handle left T-gate multiplication
@@ -232,7 +240,6 @@ void patternMatrix::leftTGateMultiply(int pRow, int qRow) {
     }
 }
 
-// TODO: Need to track LDEs here
 // Right T-gate multiplication means adding columns p, q and replacing both with the result
 void patternMatrix::rightTGateMultiply(int pCol, int qCol) {
     //  Handle right T-gate multiplication
@@ -247,6 +254,7 @@ void patternMatrix::rightTGateMultiply(int pCol, int qCol) {
         // Do factorization
     }
 }
+// ====== MULTIPLICATION BY T-GATES ======
 
 // TODO: Maybe move this out of the class?  It might need to stay in the class depending on how we handle the LDEs
 // TODO: We need to return any LDE increases here

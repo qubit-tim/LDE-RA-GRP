@@ -370,6 +370,10 @@ TEST(PatternMatrixTest,PatternMatrixRearrangeMatrixShort) {
     }
 }
 
+// TODO - Rearrangement Refactor + Test Overhaul
+TEST(PatternMatrixTest,PatternMatrixOptimalCaseRearrangements) {
+    GTEST_SKIP() << "Not implemented yet";
+}
 
 // TODO: Implement the following tests
 TEST(PatternMatrixTest,PatternMatrixLeftTGateMultiply) {
