@@ -3,6 +3,9 @@ LDE Reduction Algorithms-GRP
 
 Code written to take pattern files, match them to cases, and then work through the transitions from case 8b -> 6 -> 3 -> [ ].  It also contains other random things associated with this work.
 
+# TODO
+# The items below need to be updated for the addition of bazel
+
 # How to run the code and what the run does
 **Note - all of these are in the makefile**
 * case-matching - Loads cases from ```cases/``` and matches patterns against those cases.  Outputs matches into ```matched-cases/``` by the case matched and the pattern file it was loaded from.
