@@ -326,6 +326,9 @@ struct rearrangedPattern
 
 // TODO - This might not need a return value so remove?
 bool patternMatrix::rearrangeMatrix() {
+    // Clear out the previous rearraangements
+    caseRearrangements.clear();
+
     if (caseMatch == -1) {
         // Attempt to match the pattern to a case
         matchOnCases();
@@ -339,9 +342,7 @@ bool patternMatrix::rearrangeMatrix() {
     if (caseMatch == 0) {
         return false;
     }
-    // Now we need to rearrange the pattern matrix to match the case matrix
-    // We want to alternate between columns and rows finding potential matches and using them
-    //  but also doing every possible combo
+    
     //  We also need to try both the pattern and the transposed pattern
     if (cV == cases[caseMatch].c) {
         rearrangeColumns(p, cV, 0);
@@ -353,6 +354,7 @@ bool patternMatrix::rearrangeMatrix() {
 }
 
 void patternMatrix::rearrangeColumns(zmatrix patternVersion, zmatrix caseVersion, int curCol) {
+    if (singleCaseRearrangement && caseRearrangements.size() > 0) return;
     for (int i = curCol; i < cols; i++) {
         // If the column is all 0s, then we don't need to do anything
         if (cases[caseMatch].c.zColCounts[curCol][1] == 0) {
@@ -376,6 +378,7 @@ void patternMatrix::rearrangeColumns(zmatrix patternVersion, zmatrix caseVersion
 }
 
 void patternMatrix::rearrangeRows(zmatrix patternVersion, zmatrix caseVersion, int curRow) {
+    if (singleCaseRearrangement && caseRearrangements.size() > 0) return;
     for (int i = curRow; i < rows; i++) {
         // If the row is all 0s, then we don't need to do anything
         if (cases[caseMatch].c.zRowCounts[curRow][1] == 0) {

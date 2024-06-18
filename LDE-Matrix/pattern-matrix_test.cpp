@@ -345,6 +345,7 @@ TEST(PatternMatrixTest,PatternMatrixMatchOnCases) {
 //  This is a shortened version of the rearrangement test
 //  To do a full up test, run the test file dedicated to rearrangements
 TEST(PatternMatrixTest,PatternMatrixRearrangeMatrixShort) {
+    // Test all of the possible rearrangements but for a limited set of cases
     for (auto const& [caseNumber, patterns] : REARRANGE_CASES_SHORT) {
         if (caseNumber == -1 || caseNumber == 0) {
             continue;
@@ -366,6 +367,18 @@ TEST(PatternMatrixTest,PatternMatrixRearrangeMatrixShort) {
                 print = false;
             }
             */
+        }
+    }
+    // Test single rearrangements for a larger set of patterns
+    for (auto const& [caseNumber, patterns] : CASE_TO_VALID_PATTERN_MAP) {
+        if (caseNumber == -1 || caseNumber == 0) {
+            continue;
+        }
+        for (auto const& pattern : patterns) {
+            patternMatrix pm = patternMatrix(1, pattern);
+            pm.singleCaseRearrangement = true;
+            EXPECT_TRUE(pm.rearrangeMatrix());
+            EXPECT_TRUE(pm.caseRearrangements.size() == 1);
         }
     }
 }

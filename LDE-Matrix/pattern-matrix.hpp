@@ -19,6 +19,8 @@ class patternMatrix {
         std::vector<caseMatrix> cases;
         int caseMatch;
         int subCaseMatch;
+        // These are the flags for the pattern matrix
+        bool singleCaseRearrangement = false;  // This is stop the case rearrangement code after a single solution is found
         // << operator flags
         bool printID = false;
         bool printCaseMatch = false;
