@@ -43,6 +43,8 @@ int main(int argc, char **argv) {
         }
         for (patternMatrix pm : patterns) {
             std::cout << "Pattern " << pm << std::endl;
+            // Set this flag to stop the case rearrangement code after a single solution is found
+            pm.singleCaseRearrangement = true;
             bool success = pm.rearrangeMatrix();
             // If there are no matches, put the pattern in the no-matches file
             if (!success) {

@@ -20,6 +20,7 @@ class patternMatrix {
         int caseMatch;
         int subCaseMatch;
         // These are the flags for the pattern matrix
+        bool printDebugInfo = false;  // WIP: This is for printing debug information
         bool singleCaseRearrangement = false;  // This is stop the case rearrangement code after a single solution is found
         // << operator flags
         bool printID = false;
@@ -57,6 +58,7 @@ class patternMatrix {
         int patternElementAddition(int a, int b);
         std::string toString();
         // TODO: Add a csv output for the pattern matrix
+        bool isOrthonormal();
     private:
         void init();
         void loadCases();

@@ -402,3 +402,91 @@ void patternMatrix::rearrangeRows(zmatrix patternVersion, zmatrix caseVersion, i
         caseRearrangements[os.str()] = true;
     }
 }
+
+bool patternMatrix::isOrthonormal() {
+    bool orthNorm = true;
+    // N and M values from N + M*sqrt(2)
+    //  and then taking the modulo 2 of the individual results
+    //  where N is bit 1 and M is bit 0:
+    //    Examples:  0 == N=0, M=0
+    //               1 == N=0, M=1
+    //               2 == N=1, M=0
+    //               3 == N=1, M=1
+    // Normality checks
+    for (int i = 0; i < p.z.size(); i++) {
+        int m4Row = 0;
+        int m2Row = 0;
+        int m4Col = 0;
+        int m2Col = 0;
+        for (int j = 0; j < p.z.size(); j++) {
+            if (p.z[i][j] > 3) {
+                std::ostringstream os;
+                os << "Invalid value in pattern matrix: " << p.z[i][j];
+                throw std::runtime_error(os.str());
+            
+            }
+            // Nij + 2Mij
+            m4Row += (p.z[i][j] / 2) + 2*(p.z[i][j] % 2);
+            m4Col += (p.z[j][i] / 2) + 2*(p.z[j][i] % 2);
+            // Nij * Mij
+            m2Row += (p.z[i][j] / 2) * (p.z[i][j] % 2);
+            m2Col += (p.z[j][i] / 2) * (p.z[j][i] % 2);
+        }
+        // TODO: refactor this
+        if (printDebugInfo) {
+            if (m4Row % 4 != 0 || m2Row % 2 != 0) {
+                std::cout << "Row " << i+1 << " is not normalized" << std::endl;
+                std::cout << "  (Nij + 2Mij) Sum: " << m4Row << "; mod4: " << m4Row % 4 << std::endl;
+                std::cout << "  (Nij * Mij) Sum: " << m2Row << "; mod2: " << m2Row % 2 << std::endl;
+                orthNorm = false;
+            }
+            if (m4Col % 4 != 0 || m2Col % 2 != 0) {
+                std::cout << "Column " << i+1 << " is not normalized" << std::endl;
+                std::cout << "  (Nij + 2Mij) Sum: " << m4Col << "; mod4: " << m4Col % 4 << std::endl;
+                std::cout << "  (Nij * Mij) Sum: " << m2Col << "; mod2: " << m2Col % 2 << std::endl;
+                orthNorm = false;
+            }
+        }
+        if (!printDebugInfo && (m4Row % 4 != 0 || m2Row % 2 != 0 || m4Col % 4 != 0 || m2Col % 2 != 0)) {
+            return false;
+        }
+    }
+    // Orthogonality Checks
+    for (int i = 0; i < p.z.size(); i++) {
+        for (int k = i + 1; k < p.z.size(); k++) {
+            int m2Row = 0;
+            int m2SumRow = 0;
+            int m2Col = 0;
+            int m2SumCol = 0;
+            for (int j = 0; j < p.z.size(); j++) {
+                // Nij * Mkj
+                m2Row += (p.z[i][j] / 2) * (p.z[k][j] % 2);
+                m2Col += (p.z[j][i] / 2) * (p.z[j][k] % 2);
+                // Nij * Mkj + Nkj * Mij
+                //  This could be reduced to just Nkj * Mij since we already check if  Nij * Mkj is even
+                //    but I'm keeping it to stay consistent with the paper
+                m2SumRow += (p.z[i][j] / 2) * (p.z[k][j] % 2) + (p.z[k][j] / 2) * (p.z[i][j] % 2);
+                m2SumCol += (p.z[j][i] / 2) * (p.z[j][k] % 2) + (p.z[j][k] / 2) * (p.z[j][i] % 2);
+            }
+            // TODO: refactor this
+            if (printDebugInfo) {
+                if (m2Row % 2 != 0 || m2SumRow % 2 != 0 ) {
+                    std::cout << "Rows " << i+1 << " and " << k+1 << " are not orthogonal" << std::endl;
+                    std::cout << "  (Nij * Mkj) Sum: " << m2Row << std::endl;
+                    std::cout << "  (Nij * Mkj + Nkj * Mij) Sum: " << m2SumRow << std::endl;
+                    orthNorm = false;
+                }
+                if (m2Col % 2 != 0 || m2SumCol % 2 != 0) {
+                    std::cout << "Columns " << i+1 << " and " << k+1 << " are not orthogonal" << std::endl;
+                    std::cout << "  (Nij * Mkj) Sum: " << m2Col << std::endl;
+                    std::cout << "  (Nij * Mkj + Nkj * Mij) Sum: " << m2SumCol << std::endl;
+                    orthNorm = false;
+                }
+            }
+            if (!printDebugInfo && (m2Row % 2 != 0 || m2Col % 2 != 0 || m2SumRow % 2 != 0 || m2SumCol % 2 != 0)) {
+                return false;
+            }
+        }
+    }
+    return orthNorm;
+}
