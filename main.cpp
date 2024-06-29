@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <filesystem>
 
 #include "LDE-Matrix/pattern-matrix.hpp"
 
@@ -25,7 +26,7 @@ std::vector<patternMatrix> loadPatterns(std::string filename)
 }
 
 int main(int argc, char **argv) {
-    // There's an assumption that the folder "matched-cases" exists during the pattern matching
+    std::filesystem::create_directory("matched-cases");
     //std::vector<std::string> patternFiles = {"patterns-test"};  // Use this for testing so there's not a ton of output to go through
     //std::vector<std::string> patternFiles = {"patterns785", "patterns928", "patterns2704"};
     std::vector<std::string> patternFiles = {"patterns928"};
@@ -42,16 +43,16 @@ int main(int argc, char **argv) {
             }
         }
         for (patternMatrix pm : patterns) {
-            std::cout << "Pattern " << pm << std::endl;
+            // std::cout << "Pattern " << pm << std::endl;
             // Set this flag to stop the case rearrangement code after a single solution is found
             pm.singleCaseRearrangement = true;
             bool success = pm.rearrangeMatrix();
             // If there are no matches, put the pattern in the no-matches file
             if (!success) {
-                std::cout << "Pattern " << pm.id << " has no matches." << std::endl << std::endl;
+                // std::cout << "Pattern " << pm.id << " has no matches." << std::endl << std::endl;
                 matchedCasesFiles[0] << pm << std::endl;
             } else {
-                std::cout << "Pattern " << pm.id << " matches: " << pm.caseMatch << std::endl << std::endl;
+                // std::cout << "Pattern " << pm.id << " matches: " << pm.caseMatch << std::endl << std::endl;
                 // Toggle printing the first case match
                 bool print = true;
                 for (auto const& pair : pm.caseRearrangements) {
@@ -61,6 +62,16 @@ int main(int argc, char **argv) {
                     auto key = pair.first;
                     matchedCasesFiles[pm.caseMatch] << pm.id << " " << key << std::endl;
                     print = false;
+                    if (!pm.isOrthonormal()) {
+                        std::cout << "========================================" << std::endl;
+                        std::cout << "Pattern " << pm.id << " is NOT orthonormal." << std::endl;
+                        std::cout << "Case match: " << pm.caseMatch << std::endl;
+                        std::cout << "Original Pattern: " << pm << std::endl;
+                        std::cout << "Rearranged Version: " << key << std::endl;
+                        pm.printDebugInfo = true;
+                        pm.isOrthonormal();
+                        std::cout << "========================================" << std::endl;
+                    }
                 }
             }
         }

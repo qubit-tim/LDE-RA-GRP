@@ -190,6 +190,7 @@ void patternMatrix::printDebug(std::ostream& os) {
     cVT.printDebug(os);
 }
 
+// TODO - Add a note on which pattern encoding is being used
 std::ostream& operator<<(std::ostream& os,const patternMatrix &pm) {
     // Could do this differently by using flags to set the output format
     if (pm.printID) {

@@ -4,6 +4,9 @@ cc_binary(
     deps = [
         "//LDE-Matrix:pattern-matrix",
     ],
+    data = [
+        ":patterns",
+    ],
 )
 
 cc_binary(
@@ -13,4 +16,9 @@ cc_binary(
         "//LDE-Matrix:pattern-matrix",
         "//LDE-Matrix:zmatrix",
     ],
+)
+
+filegroup(
+        name = 'patterns',
+        srcs = glob(['patterns/*'])
 )

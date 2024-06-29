@@ -1,28 +1,26 @@
 # LDE-RA-GRP
 LDE Reduction Algorithms-GRP
 
-Code written to take pattern files, match them to cases, and then work through the transitions from case 8b -> 6 -> 3 -> [ ].  It also contains other random things associated with this work.
+Code written to take pattern files, match them to cases, and then work through the transitions from case.  It also contains other random things associated with this work.
 
-# TODO
-# The items below need to be updated for the addition of bazel
+# Running the code
+## Requirements
+ * C++
+ * Bazel - https://bazel.build/install
+ * [Optional] - Buildifier
 
-# How to run the code and what the run does
-**Note - all of these are in the makefile**
-* case-matching - Loads cases from ```cases/``` and matches patterns against those cases.  Outputs matches into ```matched-cases/``` by the case matched and the pattern file it was loaded from.
-  * make case-matching && ./case-matching.out
-* dupe-checks - Loads patterns from ```patterns/``` and dedups them against the other files.  ```patterns928.txt``` is considered the primary list.
-  * make dupe-checks && ./dupe-checks.out
-* convert-patterns - Converts patterns from "X X" format to numerical (0-3) format.
-  * make convert-patterns && ./convert-patterns.out
-* **Deprecated** pattern-file-checks - This was used to do a basic check of pattern duplicates between files but this is just as easily done with cmd line operations.  Also, this is handled with dupe-checks.  
-  * make pattern-file-checks && ./pattern-file-checks.out
-* case-8b - Loads up the ```matches/case8-matches-patterns928.txt``` file and performs case 8b matches by rearranging the matrices to match 8b then outputs the rearranged patterns in both a short and detailed form.
-  * make case-8b && ./case-8b.out
-* case-3 - Loads up the ```matches/case3-matches-patterns928.txt``` file and rearranges the cases to match the case 3 variants on page 12 of the paper.  Then it tries to perform multiplcation to get to another case.  As of 16 Mar 2024, the multiplication isn't fully working as sqrt(2) removal needs to be handled.
-  * make case-3 && ./case-3.out
-* case-traversal - WIP
-* ztest - A quick, incomplete, test of the zmatrix class
-  * make ztest && ./ztest.out
+## Run Commands
+ * On MacOS - `bazel run --cxxopt=-std=c++20 lde-main`
+ * On Windows - `bazel run --cxxopt=/std=c++20 lde-main`
+
+After executing the above command, the output will be in the `bazel-LDE-RA-GRP` directory.  If you want the output to land directly into the workspace do the following:
+ 1. `bazel build --cxxopt=-std=c++20 lde-main`
+ 1. `bazel-bin/lde-main`
+
+## Run Tests
+ * `bazel test --cxxopt=-std=c++20 --test_output=all [Test Pattern]`
+   * Test Pattern should be replaced with the test desired, like `//LDE-Matrix:pattern-matrix_test` or `//...` for all tests
+   * On Windows use `--cxxopt=/std=c++20`
 
 # Comments
 28 Feb 2024 - This code is a bit messy and could use some clean up / refactoring.  I'd also like to have this as a pipeline where a pattern can go through all the steps in one go.  Perhaps one day when I have more time.
@@ -30,3 +28,5 @@ Code written to take pattern files, match them to cases, and then work through t
 16 Mar 2024 - The case matching should be moved into the pattern matrix class along with the concept of case traversal.  Oh, and adding tests would be nice.
 
 14 Apr 2024 - Need to add some verbiage for Bazel and running tests.  Will do that after more tests are done.  Also things could be moved around and cleaned up to adhere to https://google.github.io/styleguide/cppguide.html.
+
+29 Jun 2024 - Tests cover most of what is needed but there are a few items that could be improved with regards to rearrangements and orthonormality.  Orthonormality still needs to be verified and then output cleaned up in both main.cpp and pattern-matrix.cpp so that output goes to a consistent location.  Finally, the pattern generator is still in the works and will need more threads to be viable but is also waiting on orthonormality.
