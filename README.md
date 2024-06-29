@@ -13,9 +13,14 @@ Code written to take pattern files, match them to cases, and then work through t
  * On MacOS - `bazel run --cxxopt=-std=c++20 lde-main`
  * On Windows - `bazel run --cxxopt=/std=c++20 lde-main`
 
-After executing the above command, the output will be in the `bazel-LDE-RA-GRP` directory.  If you want the output to land directly into the workspace do the following:
+After executing the above command, the output will be in the `bazel-LDE-RA-GRP` directory.  
+
+If you want the output to land directly into the workspace do the following:
  1. `bazel build --cxxopt=-std=c++20 lde-main`
  1. `bazel-bin/lde-main`
+
+### Notes on changing input files
+`main.cpp` defaults to using the `pattern928` file in the `patterns` directory.  To change to another set of patterns in the same directory, change the ` std::vector<std::string> patternFiles` to match the desired file.  At some point in the future input / output will be made more user friendly.
 
 ## Run Tests
  * `bazel test --cxxopt=-std=c++20 --test_output=all [Test Pattern]`
