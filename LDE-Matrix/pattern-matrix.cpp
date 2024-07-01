@@ -404,8 +404,23 @@ void patternMatrix::rearrangeRows(zmatrix patternVersion, zmatrix caseVersion, i
     }
 }
 
+// TODO - Refactor this
+/* Rules for orthnormality:
+   // definition of mij which is a different encoding
+   mij = 2yij + xij
+    // These are normality
+    i. ∑ mij = 0 (mod4)
+    ii. mij = 3 has to be paired if exists
+    // These are orthogonality
+    iii. ri · rj = 0 (mod2) when i  ̸= j
+    iv. the count of (1, 2), (1, 3), and (2, 3) pairs in  ri and  rj should be even
+
+*/
 bool patternMatrix::isOrthonormal() {
     bool orthNorm = true;
+    // Map of N / M vs letters in the paper:
+    //  a = N, b = M;
+    //  x = N, y = M;
     // N and M values from N + M*sqrt(2)
     //  and then taking the modulo 2 of the individual results
     //  where N is bit 1 and M is bit 0:
@@ -426,25 +441,29 @@ bool patternMatrix::isOrthonormal() {
                 throw std::runtime_error(os.str());
             
             }
-            // Nij + 2Mij
-            m4Row += (p.z[i][j] / 2) + 2*(p.z[i][j] % 2);
-            m4Col += (p.z[j][i] / 2) + 2*(p.z[j][i] % 2);
-            // Nij * Mij
-            m2Row += (p.z[i][j] / 2) * (p.z[i][j] % 2);
-            m2Col += (p.z[j][i] / 2) * (p.z[j][i] % 2);
+            int mij = p.z[i][j] / 2 + 2 * (p.z[i][j] % 2);  //mij = Nij + 2*Mij (row)
+            int mji = p.z[j][i] / 2 + 2 * (p.z[j][i] % 2);  //mji = Nji + 2*Mji (column)
+            // Rule i. ∑ mij = 0 (mod4); row check
+            m4Row += mij;
+            // Rule i. ∑ mji = 0 (mod4); column check
+            m4Col += mji;
+            // Rule ii. mij = 3 has to be paired if exists (row check)
+            if (mij == 3) m2Row++;
+            // Rule ii. mij = 3 has to be paired if exists (col check)
+            if (mji == 3) m2Col++;
         }
         // TODO: refactor this
         if (printDebugInfo) {
             if (m4Row % 4 != 0 || m2Row % 2 != 0) {
                 std::cout << "Row " << i+1 << " is not normalized" << std::endl;
-                std::cout << "  (Nij + 2Mij) Sum: " << m4Row << "; mod4: " << m4Row % 4 << std::endl;
-                std::cout << "  (Nij * Mij) Sum: " << m2Row << "; mod2: " << m2Row % 2 << std::endl;
+                std::cout << "  Rule i. ∑ mij = " << m4Row << "; mod4: " << m4Row % 4 << std::endl;
+                std::cout << "  Rule ii. mij = 3 has to be paired if exists; count: " << m2Row << "; mod2: " << m2Row % 2 << std::endl;
                 orthNorm = false;
             }
             if (m4Col % 4 != 0 || m2Col % 2 != 0) {
                 std::cout << "Column " << i+1 << " is not normalized" << std::endl;
-                std::cout << "  (Nij + 2Mij) Sum: " << m4Col << "; mod4: " << m4Col % 4 << std::endl;
-                std::cout << "  (Nij * Mij) Sum: " << m2Col << "; mod2: " << m2Col % 2 << std::endl;
+                std::cout << "  Rule i. ∑ mji = " << m4Col << "; mod4: " << m4Col % 4 << std::endl;
+                std::cout << "  Rule ii. mij = 3 has to be paired if exists; count: " << m2Col << "; mod2: " << m2Col % 2 << std::endl;
                 orthNorm = false;
             }
         }
@@ -454,37 +473,43 @@ bool patternMatrix::isOrthonormal() {
     }
     // Orthogonality Checks
     for (int i = 0; i < p.z.size(); i++) {
-        for (int k = i + 1; k < p.z.size(); k++) {
-            int m2Row = 0;
-            int m2SumRow = 0;
-            int m2Col = 0;
-            int m2SumCol = 0;
-            for (int j = 0; j < p.z.size(); j++) {
-                // Nij * Mkj
-                m2Row += (p.z[i][j] / 2) * (p.z[k][j] % 2);
-                m2Col += (p.z[j][i] / 2) * (p.z[j][k] % 2);
-                // Nij * Mkj + Nkj * Mij
-                //  This could be reduced to just Nkj * Mij since we already check if  Nij * Mkj is even
-                //    but I'm keeping it to stay consistent with the paper
-                m2SumRow += (p.z[i][j] / 2) * (p.z[k][j] % 2) + (p.z[k][j] / 2) * (p.z[i][j] % 2);
-                m2SumCol += (p.z[j][i] / 2) * (p.z[j][k] % 2) + (p.z[j][k] / 2) * (p.z[j][i] % 2);
+        for (int j = i + 1; j < p.z.size(); j++) {
+            int m2RowDotProd = 0;
+            int m2RowPairs = 0;
+            int m2ColDotProd = 0;
+            int m2ColPairs = 0;
+            for (int k = 0; k < p.z.size(); k++) {
+                /*
+                */
+                int mik = p.z[i][k] / 2 + 2 * (p.z[i][k] % 2);  //mij = Nij + 2*Mij (row A)
+                int mjk = p.z[j][k] / 2 + 2 * (p.z[j][k] % 2);  //mkj = Nkj + 2*Mkj (row B)
+                int mki = p.z[k][i] / 2 + 2 * (p.z[k][i] % 2);  //mji = Nji + 2*Mji (column A)
+                int mkj = p.z[k][j] / 2 + 2 * (p.z[k][j] % 2);  //mjk = Njk + 2*Mjk (column B)
+                // iii. ri · rj = 0 (mod2) when i  ̸= k
+                // row A * row B
+                m2RowDotProd += mik * mjk;
+                // col A * col B
+                m2ColDotProd += mki * mkj;
+                // iv. the count of (1, 2), (1, 3), and (2, 3) pairs in  ri and rj should be even
+                if (mik != 0 && mjk != 0 && mik != mjk) m2RowPairs++;
+                if (mki != 0 && mkj != 0 && mki != mkj) m2ColPairs++;
             }
             // TODO: refactor this
             if (printDebugInfo) {
-                if (m2Row % 2 != 0 || m2SumRow % 2 != 0 ) {
-                    std::cout << "Rows " << i+1 << " and " << k+1 << " are not orthogonal" << std::endl;
-                    std::cout << "  (Nij * Mkj) Sum: " << m2Row << std::endl;
-                    std::cout << "  (Nij * Mkj + Nkj * Mij) Sum: " << m2SumRow << std::endl;
+                if (m2RowDotProd % 2 != 0 || m2RowPairs % 2 != 0 ) {
+                    std::cout << "Rows " << i+1 << " and " << j+1 << " are not orthogonal" << std::endl;
+                    std::cout << "  Dot Product = " << m2RowDotProd << "; mod2 = " << m2RowDotProd % 2 << std::endl;
+                    std::cout << "  (1, 2), (1, 3), and (2, 3) pairs should be even; count = " << m2RowPairs << "; mod2 = " << m2RowPairs % 2 << std::endl;
                     orthNorm = false;
                 }
-                if (m2Col % 2 != 0 || m2SumCol % 2 != 0) {
-                    std::cout << "Columns " << i+1 << " and " << k+1 << " are not orthogonal" << std::endl;
-                    std::cout << "  (Nij * Mkj) Sum: " << m2Col << std::endl;
-                    std::cout << "  (Nij * Mkj + Nkj * Mij) Sum: " << m2SumCol << std::endl;
+                if (m2ColDotProd % 2 != 0 || m2ColPairs % 2 != 0) {
+                    std::cout << "Columns " << i+1 << " and " << j+1 << " are not orthogonal" << std::endl;
+                    std::cout << "  Dot Product = " << m2ColDotProd << "; mod2 = " << m2ColDotProd % 2 << std::endl;
+                    std::cout << "  (1, 2), (1, 3), and (2, 3) pairs should be even; count = " << m2ColPairs << "; mod2 = " << m2ColPairs % 2 << std::endl;
                     orthNorm = false;
                 }
             }
-            if (!printDebugInfo && (m2Row % 2 != 0 || m2Col % 2 != 0 || m2SumRow % 2 != 0 || m2SumCol % 2 != 0)) {
+            if (!printDebugInfo && (m2RowDotProd % 2 != 0 || m2RowPairs % 2 != 0 || m2ColDotProd % 2 != 0 || m2ColPairs % 2 != 0)) {
                 return false;
             }
         }
