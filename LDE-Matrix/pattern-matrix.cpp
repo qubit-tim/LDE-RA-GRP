@@ -16,6 +16,7 @@ void patternMatrix::init() {
     id = 0;
     caseMatch = -1;
     subCaseMatch = -1;
+    pNewEncoding = zmatrix(rows, cols, 3);
     p = zmatrix(rows, cols, 3);
     pT = zmatrix(cols, rows, 3);
     swap23 = zmatrix(rows, cols, 3);
@@ -62,6 +63,7 @@ void patternMatrix::loadFromString(std::string m) {
                 vErr << "Invalid value in pattern string: " << v ;
                 throw std::runtime_error(vErr.str());
             }
+            pNewEncoding.z[row][col] = (mv == 1) ? 2 : (mv == 2) ? 1 : mv;
             p.z[row][col] = mv;
             pT.z[col][row] = mv;
             swap23.z[row][col] = (mv == 2) ? 3 : (mv == 3) ? 2 : mv;
@@ -191,18 +193,29 @@ void patternMatrix::printDebug(std::ostream& os) {
 }
 
 // TODO - Add a note on which pattern encoding is being used
+// TODO - Refactor this mess
 std::ostream& operator<<(std::ostream& os,const patternMatrix &pm) {
     // Could do this differently by using flags to set the output format
     if (pm.printID) {
-        os << pm.id << " ";
+        os << pm.id;
     }
     if (pm.printCaseMatch) {
-        os << pm.caseMatch << " ";
+        os << pm.caseMatch;
     }
     if (pm.printAllIDs) {
-        os << pm.id2704 << " " << pm.id928 << " " << pm.id785 << " ";
+        os << pm.id2704 << " " << pm.id928 << " " << pm.id785;
     }
-    os << pm.p;
+    if (pm.multilineOutput) {
+        if (pm.printID || pm.printCaseMatch || pm.printAllIDs) {
+            os << std::endl;
+        }
+        zmatrix temp = pm.pNewEncoding;
+        temp.multilineOutput = true;
+        os << temp;
+    } else {
+        if (pm.printID || pm.printCaseMatch || pm.printAllIDs) os << " ";
+        os << pm.pNewEncoding;
+    }
     return os;
 }
 

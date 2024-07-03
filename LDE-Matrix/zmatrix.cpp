@@ -188,6 +188,7 @@ std::ostream& operator<<(std::ostream& os, const zmatrix &zm) {
             if (j != zm.z[i].size()-1) os << ","; // Don't print a comma after the last element
         }
         os << "]"; // Print closing bracket for the row
+        if(zm.multilineOutput) os << std::endl; // Print a newline if we're doing multiline output
     }
     return os;
 }

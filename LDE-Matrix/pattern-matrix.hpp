@@ -26,6 +26,9 @@ class patternMatrix {
         bool printID = false;
         bool printCaseMatch = false;
         bool printAllIDs = false;
+        bool multilineOutput = false;
+        // TODO refactor to split new vs old encoding
+        zmatrix pNewEncoding;  // This is the pattern matrix with the new encoding - 2y + x
         // These are the matrices that are used for comparison
         zmatrix p; // This is the pattern matrix
         zmatrix pT;  // This is the transposed pattern matrix
