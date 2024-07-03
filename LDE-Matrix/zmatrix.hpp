@@ -9,6 +9,9 @@ class zmatrix {
         zmatrix();
         zmatrix(int rows, int cols, int maxValue);
 
+        // These are the flags for the zmatrix
+        bool multilineOutput = false;
+
         std::vector<std::vector<int>> z;
         int zSum;
         std::vector<int> zNumCounts; // Count of the number of 0s, 1s, 2s, 3s, ..., n's in the matrix
