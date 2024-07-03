@@ -190,6 +190,7 @@ void patternMatrix::printDebug(std::ostream& os) {
     cVT.printDebug(os);
 }
 
+// TODO - Add a note on which pattern encoding is being used
 std::ostream& operator<<(std::ostream& os,const patternMatrix &pm) {
     // Could do this differently by using flags to set the output format
     if (pm.printID) {
@@ -401,4 +402,117 @@ void patternMatrix::rearrangeRows(zmatrix patternVersion, zmatrix caseVersion, i
         os << patternVersion;
         caseRearrangements[os.str()] = true;
     }
+}
+
+// TODO - Refactor this
+/* Rules for orthnormality:
+   // definition of mij which is a different encoding
+   mij = 2yij + xij
+    // These are normality
+    i. ∑ mij = 0 (mod4)
+    ii. mij = 3 has to be paired if exists
+    // These are orthogonality
+    iii. ri · rj = 0 (mod2) when i  ̸= j
+    iv. the count of (1, 2), (1, 3), and (2, 3) pairs in  ri and  rj should be even
+
+*/
+bool patternMatrix::isOrthonormal() {
+    bool orthNorm = true;
+    // Map of N / M vs letters in the paper:
+    //  a = N, b = M;
+    //  x = N, y = M;
+    // N and M values from N + M*sqrt(2)
+    //  and then taking the modulo 2 of the individual results
+    //  where N is bit 1 and M is bit 0:
+    //    Examples:  0 == N=0, M=0
+    //               1 == N=0, M=1
+    //               2 == N=1, M=0
+    //               3 == N=1, M=1
+    // Normality checks
+    for (int i = 0; i < p.z.size(); i++) {
+        int m4Row = 0;
+        int m2Row = 0;
+        int m4Col = 0;
+        int m2Col = 0;
+        for (int j = 0; j < p.z.size(); j++) {
+            if (p.z[i][j] > 3) {
+                std::ostringstream os;
+                os << "Invalid value in pattern matrix: " << p.z[i][j];
+                throw std::runtime_error(os.str());
+            
+            }
+            int mij = p.z[i][j] / 2 + 2 * (p.z[i][j] % 2);  //mij = Nij + 2*Mij (row)
+            int mji = p.z[j][i] / 2 + 2 * (p.z[j][i] % 2);  //mji = Nji + 2*Mji (column)
+            // Rule i. ∑ mij = 0 (mod4); row check
+            m4Row += mij;
+            // Rule i. ∑ mji = 0 (mod4); column check
+            m4Col += mji;
+            // Rule ii. mij = 3 has to be paired if exists (row check)
+            if (mij == 3) m2Row++;
+            // Rule ii. mij = 3 has to be paired if exists (col check)
+            if (mji == 3) m2Col++;
+        }
+        // TODO: refactor this
+        if (printDebugInfo) {
+            if (m4Row % 4 != 0 || m2Row % 2 != 0) {
+                std::cout << "Row " << i+1 << " is not normalized" << std::endl;
+                std::cout << "  Rule i. ∑ mij = " << m4Row << "; mod4: " << m4Row % 4 << std::endl;
+                std::cout << "  Rule ii. mij = 3 has to be paired if exists; count: " << m2Row << "; mod2: " << m2Row % 2 << std::endl;
+                orthNorm = false;
+            }
+            if (m4Col % 4 != 0 || m2Col % 2 != 0) {
+                std::cout << "Column " << i+1 << " is not normalized" << std::endl;
+                std::cout << "  Rule i. ∑ mji = " << m4Col << "; mod4: " << m4Col % 4 << std::endl;
+                std::cout << "  Rule ii. mij = 3 has to be paired if exists; count: " << m2Col << "; mod2: " << m2Col % 2 << std::endl;
+                orthNorm = false;
+            }
+        }
+        if (!printDebugInfo && (m4Row % 4 != 0 || m2Row % 2 != 0 || m4Col % 4 != 0 || m2Col % 2 != 0)) {
+            return false;
+        }
+    }
+    // Orthogonality Checks
+    for (int i = 0; i < p.z.size(); i++) {
+        for (int j = i + 1; j < p.z.size(); j++) {
+            int m2RowDotProd = 0;
+            int m2RowPairs = 0;
+            int m2ColDotProd = 0;
+            int m2ColPairs = 0;
+            for (int k = 0; k < p.z.size(); k++) {
+                /*
+                */
+                int mik = p.z[i][k] / 2 + 2 * (p.z[i][k] % 2);  //mij = Nij + 2*Mij (row A)
+                int mjk = p.z[j][k] / 2 + 2 * (p.z[j][k] % 2);  //mkj = Nkj + 2*Mkj (row B)
+                int mki = p.z[k][i] / 2 + 2 * (p.z[k][i] % 2);  //mji = Nji + 2*Mji (column A)
+                int mkj = p.z[k][j] / 2 + 2 * (p.z[k][j] % 2);  //mjk = Njk + 2*Mjk (column B)
+                // iii. ri · rj = 0 (mod2) when i  ̸= k
+                // row A * row B
+                m2RowDotProd += mik * mjk;
+                // col A * col B
+                m2ColDotProd += mki * mkj;
+                // iv. the count of (1, 2), (1, 3), and (2, 3) pairs in  ri and rj should be even
+                if (mik != 0 && mjk != 0 && mik != mjk) m2RowPairs++;
+                if (mki != 0 && mkj != 0 && mki != mkj) m2ColPairs++;
+            }
+            // TODO: refactor this
+            if (printDebugInfo) {
+                if (m2RowDotProd % 2 != 0 || m2RowPairs % 2 != 0 ) {
+                    std::cout << "Rows " << i+1 << " and " << j+1 << " are not orthogonal" << std::endl;
+                    std::cout << "  Dot Product = " << m2RowDotProd << "; mod2 = " << m2RowDotProd % 2 << std::endl;
+                    std::cout << "  (1, 2), (1, 3), and (2, 3) pairs should be even; count = " << m2RowPairs << "; mod2 = " << m2RowPairs % 2 << std::endl;
+                    orthNorm = false;
+                }
+                if (m2ColDotProd % 2 != 0 || m2ColPairs % 2 != 0) {
+                    std::cout << "Columns " << i+1 << " and " << j+1 << " are not orthogonal" << std::endl;
+                    std::cout << "  Dot Product = " << m2ColDotProd << "; mod2 = " << m2ColDotProd % 2 << std::endl;
+                    std::cout << "  (1, 2), (1, 3), and (2, 3) pairs should be even; count = " << m2ColPairs << "; mod2 = " << m2ColPairs % 2 << std::endl;
+                    orthNorm = false;
+                }
+            }
+            if (!printDebugInfo && (m2RowDotProd % 2 != 0 || m2RowPairs % 2 != 0 || m2ColDotProd % 2 != 0 || m2ColPairs % 2 != 0)) {
+                return false;
+            }
+        }
+    }
+    return orthNorm;
 }

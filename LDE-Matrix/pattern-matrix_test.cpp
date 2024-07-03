@@ -173,6 +173,49 @@ std::map <int, std::vector<std::string>> REARRANGE_CASES_SHORT = {
     */
 };
 
+// These are a base test set which are guaranteed to be valid
+std::map <bool, std::vector<std::string>> ORTHONORMAL_PATTERN_CHECKS = {
+    {
+        true,  // The case where the pattern is orthonormal
+        {
+            // These were taken from pattern785 case matches
+            // Case 1
+            "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,1,1][0,0,0,1,2,2][0,0,0,1,2,2]",
+            "[0,0,0,0,1,1][0,0,0,0,1,1][0,1,2,2,1,1][0,1,2,2,1,1][1,1,0,0,1,1][1,1,1,1,1,1]",
+            // Case 2
+            "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,1,1,1,1][0,0,2,2,2,2][0,0,2,2,2,2]",
+            "[0,0,2,2,2,2][0,0,2,2,2,2][1,1,0,0,0,0][1,1,1,1,1,1][1,1,1,1,1,1][1,1,1,1,1,1]",
+            // Case 3
+            "[0,0,0,0,1,1][0,0,0,0,1,1][1,1,2,2,2,2][1,1,2,2,2,2][1,1,2,2,2,2][1,1,2,2,2,2]",
+            "[1,1,1,1,1,1][1,1,1,1,1,1][1,1,2,2,2,2][1,1,2,2,2,2][1,1,2,2,2,2][1,1,2,2,2,2]",
+            // Case 4
+            "[0,0,0,0,0,0][0,0,0,1,2,2][0,0,0,1,2,2][0,0,1,1,0,0][1,1,2,3,2,3][1,1,2,3,2,3]",
+            "[0,0,2,2,2,2][0,0,2,2,2,2][0,1,1,1,2,2][0,1,1,1,2,2][1,1,0,0,1,1][1,1,1,1,1,1]",
+            // Case 5
+            "[0,0,0,0,0,0][0,1,1,1,2,2][0,1,1,1,2,2][1,0,0,1,1,1][2,1,1,2,0,1][2,1,1,2,0,1]",
+            "[0,1,1,1,3,3][1,0,1,1,3,3][1,1,1,1,1,1][1,1,1,1,1,1][2,2,1,1,0,1][2,2,1,1,1,0]",
+            // Case 6
+            "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,2,2,3,3][1,1,2,2,2,2][2,2,0,0,3,3][2,2,1,1,2,2]",
+            "[0,0,0,0,1,1][0,0,1,1,0,0][2,2,1,1,2,2][2,2,1,1,2,2][3,3,2,2,1,1][3,3,2,2,1,1]",
+            // Case 7
+            // "[2,2,0,0,0,0][2,2,0,0,0,0][0,0,2,2,0,0][0,0,2,2,0,0][0,0,0,0,2,2][0,0,0,0,2,2]",
+            // Case 8
+            "[0,0,2,2,3,3][0,0,2,2,3,3][2,3,1,3,1,2][2,3,1,3,1,2][3,2,2,1,3,1][3,2,2,1,3,1]",
+            "[1,1,3,3,3,3][1,1,3,3,3,3][2,2,1,1,3,3][2,2,1,1,3,3][2,2,2,2,1,1][2,2,2,2,1,1]",
+        }
+    },
+    {
+        false,
+        {
+            "[3,3,0,0,3,2][0,0,2,3,3,3][2,3,0,0,3,3][3,2,3,2,0,0][0,0,3,3,2,3][3,2,3,3,0,0]",
+            // Should these fail???
+            "[2,2,0,0,0,0][2,2,0,0,0,0][0,0,2,2,0,0][0,0,2,2,0,0][0,0,0,0,2,2][0,0,0,0,2,2]",  // Case 7
+            "[0,0,0,0,2,2][0,0,0,0,2,2][0,0,0,1,0,0][0,0,1,0,0,0][0,1,0,0,0,0][1,0,0,0,0,0]",  // Case 1
+
+        }
+    },
+};
+
 
 TEST(PatternMatrixTest, PatternDefaultMatrixConstructor) {
     patternMatrix pm = patternMatrix();
@@ -422,6 +465,27 @@ TEST(PatternMatrixTest,PatternMatrixPatternElementAddition) {
         for (int j=0; j < results[i].size(); j++) {
             // Test the addition of the pattern elements
             EXPECT_EQ(results[i][j], pm.patternElementAddition(i,j)) << "i: " << i << " j: " << j;
+        }
+    }
+}
+
+TEST(PatternMatrixTest,PatternMatrixIsOrthonormal) {
+    for (auto const& [expected, patterns] : ORTHONORMAL_PATTERN_CHECKS) {
+        for (auto const& pattern : patterns) {
+            patternMatrix pm = patternMatrix(1, pattern);
+            pm.matchOnCases();
+            // Uncomment this to see the pattern that is not orthonormal
+            //if (!expected) {
+            //    pm.printDebugInfo = true;
+            //   std::cout << "Pattern: " << pattern << "; Case: " << pm.caseMatch << std::endl;
+            //}
+            bool got = pm.isOrthonormal();
+            EXPECT_EQ(got, expected) << "Expected: " << expected << " Got: " << got << " with Pattern: " << pattern << "; Case: " << pm.caseMatch;
+            // Debugging for failed tests
+            if (got != expected) {
+                pm.printDebugInfo = true;
+                pm.isOrthonormal();
+            }
         }
     }
 }
