@@ -36,6 +36,7 @@ class patternMatrix {
         zmatrix swap23T;  // This is the transposed pattern matrix with 2s swapped for 3s and 3s swapped for 2s
         zmatrix cV;  // This is the pattern matrix changed to match the case style, 0s for 0,1 and 1s for 2,3
         zmatrix cVT;  // This is the transposed pattern matrix changed to match the case style, 0s for 0,1 and 1s for 2,3
+        zmatrix pGroupings;  // This is the pattern matrix with the groupings applied
         // TODO: Add a A, B set of matrices for the pattern where: A+Bsqrt(2) = pattern
         //   and use these for normality and orthogonality checking
         //   Essentially, this is keeping the original form of the patterns when they are in binary form 'A B' of (0 0, 0 1, 1 0, 1 1)

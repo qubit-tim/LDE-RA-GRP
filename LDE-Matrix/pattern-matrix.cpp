@@ -23,6 +23,7 @@ void patternMatrix::init() {
     swap23T = zmatrix(cols, rows, 3);
     cV = zmatrix(rows, cols, 1);
     cVT = zmatrix(cols, rows, 1);
+    pGroupings = zmatrix(rows, cols, 36);
     originalMatrix = "[0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0]";
     loadCases();
 }
@@ -37,6 +38,7 @@ void patternMatrix::loadFromString(std::string m) {
     if (m.size() == 0) throw std::runtime_error("Empty pattern string");
     std::stringstream ms(m);
     std::string r;
+    int group = 1;  // Used to track groupings; initially, all entries are in their own group
     int row = 0;
     while(std::getline(ms, r, ']')) {
         if(row == rows) throw std::runtime_error("Too many rows in pattern string");
@@ -70,6 +72,8 @@ void patternMatrix::loadFromString(std::string m) {
             swap23T.z[col][row] = (mv == 2) ? 3 : (mv == 3) ? 2 : mv;
             cV.z[row][col] = mv / 2;
             cVT.z[col][row] = mv / 2;
+            pGroupings.z[row][col] = group;
+            group++;
             col++;
         }
         if(col != cols) {
@@ -242,7 +246,7 @@ void patternMatrix::leftTGateMultiply(int pRow, int qRow) {
     //  Handle left T-gate multiplication
     //  This means adding rows p, q and replacing both with the result
     //  This might be different when p > q
-    // TODO: Need to track LDEs here
+    //  TODO: Need to track LDEs here
     int result;
     for (int i = 0; i < p.z[pRow].size(); i++) {
         result = patternElementAddition(p.z[pRow][i], p.z[qRow][i]);
