@@ -3,6 +3,11 @@
 
 #include <map>
 #include <string>
+#include <format>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <sstream>
 
 #include "case-matrix.hpp"
 #include "zmatrix.hpp"
@@ -27,6 +32,7 @@ class patternMatrix {
         bool printCaseMatch = false;
         bool printAllIDs = false;
         bool multilineOutput = false;
+        bool printOldEncoding = false;
         // TODO refactor to split new vs old encoding
         zmatrix pNewEncoding;  // This is the pattern matrix with the new encoding - 2y + x
         // These are the matrices that are used for comparison
@@ -51,7 +57,6 @@ class patternMatrix {
         bool is23Swap(patternMatrix other);
         bool is23SwapT(patternMatrix other);
         void printDebug(std::ostream& os);
-        friend std::ostream& operator<<(std::ostream&,const patternMatrix &);
         void leftTGateMultiply(int p, int q);
         void rightTGateMultiply(int p, int q);
         // These could be private but are public for testing
@@ -63,6 +68,10 @@ class patternMatrix {
         std::string toString();
         // TODO: Add a csv output for the pattern matrix
         bool isOrthonormal();
+
+        // Friends
+        friend std::ostream& operator<<(std::ostream&,const patternMatrix &);
+    
     private:
         void init();
         void loadCases();
