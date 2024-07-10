@@ -21,6 +21,7 @@ class patternMatrix {
         int id2704 = 0;  // Identifier for the 2704 pattern
         int id928 = 0;   // Identifier for the 928 pattern
         int id785 = 0;   // Identifier for the 785 pattern
+        // Cases that the pattern could match
         std::vector<caseMatrix> cases;
         int caseMatch;
         int subCaseMatch;
@@ -50,6 +51,11 @@ class patternMatrix {
         //    See line 160 in the Latex document
         std::string originalMatrix; // This is the original matrix string
         std::map<std::string, bool> caseRearrangements; // This is a map of all the possible case rearrangements
+        // LDE Tracking
+        int LDE = 0;  // This is the LDE of the pattern
+        // This tracks an entry by entry LDE change based on T-Gate operations and factorization
+        std::vector<std::vector<int>> entryLDEs;
+
         void loadFromString(std::string m);
         void matchOnCases();
         bool matchesCase(int caseIndex);

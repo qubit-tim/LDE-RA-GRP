@@ -24,6 +24,10 @@ void patternMatrix::init() {
     cV = zmatrix(rows, cols, 1);
     cVT = zmatrix(cols, rows, 1);
     pGroupings = zmatrix(rows, cols, 36);
+    entryLDEs.resize(rows);
+    for (int i = 0; i < rows; i++) {
+        entryLDEs[i].resize(cols);
+    }
     originalMatrix = "[0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0]";
     loadCases();
 }
@@ -263,6 +267,9 @@ void patternMatrix::leftTGateMultiply(int pRow, int qRow) {
         result = patternElementAddition(p.z[pRow][i], p.z[qRow][i]);
         p.z[pRow][i] = result;
         p.z[qRow][i] = result;
+        // Increment the LDEs
+        entryLDEs[pRow][i]++;
+        entryLDEs[qRow][i]++;
         // Groupings - Going to use the lower group number of the two
         //  It might not matter but might also make it easier for humans to read
         if (pGroupings.z[pRow][i] > pGroupings.z[qRow][i]) {
@@ -271,7 +278,7 @@ void patternMatrix::leftTGateMultiply(int pRow, int qRow) {
             pGroupings.z[qRow][i] = pGroupings.z[pRow][i];
         }
     }
-    // TODO - Do factorization
+    // TODO - Do factorization which includes possible LDE reduction
 }
 
 // Right T-gate multiplication means adding columns p, q and replacing both with the result
@@ -285,6 +292,9 @@ void patternMatrix::rightTGateMultiply(int pCol, int qCol) {
         result = patternElementAddition(p.z[i][pCol], p.z[i][qCol]);
         p.z[i][pCol] = result;
         p.z[i][qCol] = result;
+        // Increment the LDEs
+        entryLDEs[i][pCol]++;
+        entryLDEs[i][qCol]++;
         // Groupings - Going to use the lower group number of the two
         //  It might not matter but might also make it easier for humans to read
         if (pGroupings.z[i][pCol] <= pGroupings.z[i][qCol]) {
@@ -293,7 +303,7 @@ void patternMatrix::rightTGateMultiply(int pCol, int qCol) {
             pGroupings.z[i][qCol] = pGroupings.z[i][pCol];
         }
     }
-    // TODO - Do factorization
+    // TODO - Do factorization which includes possible LDE reduction
 }
 // ====== MULTIPLICATION BY T-GATES ======
 
