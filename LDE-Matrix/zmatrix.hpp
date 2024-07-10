@@ -2,6 +2,11 @@
 #define Z_MATRIX_HPP
 
 #include <vector>
+#include <format>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <sstream>
 
 // Attempting to generalize the pattern and case matrices into a single class
 class zmatrix {

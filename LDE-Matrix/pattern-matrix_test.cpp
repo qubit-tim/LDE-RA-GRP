@@ -1,5 +1,6 @@
 #include "pattern-matrix.hpp"
 #include "zmatrix.hpp"
+#include "test-utils.hpp"
 
 #include <gtest/gtest.h>
 
@@ -221,6 +222,7 @@ TEST(PatternMatrixTest, PatternDefaultMatrixConstructor) {
     patternMatrix pm = patternMatrix();
     zmatrix pmz = zmatrix(6,6,3);
     zmatrix cz = zmatrix(6,6,1);
+    zmatrix groupings = zmatrix(6,6,36);
     EXPECT_EQ(pm.id, 0);
     EXPECT_EQ(pm.id2704, 0);
     EXPECT_EQ(pm.id928, 0);
@@ -237,6 +239,7 @@ TEST(PatternMatrixTest, PatternDefaultMatrixConstructor) {
     EXPECT_EQ(pm.cV, cz);
     EXPECT_EQ(pm.cVT, cz);
     EXPECT_EQ(pm.originalMatrix, "[0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0]");
+    EXPECT_EQ(pm.pGroupings, groupings);
 }
 
 TEST(PatternMatrixTest, PatternMatrixLoadFromString) {
@@ -256,6 +259,7 @@ TEST(PatternMatrixTest,PatternMatrixStringConstructor) {
     pmz.updateMetadata();
     zmatrix cz = zmatrix(6,6,1);
     cz.updateMetadata();
+    zmatrix groupings = initGroupings();
     EXPECT_EQ(pm.id, 1);
     EXPECT_EQ(pm.id2704, 0);
     EXPECT_EQ(pm.id928, 0);
@@ -266,6 +270,7 @@ TEST(PatternMatrixTest,PatternMatrixStringConstructor) {
     EXPECT_EQ(pm.printCaseMatch, false);
     EXPECT_EQ(pm.printAllIDs, false);
     EXPECT_EQ(pm.originalMatrix, ALL_ZEROS_PATTERN);
+    EXPECT_EQ(pm.pGroupings, groupings);
     EXPECT_TRUE(pm.p == pmz);
     EXPECT_TRUE(pm.pT == pmz);
     EXPECT_TRUE(pm.swap23 == pmz);
@@ -433,11 +438,62 @@ TEST(PatternMatrixTest,PatternMatrixOptimalCaseRearrangements) {
 
 // TODO: Implement the following tests
 TEST(PatternMatrixTest,PatternMatrixLeftTGateMultiply) {
-    GTEST_SKIP() << "Not implemented yet";
+    patternMatrix pm1 = patternMatrix(1, "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,1,1][0,0,0,1,2,2][0,0,0,1,2,2]");
+    if(!pm1.rearrangeMatrix()) FAIL() << "Failed to rearrange matrix";
+    pm1.multilineOutput = true;
+    pm1.printOldEncoding = true;
+    std::cout << "Original Matrix: " << std::endl;
+    std::cout << pm1 << std::endl;
+    patternMatrix pmR = patternMatrix(1, pm1.caseRearrangements.begin()->first);
+    pmR.multilineOutput = true;
+    pmR.printOldEncoding = true;
+    std::cout << "Rearranged Matrix: " << std::endl;
+    std::cout << pmR << std::endl;
+    pmR.leftTGateMultiply(0,1);
+    std::cout << "leftTGateMultiply: " << std::endl;
+    std::cout << pmR << std::endl;
+    std::cout << "Groupings" << std::endl;
+    pmR.pGroupings.multilineOutput = true;
+    std::cout << pmR.pGroupings << std::endl;
+    std::cout << "LDEs - NO FACTORING DONE" << std::endl;
+    for (int i=0; i < 6; i++) {
+        std::cout << "[";
+        for (int j=0; j < 6; j++) {
+            std::cout << pmR.entryLDEs[i][j] << " ";
+        }
+        std::cout << "]" << std::endl;
+    }
+    GTEST_SKIP() << "Not finished";
 }
 
 TEST(PatternMatrixTest,PatternMatrixRightTGateMultiply) {
-    GTEST_SKIP() << "Not implemented yet";
+    patternMatrix pm1 = patternMatrix(1, "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,1,1][0,0,0,1,2,2][0,0,0,1,2,2]");
+    if(!pm1.rearrangeMatrix()) FAIL() << "Failed to rearrange matrix";
+    pm1.multilineOutput = true;
+    pm1.printOldEncoding = true;
+    std::cout << "Original Matrix: " << std::endl;
+    std::cout << pm1 << std::endl;
+    patternMatrix pmR = patternMatrix(1, pm1.caseRearrangements.begin()->first);
+    pmR.multilineOutput = true;
+    pmR.printOldEncoding = true;
+    std::cout << "Rearranged Matrix: " << std::endl;
+    std::cout << pmR << std::endl;
+    pmR.rightTGateMultiply(0,1);
+    std::cout << "RightTGateMultiply: " << std::endl;
+    std::cout << pmR << std::endl;
+    std::cout << "Groupings" << std::endl;
+    pmR.pGroupings.multilineOutput = true;
+    std::cout << pmR.pGroupings << std::endl;
+    std::cout << "LDEs - NO FACTORING DONE" << std::endl;
+    for (int i=0; i < 6; i++) {
+        std::cout << "[";
+        for (int j=0; j < 6; j++) {
+            std::cout << pmR.entryLDEs[i][j];
+            if (j < 5) std::cout << ",";
+        }
+        std::cout << "]" << std::endl;
+    }
+    GTEST_SKIP() << "Not finished";
 }
 
 TEST(PatternMatrixTest,PatternMatrixPrintMatchComparison) {

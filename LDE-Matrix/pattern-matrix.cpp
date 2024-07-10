@@ -23,6 +23,11 @@ void patternMatrix::init() {
     swap23T = zmatrix(cols, rows, 3);
     cV = zmatrix(rows, cols, 1);
     cVT = zmatrix(cols, rows, 1);
+    pGroupings = zmatrix(rows, cols, 36);
+    entryLDEs.resize(rows);
+    for (int i = 0; i < rows; i++) {
+        entryLDEs[i].resize(cols);
+    }
     originalMatrix = "[0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0]";
     loadCases();
 }
@@ -37,6 +42,7 @@ void patternMatrix::loadFromString(std::string m) {
     if (m.size() == 0) throw std::runtime_error("Empty pattern string");
     std::stringstream ms(m);
     std::string r;
+    int group = 1;  // Used to track groupings; initially, all entries are in their own group
     int row = 0;
     while(std::getline(ms, r, ']')) {
         if(row == rows) throw std::runtime_error("Too many rows in pattern string");
@@ -70,6 +76,8 @@ void patternMatrix::loadFromString(std::string m) {
             swap23T.z[col][row] = (mv == 2) ? 3 : (mv == 3) ? 2 : mv;
             cV.z[row][col] = mv / 2;
             cVT.z[col][row] = mv / 2;
+            pGroupings.z[row][col] = group;
+            group++;
             col++;
         }
         if(col != cols) {
@@ -90,6 +98,7 @@ void patternMatrix::loadFromString(std::string m) {
     cVT.updateMetadata();
     swap23.updateMetadata();
     swap23T.updateMetadata();
+    pGroupings.updateMetadata();  // This probably isn't necessary but it's good to be consistent
     // Now we know we have a valid matrix string so let's save it
     originalMatrix = toString();
 }
@@ -193,7 +202,7 @@ void patternMatrix::printDebug(std::ostream& os) {
 }
 
 // TODO - Add a note on which pattern encoding is being used
-// TODO - Refactor this mess
+// TODO - Refactor this mess, especially the new vs old encoding
 std::ostream& operator<<(std::ostream& os,const patternMatrix &pm) {
     // Could do this differently by using flags to set the output format
     if (pm.printID) {
@@ -209,12 +218,22 @@ std::ostream& operator<<(std::ostream& os,const patternMatrix &pm) {
         if (pm.printID || pm.printCaseMatch || pm.printAllIDs) {
             os << std::endl;
         }
-        zmatrix temp = pm.pNewEncoding;
-        temp.multilineOutput = true;
-        os << temp;
+        if (pm.printOldEncoding) {
+            zmatrix temp = pm.p;
+            temp.multilineOutput = true;
+            os << temp;
+        } else {
+            zmatrix temp = pm.pNewEncoding;
+            temp.multilineOutput = true;
+            os << temp;
+        }
     } else {
         if (pm.printID || pm.printCaseMatch || pm.printAllIDs) os << " ";
-        os << pm.pNewEncoding;
+        if (pm.printOldEncoding) {
+            os << pm.p;
+        } else {
+            os << pm.pNewEncoding;
+        }
     }
     return os;
 }
@@ -242,16 +261,24 @@ void patternMatrix::leftTGateMultiply(int pRow, int qRow) {
     //  Handle left T-gate multiplication
     //  This means adding rows p, q and replacing both with the result
     //  This might be different when p > q
-    // TODO: Need to track LDEs here
+    //  TODO: Need to track LDEs here
     int result;
     for (int i = 0; i < p.z[pRow].size(); i++) {
         result = patternElementAddition(p.z[pRow][i], p.z[qRow][i]);
         p.z[pRow][i] = result;
         p.z[qRow][i] = result;
-        // Do factorization
-        // Check which case they match
-        //  If they don't match a case, then remove the pattern
+        // Increment the LDEs
+        entryLDEs[pRow][i]++;
+        entryLDEs[qRow][i]++;
+        // Groupings - Going to use the lower group number of the two
+        //  It might not matter but might also make it easier for humans to read
+        if (pGroupings.z[pRow][i] > pGroupings.z[qRow][i]) {
+            pGroupings.z[pRow][i] = pGroupings.z[qRow][i];
+        } else {
+            pGroupings.z[qRow][i] = pGroupings.z[pRow][i];
+        }
     }
+    // TODO - Do factorization which includes possible LDE reduction
 }
 
 // Right T-gate multiplication means adding columns p, q and replacing both with the result
@@ -265,8 +292,18 @@ void patternMatrix::rightTGateMultiply(int pCol, int qCol) {
         result = patternElementAddition(p.z[i][pCol], p.z[i][qCol]);
         p.z[i][pCol] = result;
         p.z[i][qCol] = result;
-        // Do factorization
+        // Increment the LDEs
+        entryLDEs[i][pCol]++;
+        entryLDEs[i][qCol]++;
+        // Groupings - Going to use the lower group number of the two
+        //  It might not matter but might also make it easier for humans to read
+        if (pGroupings.z[i][pCol] <= pGroupings.z[i][qCol]) {
+            pGroupings.z[i][pCol] = pGroupings.z[i][qCol];
+        } else {
+            pGroupings.z[i][qCol] = pGroupings.z[i][pCol];
+        }
     }
+    // TODO - Do factorization which includes possible LDE reduction
 }
 // ====== MULTIPLICATION BY T-GATES ======
 

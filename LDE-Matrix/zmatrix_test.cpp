@@ -1,4 +1,5 @@
 #include "zmatrix.hpp"
+#include "test-utils.hpp"
 
 #include <gtest/gtest.h>
 
@@ -88,7 +89,7 @@ TEST(ZMatrixTest, ZMatrixConstructor) {
     EXPECT_EQ(zPattern.zCountCols.size(), PATTERN_MAX_VALUE+1);
 }
 
-TEST(ZMatrixTest, ZMatrixUpdateMetadata) {
+TEST(ZMatrixTest, ZMatrixCasesUpdateMetadata) {
     // Test case matrices
     zmatrix zCase = zmatrix(ROWS, COLS, CASE_MAX_VALUE);
     // Case 1
@@ -185,7 +186,9 @@ TEST(ZMatrixTest, ZMatrixUpdateMetadata) {
             }
         }
     }
+}
 
+TEST(ZMatrixTest, ZMatrixPatternsUpdateMetadata) {
     // Test pattern matrices
     zmatrix zPattern = zmatrix(ROWS, COLS, PATTERN_MAX_VALUE);
     // Pattern A
@@ -412,6 +415,13 @@ TEST(ZMatrixTest, ZMatrixUpdateMetadata) {
     zmatrix zNegativeValueException = zmatrix(ROWS, COLS, PATTERN_MAX_VALUE);
     zNegativeValueException.z = NEGATIVE_VALUE_PATTERN;
     EXPECT_THROW(zNegativeValueException.updateMetadata(),std::runtime_error);
+}
+
+// TODO - Expand this test
+TEST(ZMatrixTest, ZMatrixGroupingsUpdateMetadata) {
+    zmatrix groupings = initGroupings();
+    groupings.updateMetadata();
+    EXPECT_EQ(groupings.zSum, 666);
 }
 
 TEST(ZMatrixTest, ZMatrixEqualityOperator) {

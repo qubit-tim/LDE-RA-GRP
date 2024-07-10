@@ -17,6 +17,7 @@ cc_test(
     deps = [
       "@googletest//:gtest_main",
       ":zmatrix",
+      ":lde-matrix-test-utils",
     ],
 )
 
@@ -56,6 +57,7 @@ cc_test(
     deps = [
       "@googletest//:gtest_main",
       ":pattern-matrix",
+      ":lde-matrix-test-utils",
     ],
 )
 
@@ -67,4 +69,16 @@ cc_test(
       "@googletest//:gtest_main",
       ":pattern-matrix",
     ],
+)
+
+cc_library(
+    name = "lde-matrix-test-utils",
+    srcs = ["test-utils.cpp"],
+    hdrs = ["test-utils.hpp"],
+    deps = [
+        ":zmatrix",
+        ":pattern-matrix",
+        ":case-matrix",
+    ],
+    visibility = ["//visibility:public"],
 )
