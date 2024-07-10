@@ -59,6 +59,7 @@ class patternMatrix {
         void loadFromString(std::string m);
         void matchOnCases();
         bool matchesCase(int caseIndex);
+        bool determineSubCase();
         bool isTranspose(patternMatrix other);
         bool is23Swap(patternMatrix other);
         bool is23SwapT(patternMatrix other);

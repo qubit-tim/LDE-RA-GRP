@@ -123,6 +123,42 @@ bool patternMatrix::matchesCase(int caseIndex) {
     return false;
 }
 
+// This might need a refactor into the normal matchOnCases 
+//  however it does require the pattern to be rearranged to match the case (I think)
+bool patternMatrix::determineSubCase(){
+    subCaseMatch = -1;
+    switch (caseMatch)
+    {
+    case 1:
+        subCaseMatch = 0;
+        return true;
+    case 2:
+        subCaseMatch = 0;
+        return true;
+    case 3:
+        // check for subcases a,b,c
+        break;
+    case 4:
+        // check for subcases a,b
+        break;
+    case 5:
+        // check for subcases a,b
+        break;
+    case 6:
+        // TBD
+        break;
+    case 7:
+        // TBD
+        break;
+    case 8:
+        // check for subcases a,b
+        break;
+    default:
+        break;
+    }
+    return false;
+}
+
 bool patternMatrix::isTranspose(patternMatrix other) {
     // We need to do a complete check to verify that the pattern matrix is a transpose of the other
     bool isTranspose = (pT == other.p);

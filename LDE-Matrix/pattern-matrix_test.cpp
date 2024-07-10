@@ -389,6 +389,10 @@ TEST(PatternMatrixTest,PatternMatrixMatchOnCases) {
     }
 }
 
+TEST(PatternMatrixTest,PatternMatrixDetermineSubCase) {
+    GTEST_SKIP() << "Not implemented yet";
+}
+
 // TODO - Rearrangement Refactor + Test Overhaul
 //  This is a shortened version of the rearrangement test
 //  To do a full up test, run the test file dedicated to rearrangements
