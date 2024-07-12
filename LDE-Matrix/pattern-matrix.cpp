@@ -39,6 +39,20 @@ patternMatrix::patternMatrix(int pNum, std::string matrix) {
     loadFromString(matrix);
 }
 
+patternMatrix::patternMatrix(int pNum, std::string matrix, bool newEncoding) {
+    init();
+    id = pNum;
+    if (newEncoding) {
+        for(int i = 0; i < matrix.size(); i++) {
+            if (matrix[i] == '0') matrix[i] = '0';
+            else if (matrix[i] == '1') matrix[i] = '2';
+            else if (matrix[i] == '2') matrix[i] = '1';
+            else if (matrix[i] == '3') matrix[i] = '3';
+        }
+    }
+    loadFromString(matrix);
+}
+
 void patternMatrix::loadFromString(std::string m) {
     if (m.size() == 0) throw std::runtime_error("Empty pattern string");
     std::stringstream ms(m);
@@ -268,9 +282,10 @@ bool patternMatrix::case6SubCaseMatch() {
         subCaseMatch = 'b';
         return true;
     }
-    // 6c: In the first four rows, only two paired entries per row,
-    if (rowPairCounts[0][1] == 2 && rowPairCounts[0][2] == 2 && rowPairCounts[0][3] == 2 && 
-        rowPairCounts[1][2] == 2 && rowPairCounts[1][3] == 2 && rowPairCounts[2][3] == 2) {
+    // 6c: In the first four rows, only two paired entries between sets of 2 rows ([1,2 and 3,4] or [1,3 and 2,4] or [1,4 and 2,3])
+    if ((rowPairCounts[0][1] == 2 && rowPairCounts[2][3] == 2) || 
+        (rowPairCounts[0][2] == 2 && rowPairCounts[1][3] == 2) ||
+        (rowPairCounts[0][3] == 2 && rowPairCounts[1][2] == 2)) {
         subCaseMatch = 'c';
         return true;
     }

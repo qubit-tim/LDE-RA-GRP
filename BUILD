@@ -18,7 +18,25 @@ cc_binary(
     ],
 )
 
+cc_binary(
+    name = "lde-subcase-matching",
+    srcs = ["subcase-matching.cpp"],
+    deps = [
+        "//LDE-Matrix:pattern-matrix",
+        "//LDE-Matrix:zmatrix",
+    ],
+    data = [
+        ":patterns",
+        ":matched-cases",
+    ],
+)
+
 filegroup(
         name = 'patterns',
-        srcs = glob(['patterns/*'])
+        srcs = glob(['patterns/**'])
+)
+
+filegroup(
+        name = 'matched-cases',
+        srcs = glob(['matched-cases/**'])
 )

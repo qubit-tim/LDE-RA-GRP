@@ -282,6 +282,10 @@ TEST(PatternMatrixTest,PatternMatrixStringConstructor) {
     EXPECT_EQ(pm2.originalMatrix, VALID_BINARY_PATTERN_IN_NUMERICAL_FORM);
 }
 
+TEST(PatternMatrixTest,PatternMatrixNewEncodingConstructor) {
+    GTEST_SKIP() << "Not implemented yet";
+}
+
 TEST(PatternMatrixTest,PatternMatrixIsTranspose) {
     patternMatrix pm1 = patternMatrix(1, "[1,1,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]");
     patternMatrix pm2 = patternMatrix(1, "[1,0,0,0,0,0][1,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]");

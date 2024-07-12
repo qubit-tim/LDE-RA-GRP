@@ -16,6 +16,7 @@ class patternMatrix {
     public:
         patternMatrix();
         patternMatrix(int patternNumber, std::string matrix);
+        patternMatrix(int pNum, std::string matrix, bool newEncoding);
         int id;  // Primary identifier for the pattern
         // These identifiers start at 1 and increase with 0 meaning it's not in the file
         int id2704 = 0;  // Identifier for the 2704 pattern
