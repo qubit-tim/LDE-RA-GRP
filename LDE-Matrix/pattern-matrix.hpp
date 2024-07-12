@@ -24,7 +24,7 @@ class patternMatrix {
         // Cases that the pattern could match
         std::vector<caseMatrix> cases;
         int caseMatch;
-        int subCaseMatch;
+        char subCaseMatch;
         // These are the flags for the pattern matrix
         bool printDebugInfo = false;  // WIP: This is for printing debug information
         bool singleCaseRearrangement = false;  // This is stop the case rearrangement code after a single solution is found
@@ -51,15 +51,29 @@ class patternMatrix {
         //    See line 160 in the Latex document
         std::string originalMatrix; // This is the original matrix string
         std::map<std::string, bool> caseRearrangements; // This is a map of all the possible case rearrangements
+        std::vector<std::vector<int>> rowPairCounts;  // This is the row pair counts for the pattern
+        std::vector<std::vector<int>> colPairCounts;  // This is the col pair counts for the pattern
         // LDE Tracking
         int LDE = 0;  // This is the LDE of the pattern
         // This tracks an entry by entry LDE change based on T-Gate operations and factorization
         std::vector<std::vector<int>> entryLDEs;
 
         void loadFromString(std::string m);
+        void updatePairCounts();
+        // Case Matching Functions
         void matchOnCases();
         bool matchesCase(int caseIndex);
         bool determineSubCase();
+        bool case1SubCaseMatch();
+        bool case2SubCaseMatch();
+        bool case3SubCaseMatch();
+        bool case4SubCaseMatch();
+        bool case5SubCaseMatch();
+        bool case6SubCaseMatch();
+        bool case7SubCaseMatch();
+        bool case8SubCaseMatch();
+
+        // Duplicate Pattern Checks
         bool isTranspose(patternMatrix other);
         bool is23Swap(patternMatrix other);
         bool is23SwapT(patternMatrix other);
