@@ -82,7 +82,6 @@ class patternMatrix {
         void leftTGateMultiply(int p, int q);
         void rightTGateMultiply(int p, int q);
         // These could be private but are public for testing
-        void printMatchComparison(caseMatrix cm);
         bool rearrangeMatrix();
         void rearrangeColumns(zmatrix patternVersion, zmatrix caseVersion, int currentColumn);
         void rearrangeRows(zmatrix patternVersion, zmatrix caseVersion, int currentRow);

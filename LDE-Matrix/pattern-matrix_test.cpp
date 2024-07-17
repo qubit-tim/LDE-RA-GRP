@@ -571,10 +571,6 @@ TEST(PatternMatrixTest,PatternMatrixRightTGateMultiply) {
     GTEST_SKIP() << "Not finished";
 }
 
-TEST(PatternMatrixTest,PatternMatrixPrintMatchComparison) {
-    GTEST_SKIP() << "Not implemented yet";
-}
-
 // TODO - This might be better to put outside of the PatternMatrix and into another file
 //  But should be determined after figuring out how to handle LDEs
 TEST(PatternMatrixTest,PatternMatrixPatternElementAddition) {

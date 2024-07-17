@@ -424,10 +424,6 @@ std::ostream& operator<<(std::ostream& os,const patternMatrix &pm) {
     return os;
 }
 
-void patternMatrix::printMatchComparison(caseMatrix cm) {
-    std::cout << "NOT IMPLEMENTED YET" << std::endl;
-}
-
 // Do something with factorization of the sqrt(2) and the modulo 2 addition
 //  Need to make sure that we handle all of the different outcomes as some may produce multiple
 //   See your notes for that.
