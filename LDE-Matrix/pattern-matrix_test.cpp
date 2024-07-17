@@ -110,6 +110,57 @@ std::map <int, std::vector<std::string>> CASE_TO_VALID_PATTERN_MAP = {
     },
 };
 
+// These are a limited set of the patterns which were taken from case files
+std::map <int, std::map<char, std::string> > SUBCASE_NEW_ENCODING_MAP = {
+    {
+        1,  {
+            {'-', "[1,1,0,2,0,0][1,1,0,2,0,0][0,0,0,0,0,0][2,2,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"},
+        }
+    },
+    {
+        2, {
+            {'-', "[1,1,0,2,0,0][1,1,0,2,0,0][3,3,2,2,0,2][3,3,2,2,0,2][0,0,0,0,0,0][0,0,0,0,0,0]"},
+        },
+    },
+    {
+        3, {
+            {'a', "[1,1,3,3,0,0][3,3,1,1,0,0][1,1,1,1,2,2][3,3,3,3,2,2][0,0,0,0,0,0][0,0,0,0,0,0]"},
+            {'b', "[1,1,1,1,0,0][3,3,3,3,0,0][1,3,1,3,2,2][3,1,3,1,2,2][0,0,2,2,0,0][0,0,2,2,0,0]"},
+            {'c', "[1,1,3,3,0,0][3,3,1,1,0,0][1,3,3,1,2,2][3,1,1,3,2,2][0,2,0,2,2,2][0,2,0,2,2,2]"},
+        },
+    },
+    {
+        4, {
+            {'a', "[1,1,1,1,2,2][1,1,1,1,2,2][1,1,2,2,0,2][1,1,2,2,0,2][0,0,0,0,0,0][0,0,2,2,0,0]"},
+            {'b', "[1,3,1,3,2,2][3,1,1,3,2,2][1,1,0,2,0,0][3,3,2,0,0,0][0,0,2,2,0,0][0,0,2,2,0,0]"},
+        },
+    },
+    {
+        5, {
+            {'a', "[1,1,2,2,0,2][1,1,2,2,0,2][2,2,3,3,0,2][2,2,3,3,0,2][0,0,0,0,0,0][2,2,2,2,0,0]"},
+            {'b', "[1,1,0,2,2,2][1,1,2,0,2,2][0,2,3,3,2,2][2,0,3,3,2,2][0,0,0,0,2,2][0,0,0,0,2,2]"},
+        },
+    },
+    {
+        6, {
+            {'a', "[3,3,1,1,0,0][3,3,1,1,0,0][1,1,0,0,3,3][1,1,0,0,3,3][0,0,0,0,0,0][0,0,2,2,2,2]"},
+            {'b', "[1,1,3,3,2,2][3,3,3,3,0,0][1,1,0,0,3,3][3,3,2,2,3,3][0,0,0,0,2,2][0,0,0,0,2,2]"},
+            {'c', "[1,3,1,3,2,2][3,1,1,3,0,0][1,3,0,0,1,3][3,1,2,2,1,3][0,0,2,2,2,2][0,0,2,2,2,2]"},
+        },
+    },
+    {
+        7, {
+            {'-', "[1,1,0,0,0,0][1,1,0,0,0,0][0,0,1,1,0,0][0,0,1,1,0,0][0,0,0,0,1,1][0,0,0,0,1,1]"},
+        },
+    },
+    {
+        8, {
+            {'a', "[1,1,1,1,0,0][3,3,3,3,0,0][1,1,0,0,1,1][3,3,0,0,3,3][0,0,1,1,1,1][0,0,3,3,3,3]"},
+            {'b', "[3,1,3,1,2,2][3,1,3,1,2,2][1,3,2,2,3,1][1,3,2,2,3,1][2,2,1,3,1,3][2,2,1,3,1,3]"},
+        },
+    },
+};
+
 // TODO - Rearrangement Refactor + Test Overhaul
 // These are a limited set of the patterns which are guaranteed to be valid
 std::map <int, std::vector<std::string>> REARRANGE_CASES_SHORT = {
@@ -228,7 +279,7 @@ TEST(PatternMatrixTest, PatternDefaultMatrixConstructor) {
     EXPECT_EQ(pm.id928, 0);
     EXPECT_EQ(pm.id785, 0);
     EXPECT_EQ(pm.caseMatch, -1);
-    EXPECT_EQ(pm.subCaseMatch, -1);
+    EXPECT_EQ(pm.subCaseMatch, '-');
     EXPECT_EQ(pm.printID, false);
     EXPECT_EQ(pm.printCaseMatch, false);
     EXPECT_EQ(pm.printAllIDs, false);
@@ -265,7 +316,7 @@ TEST(PatternMatrixTest,PatternMatrixStringConstructor) {
     EXPECT_EQ(pm.id928, 0);
     EXPECT_EQ(pm.id785, 0);
     EXPECT_EQ(pm.caseMatch, -1);
-    EXPECT_EQ(pm.subCaseMatch, -1);
+    EXPECT_EQ(pm.subCaseMatch, '-');
     EXPECT_EQ(pm.printID, false);
     EXPECT_EQ(pm.printCaseMatch, false);
     EXPECT_EQ(pm.printAllIDs, false);
@@ -282,8 +333,16 @@ TEST(PatternMatrixTest,PatternMatrixStringConstructor) {
     EXPECT_EQ(pm2.originalMatrix, VALID_BINARY_PATTERN_IN_NUMERICAL_FORM);
 }
 
+// TODO - Add a few more test cases
 TEST(PatternMatrixTest,PatternMatrixNewEncodingConstructor) {
-    GTEST_SKIP() << "Not implemented yet";
+    // Using a case match from the 928 group to test the new encoding
+    // Case 2 - 27 [1,1,0,2,0,0][1,1,2,0,0,0][1,1,0,0,0,2][1,1,2,2,0,2][0,0,0,0,0,0][0,0,0,0,0,0]
+    patternMatrix pm = patternMatrix(27, "[1,1,0,2,0,0][1,1,2,0,0,0][1,1,0,0,0,2][1,1,2,2,0,2][0,0,0,0,0,0][0,0,0,0,0,0]", true);
+    EXPECT_EQ(pm.caseMatch, -1);
+    EXPECT_EQ(pm.subCaseMatch, '-');
+    pm.matchOnCases();
+    EXPECT_EQ(pm.caseMatch, 2);
+    EXPECT_EQ(pm.subCaseMatch, '-');
 }
 
 TEST(PatternMatrixTest,PatternMatrixIsTranspose) {
@@ -394,7 +453,15 @@ TEST(PatternMatrixTest,PatternMatrixMatchOnCases) {
 }
 
 TEST(PatternMatrixTest,PatternMatrixDetermineSubCase) {
-    GTEST_SKIP() << "Not implemented yet";
+    for (auto const& [caseNumber, subcases] : SUBCASE_NEW_ENCODING_MAP) {
+        for (auto const& [subcase, pattern] : subcases) {
+            patternMatrix pm = patternMatrix(1, pattern, true);
+            pm.matchOnCases();
+            EXPECT_TRUE(pm.caseMatch == caseNumber) << "Expected: " << caseNumber << " Got: " << pm.caseMatch << " with Pattern: " << pattern;
+            pm.determineSubCase();
+            EXPECT_TRUE(pm.subCaseMatch == subcase) << "Expected: " << subcase << " Got: " << pm.subCaseMatch << " with Pattern: " << pattern;
+        }
+    }
 }
 
 // TODO - Rearrangement Refactor + Test Overhaul
