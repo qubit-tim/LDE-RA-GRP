@@ -15,7 +15,7 @@ patternMatrix::patternMatrix() {
 void patternMatrix::init() {
     id = 0;
     caseMatch = -1;
-    subCaseMatch = -1;
+    subCaseMatch = '-';
     pNewEncoding = zmatrix(rows, cols, 3);
     p = zmatrix(rows, cols, 3);
     pT = zmatrix(cols, rows, 3);
@@ -30,11 +30,26 @@ void patternMatrix::init() {
     }
     originalMatrix = "[0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0]";
     loadCases();
+    updatePairCounts();
 }
 
 patternMatrix::patternMatrix(int pNum, std::string matrix) {
     init();
     id = pNum;
+    loadFromString(matrix);
+}
+
+patternMatrix::patternMatrix(int pNum, std::string matrix, bool newEncoding) {
+    init();
+    id = pNum;
+    if (newEncoding) {
+        for(int i = 0; i < matrix.size(); i++) {
+            if (matrix[i] == '0') matrix[i] = '0';
+            else if (matrix[i] == '1') matrix[i] = '2';
+            else if (matrix[i] == '2') matrix[i] = '1';
+            else if (matrix[i] == '3') matrix[i] = '3';
+        }
+    }
     loadFromString(matrix);
 }
 
@@ -103,6 +118,34 @@ void patternMatrix::loadFromString(std::string m) {
     originalMatrix = toString();
 }
 
+void patternMatrix::updatePairCounts(){
+    // Reset the pair counts
+    rowPairCounts.resize(rows);
+    for (int i = 0; i < rows; i++) {
+        rowPairCounts[i].resize(rows);
+    }
+    colPairCounts.resize(cols);
+    for (int i = 0; i < cols; i++) {
+        colPairCounts[i].resize(cols);
+    }
+    // Now to update the pair counts
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < rows; j++) {
+            rowPairCounts[i][j] = 0;
+            colPairCounts[i][j] = 0;
+            if (i == j) {
+                rowPairCounts[i][j] = 6;
+                colPairCounts[i][j] = 6;
+                continue;
+            }
+            for (int k = 0; k < cols; k++) {
+                if (p.z[i][k] == p.z[j][k]) rowPairCounts[i][j]++;
+                if (p.z[k][i] == p.z[k][j]) colPairCounts[i][j]++;
+            }
+        }
+    }
+}
+
 void patternMatrix::matchOnCases() {
     caseMatch = -1;
     for (int i = 0; i < cases.size(); i++) {
@@ -121,6 +164,149 @@ bool patternMatrix::matchesCase(int caseIndex) {
     if (cV == cases[caseIndex].c) return true; // pattern matrix case style matches the case matrix
     if (cVT == cases[caseIndex].c) return true; // transposed pattern matrix case style matches the case matrix
     return false;
+}
+
+// This might need a refactor into the normal matchOnCases 
+//  however it does require the pattern to be rearranged to match the case (I think)
+bool patternMatrix::determineSubCase(){
+    subCaseMatch = '-';
+    updatePairCounts();
+    switch (caseMatch)
+    {
+    case 1:
+        return case1SubCaseMatch();
+    case 2:
+        return case2SubCaseMatch();
+    case 3:
+        return case3SubCaseMatch();
+    case 4:
+        return case4SubCaseMatch();
+    case 5:
+        return case5SubCaseMatch();
+    case 6:
+        return case6SubCaseMatch();
+    case 7:
+        return case7SubCaseMatch();
+    case 8:
+        return case8SubCaseMatch();
+    default:
+        break;
+    }
+    return false;
+}
+
+bool patternMatrix::case1SubCaseMatch() {
+    // Case 1 doesn't have any subcases
+    return true;
+}
+
+bool patternMatrix::case2SubCaseMatch() {
+    // Case 2 doesn't have any subcases
+    return true;
+}
+
+bool patternMatrix::case3SubCaseMatch() {
+    // 3a: The four columns/rows with odd entries are fully paired
+    if ((rowPairCounts[0][1] == 6 && rowPairCounts[2][3] == 6) || (rowPairCounts[0][2] == 6 && rowPairCounts[1][3] == 6)) {
+        subCaseMatch = 'a';
+        return true;
+    }
+    if ((colPairCounts[0][1] == 6 && colPairCounts[2][3] == 6) || (colPairCounts[0][2] == 6 && colPairCounts[1][3] == 6)) {
+        subCaseMatch = 'a';
+        return true;
+    }
+    // 3b: In the first four rows/columns, four entries of every row/column are paired.
+    if ((rowPairCounts[0][1] == 4 && rowPairCounts[2][3] == 4) || (rowPairCounts[0][2] == 4 && rowPairCounts[1][3] == 4)) {
+        subCaseMatch = 'b';
+        return true;
+    }
+    if ((colPairCounts[0][1] == 4 && colPairCounts[2][3] == 4) || (colPairCounts[0][2] == 4 && colPairCounts[1][3] == 4)) {
+        subCaseMatch = 'b';
+        return true;
+    }
+    // 3c: there are only two paired numbers per row/column.
+    if ((rowPairCounts[0][1] == 2 && rowPairCounts[2][3] == 2) || (rowPairCounts[0][2] == 2 && rowPairCounts[1][3] == 2)) {
+        subCaseMatch = 'c';
+        return true;
+    }
+    if ((colPairCounts[0][1] == 2 && colPairCounts[2][3] == 2) || (colPairCounts[0][2] == 2 && colPairCounts[1][3] == 2)) {
+        subCaseMatch = 'c';
+        return true;
+    }
+    // I don't think this should ever happen
+    return false;
+}
+
+bool patternMatrix::case4SubCaseMatch() {
+    // 4a: has two fully paired columns if m11 = m12.
+    if ((colPairCounts[0][1] == 6 && colPairCounts[2][3] == 6) || (colPairCounts[0][2] == 6 && colPairCounts[1][3] == 6)) {
+        subCaseMatch = 'a';
+        return true;
+    }
+    // 4b: where m11 ̸ = m12
+    subCaseMatch = 'b';
+    return true;
+}
+
+bool patternMatrix::case5SubCaseMatch() {
+    // 5a: Either columns (1,2) and (3,4) are fully paired if m11 = m12 and 
+    //     m13 = m14, where xT12xT34 is correct T sequence, or rows (1,2) and (3,4) are
+    //     fully paired if m11 = m21 and m31 = m41, where T12xT34x reduce k to k-1.
+    if ((rowPairCounts[0][1] == 6 && rowPairCounts[2][3] == 6) || (rowPairCounts[0][2] == 6 && rowPairCounts[1][3] == 6)) {
+        subCaseMatch = 'a';
+        return true;
+    }
+    if ((colPairCounts[0][1] == 6 && colPairCounts[2][3] == 6) || (colPairCounts[0][2] == 6 && colPairCounts[1][3] == 6)) {
+        subCaseMatch = 'a';
+        return true;
+    }
+    // 5b: m11 = m12 and m13 ̸ = m14
+    //     I'm adding the case where m33 = m34 and m31 != m32 as this block can be moved into place
+    //       This addition might not be necessary
+    if((p.z[0][0] == p.z[0][1] && p.z[0][2] != p.z[0][3]) || (p.z[2][2] == p.z[2][3] && p.z[2][0] != p.z[2][1])) {
+        subCaseMatch = 'b';
+        return true;
+    }
+    // I don't think this should happen
+    return false;
+}
+
+bool patternMatrix::case6SubCaseMatch() {
+    // 6a: Rows (1,2) and (3,4) are paired
+    if (rowPairCounts[0][1] == 6 && rowPairCounts[2][3] == 6) {
+        subCaseMatch = 'a';
+        return true;
+    }
+    // 6b: columns (1,2), (3,4), and (5,6) are fully paired
+    if (colPairCounts[0][1] == 6 && colPairCounts[2][3] == 6 && colPairCounts[4][5] == 6) {
+        subCaseMatch = 'b';
+        return true;
+    }
+    // 6c: In the first four rows, only two paired entries between sets of 2 rows ([1,2 and 3,4] or [1,3 and 2,4] or [1,4 and 2,3])
+    if ((rowPairCounts[0][1] == 2 && rowPairCounts[2][3] == 2) || 
+        (rowPairCounts[0][2] == 2 && rowPairCounts[1][3] == 2) ||
+        (rowPairCounts[0][3] == 2 && rowPairCounts[1][2] == 2)) {
+        subCaseMatch = 'c';
+        return true;
+    }
+    // I don't think this should happen
+    return false;
+}
+
+bool patternMatrix::case7SubCaseMatch() {
+    // Maybe N/A??  The single pattern corresponds to I ⊗ H?
+    return true;
+}
+
+bool patternMatrix::case8SubCaseMatch() {
+    // 8a: V11, V12 have the same parity
+    // 8b: V11, V12 have different parity
+    // Assume subcase 'a' and change to 'b' if the parity is different
+    subCaseMatch = 'a';
+    if (p.z[0][0] % 2 != p.z[0][1] % 2) {
+        subCaseMatch = 'b';
+    }
+    return true;
 }
 
 bool patternMatrix::isTranspose(patternMatrix other) {

@@ -11,7 +11,7 @@ std::vector<patternMatrix> loadPatterns(std::string filename)
 {
     std::ifstream file(filename);
     if (!file.is_open()) {
-        std::cerr << "Error opening file!" << std::endl;
+        std::cerr << "Error opening file:" << filename << std::endl;
         return {}; // Indicate error
     }
     std::vector<patternMatrix> patterns;
