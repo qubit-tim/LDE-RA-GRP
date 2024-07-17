@@ -29,6 +29,10 @@ void patternMatrix::init() {
         entryLDEs[i].resize(cols);
     }
     originalMatrix = "[0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0]";
+    possibleValues.resize(rows);
+    for (int i = 0; i < rows; i++) {
+        possibleValues[i].resize(cols);
+    }
     loadCases();
     updatePairCounts();
 }
@@ -87,6 +91,9 @@ void patternMatrix::loadFromString(std::string m) {
             pNewEncoding.z[row][col] = (mv == 1) ? 2 : (mv == 2) ? 1 : mv;
             p.z[row][col] = mv;
             pT.z[col][row] = mv;
+            // Since we know the pattern, the possible values are just the pattern values
+            //  This will change after LDE reduction
+            possibleValues[row][col].push_back(mv);
             swap23.z[row][col] = (mv == 2) ? 3 : (mv == 3) ? 2 : mv;
             swap23T.z[col][row] = (mv == 2) ? 3 : (mv == 3) ? 2 : mv;
             cV.z[row][col] = mv / 2;
