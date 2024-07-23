@@ -79,14 +79,23 @@ class patternMatrix {
         bool isTranspose(patternMatrix other);
         bool is23Swap(patternMatrix other);
         bool is23SwapT(patternMatrix other);
+        // Extra Printing Functions
         void printDebug(std::ostream& os);
+        void printLDEs(std::ostream& os);
+        void printPossibleValues(std::ostream& os);
+        // T-Gate Multiplication Functions
         void leftTGateMultiply(int p, int q);
         void rightTGateMultiply(int p, int q);
+        int patternElementAddition(int a, int b);
+        // LDE Reduction Functions
+        void ldeReductionOnRow(int row);
+        void ldeReductionOnCol(int col);
+        void ldeReductionOnEntry(int row, int col);
+        void ldeReductionOnPattern();
         // These could be private but are public for testing
         bool rearrangeMatrix();
         void rearrangeColumns(zmatrix patternVersion, zmatrix caseVersion, int currentColumn);
         void rearrangeRows(zmatrix patternVersion, zmatrix caseVersion, int currentRow);
-        int patternElementAddition(int a, int b);
         std::string toString();
         // TODO: Add a csv output for the pattern matrix
         bool isOrthonormal();

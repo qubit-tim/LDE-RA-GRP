@@ -394,6 +394,40 @@ void patternMatrix::printDebug(std::ostream& os) {
     cVT.printDebug(os);
 }
 
+void patternMatrix::printLDEs(std::ostream& os){
+    for (int i = 0; i < rows; i++) {
+        os << "[";
+        for (int j = 0; j < cols; j++) {
+            os << entryLDEs[i][j];
+            if (j != cols-1) os << ","; // Don't print a comma after the last element
+        }
+        os << "]";
+        if (multilineOutput) os << std::endl;
+    }
+}
+
+void patternMatrix::printPossibleValues(std::ostream& os) {
+    for (int i = 0; i < rows; i++) {
+        os << "[";
+        for (int j = 0; j < cols; j++) {
+            os << "{";
+            for (int k = 0; k < possibleValues[i][j].size(); k++) {
+                int val = possibleValues[i][j][k];
+                if(!printOldEncoding) {
+                    val = (val == 1) ? 2 : (val == 2) ? 1 : val;
+                }
+                os << val;
+                if (k != possibleValues[i][j].size()-1) os << ","; // Don't print a comma after the last element
+            }
+            os << "}";
+            if (j != cols-1) os << ","; // Don't print a comma after the last element
+        }
+        os << "]";
+        if (multilineOutput) os << std::endl;
+    }
+}
+
+
 // TODO - Add a note on which pattern encoding is being used
 // TODO - Refactor this mess, especially the new vs old encoding
 std::ostream& operator<<(std::ostream& os,const patternMatrix &pm) {
@@ -450,15 +484,20 @@ void patternMatrix::leftTGateMultiply(int pRow, int qRow) {
     //  Handle left T-gate multiplication
     //  This means adding rows p, q and replacing both with the result
     //  This might be different when p > q
-    //  TODO: Need to track LDEs here
     int result;
     for (int i = 0; i < p.z[pRow].size(); i++) {
         result = patternElementAddition(p.z[pRow][i], p.z[qRow][i]);
         p.z[pRow][i] = result;
         p.z[qRow][i] = result;
-        // Increment the LDEs
-        entryLDEs[pRow][i]++;
-        entryLDEs[qRow][i]++;
+        pNewEncoding.z[pRow][i] = (result == 1) ? 2 : (result == 2) ? 1 : result;
+        pNewEncoding.z[qRow][i] = (result == 1) ? 2 : (result == 2) ? 1 : result;
+        // TODO: Verify that this is correct and should be done entry by entry
+        // Update the LDE
+        ldeReductionOnEntry(pRow, i);
+        ldeReductionOnEntry(qRow, i);
+        // I'm leaving these here for now until the above is verified
+        //entryLDEs[pRow][i]++;
+        //entryLDEs[qRow][i]++;
         // Groupings - Going to use the lower group number of the two
         //  It might not matter but might also make it easier for humans to read
         if (pGroupings.z[pRow][i] > pGroupings.z[qRow][i]) {
@@ -467,7 +506,6 @@ void patternMatrix::leftTGateMultiply(int pRow, int qRow) {
             pGroupings.z[qRow][i] = pGroupings.z[pRow][i];
         }
     }
-    // TODO - Do factorization which includes possible LDE reduction
 }
 
 // Right T-gate multiplication means adding columns p, q and replacing both with the result
@@ -475,15 +513,20 @@ void patternMatrix::rightTGateMultiply(int pCol, int qCol) {
     //  Handle right T-gate multiplication
     //  This means adding column p, q and replacing both with the result
     //  This might be different when p > q
-    // TODO: Need to track LDEs here
     int result;
     for (int i = 0; i < p.z.size(); i++) {
         result = patternElementAddition(p.z[i][pCol], p.z[i][qCol]);
         p.z[i][pCol] = result;
         p.z[i][qCol] = result;
-        // Increment the LDEs
-        entryLDEs[i][pCol]++;
-        entryLDEs[i][qCol]++;
+        pNewEncoding.z[i][pCol] = (result == 1) ? 2 : (result == 2) ? 1 : result;
+        pNewEncoding.z[i][qCol] = (result == 1) ? 2 : (result == 2) ? 1 : result;
+        // TODO: Verify that this is correct and should be done entry by entry
+        // Update the LDE
+        ldeReductionOnEntry(i, pCol);
+        ldeReductionOnEntry(i, qCol);
+        // I'm leaving these here for now until the above is verified
+        //entryLDEs[i][pCol]++;
+        //entryLDEs[i][qCol]++;
         // Groupings - Going to use the lower group number of the two
         //  It might not matter but might also make it easier for humans to read
         if (pGroupings.z[i][pCol] <= pGroupings.z[i][qCol]) {
@@ -492,8 +535,70 @@ void patternMatrix::rightTGateMultiply(int pCol, int qCol) {
             pGroupings.z[i][qCol] = pGroupings.z[i][pCol];
         }
     }
-    // TODO - Do factorization which includes possible LDE reduction
 }
+
+void patternMatrix::ldeReductionOnRow(int row){
+    for(int i = 0; i < cols; i++){
+        ldeReductionOnEntry(row, i);
+    }
+}
+
+void patternMatrix::ldeReductionOnCol(int col){
+    for(int i = 0; i < rows; i++){
+        ldeReductionOnEntry(i, col);
+    }
+}
+
+
+// LDE Reduction
+/*
+Resulting value
+0 -> {0,1,2,3} and k-1
+1 -> {2,3} and k
+2 -> {2} and k+1
+3 -> {3} and k+1
+*/
+void patternMatrix::ldeReductionOnEntry(int row, int col){
+    switch (p.z[row][col]) {
+        case 0:
+            // 0 -> {0,1,2,3} and k-1
+            possibleValues[row][col].clear();
+            possibleValues[row][col].push_back(0);
+            possibleValues[row][col].push_back(1);
+            possibleValues[row][col].push_back(2);
+            possibleValues[row][col].push_back(3);
+            entryLDEs[row][col]--;
+            break;
+        case 1:
+            // 1 -> {2,3} and k
+            possibleValues[row][col].clear();
+            possibleValues[row][col].push_back(2);
+            possibleValues[row][col].push_back(3);
+            break;
+        case 2:
+            // 2 -> {2} and k+1
+            possibleValues[row][col].clear();
+            possibleValues[row][col].push_back(2);
+            entryLDEs[row][col]++;
+            break;
+        case 3:
+            // 3 -> {3} and k+1
+            possibleValues[row][col].clear();
+            possibleValues[row][col].push_back(3);
+            entryLDEs[row][col]++;
+            break;
+        default:
+            break;
+    }
+}
+
+void patternMatrix::ldeReductionOnPattern(){
+    for(int i = 0; i < rows; i++){
+        ldeReductionOnRow(i);
+    }
+}
+
+
 // ====== MULTIPLICATION BY T-GATES ======
 
 // TODO: Maybe move this out of the class?  It might need to stay in the class depending on how we handle the LDEs
