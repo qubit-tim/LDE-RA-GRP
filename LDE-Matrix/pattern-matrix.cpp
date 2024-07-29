@@ -520,7 +520,6 @@ void patternMatrix::rightTGateMultiply(int pCol, int qCol) {
         p.z[i][qCol] = result;
         pNewEncoding.z[i][pCol] = (result == 1) ? 2 : (result == 2) ? 1 : result;
         pNewEncoding.z[i][qCol] = (result == 1) ? 2 : (result == 2) ? 1 : result;
-        // TODO: Verify that this is correct and should be done entry by entry
         // Update the LDE
         ldeReductionOnEntry(i, pCol);
         ldeReductionOnEntry(i, qCol);
@@ -557,6 +556,9 @@ Resulting value
 1 -> {2,3} and k
 2 -> {2} and k+1
 3 -> {3} and k+1
+
+// Need to update this....
+
 */
 void patternMatrix::ldeReductionOnEntry(int row, int col){
     switch (p.z[row][col]) {
