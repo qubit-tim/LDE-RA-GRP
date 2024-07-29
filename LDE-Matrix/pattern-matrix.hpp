@@ -45,6 +45,7 @@ class patternMatrix {
         zmatrix cV;  // This is the pattern matrix changed to match the case style, 0s for 0,1 and 1s for 2,3
         zmatrix cVT;  // This is the transposed pattern matrix changed to match the case style, 0s for 0,1 and 1s for 2,3
         zmatrix pGroupings;  // This is the pattern matrix with the groupings applied
+        std::vector<std::vector<std::vector<int>>> possibleValues;  // After LDE reduction, these are the possible values for the pattern
         // TODO: Add a A, B set of matrices for the pattern where: A+Bsqrt(2) = pattern
         //   and use these for normality and orthogonality checking
         //   Essentially, this is keeping the original form of the patterns when they are in binary form 'A B' of (0 0, 0 1, 1 0, 1 1)
@@ -73,19 +74,29 @@ class patternMatrix {
         bool case6SubCaseMatch();
         bool case7SubCaseMatch();
         bool case8SubCaseMatch();
+        std::string getFirstCaseRearrangement();
 
         // Duplicate Pattern Checks
         bool isTranspose(patternMatrix other);
         bool is23Swap(patternMatrix other);
         bool is23SwapT(patternMatrix other);
+        // Extra Printing Functions
         void printDebug(std::ostream& os);
+        void printLDEs(std::ostream& os);
+        void printPossibleValues(std::ostream& os);
+        // Get the possible values
+        std::string getMaxOfPossibleValues();
+        // T-Gate Multiplication Functions
         void leftTGateMultiply(int p, int q);
         void rightTGateMultiply(int p, int q);
+        int patternElementAddition(int a, int b);
+        // LDE Reduction Functions
+        void ldeReductionOnEntry(int row, int col, int ldeReduction);
+        void ldeReductionOnPattern(int ldeValue);
         // These could be private but are public for testing
         bool rearrangeMatrix();
         void rearrangeColumns(zmatrix patternVersion, zmatrix caseVersion, int currentColumn);
         void rearrangeRows(zmatrix patternVersion, zmatrix caseVersion, int currentRow);
-        int patternElementAddition(int a, int b);
         std::string toString();
         // TODO: Add a csv output for the pattern matrix
         bool isOrthonormal();

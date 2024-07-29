@@ -10,6 +10,7 @@
 
 patternMatrix::patternMatrix() {
     init();
+    updatePairCounts();
 }
 
 void patternMatrix::init() {
@@ -29,14 +30,18 @@ void patternMatrix::init() {
         entryLDEs[i].resize(cols);
     }
     originalMatrix = "[0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0][0,0,0,0,0]";
+    possibleValues.resize(rows);
+    for (int i = 0; i < rows; i++) {
+        possibleValues[i].resize(cols);
+    }
     loadCases();
-    updatePairCounts();
 }
 
 patternMatrix::patternMatrix(int pNum, std::string matrix) {
     init();
     id = pNum;
     loadFromString(matrix);
+    updatePairCounts();
 }
 
 patternMatrix::patternMatrix(int pNum, std::string matrix, bool newEncoding) {
@@ -51,6 +56,7 @@ patternMatrix::patternMatrix(int pNum, std::string matrix, bool newEncoding) {
         }
     }
     loadFromString(matrix);
+    updatePairCounts();
 }
 
 void patternMatrix::loadFromString(std::string m) {
@@ -87,6 +93,9 @@ void patternMatrix::loadFromString(std::string m) {
             pNewEncoding.z[row][col] = (mv == 1) ? 2 : (mv == 2) ? 1 : mv;
             p.z[row][col] = mv;
             pT.z[col][row] = mv;
+            // Since we know the pattern, the possible values are just the pattern values
+            //  This will change after LDE reduction
+            possibleValues[row][col].push_back(mv);
             swap23.z[row][col] = (mv == 2) ? 3 : (mv == 3) ? 2 : mv;
             swap23T.z[col][row] = (mv == 2) ? 3 : (mv == 3) ? 2 : mv;
             cV.z[row][col] = mv / 2;
@@ -155,7 +164,39 @@ void patternMatrix::matchOnCases() {
                 caseErr << "Pattern " << id << " matches more than 1 case: " << caseMatch << " and " << cases[i].id << std::endl;
                 throw std::runtime_error(caseErr.str());
             }
-            caseMatch = cases[i].id;
+            switch (cases[i].id)
+            {
+                case 2: {
+                    // Case 2 requires that the rows / columns with the 4 case entries are fully paired
+                    bool checkRows = true;
+                    int rc1 = -1;
+                    int rc2 = -1;
+                    for (int j = 0; j < rows; j++) {
+                        if (p.zRowCounts[j][2] + p.zRowCounts[j][3] == 4) {
+                            if (rc1 == -1) rc1 = j;
+                            else rc2 = j;
+                        }
+                    }
+                    for (int j = 0; j < cols; j++) {
+                        if (p.zColCounts[j][2] + p.zColCounts[j][3] == 4) {
+                            if (rc1 == -1) rc1 = j;
+                            else rc2 = j;
+                        }
+                    }
+                    if (checkRows && rowPairCounts[rc1][rc2] == 6) {
+                        std::cout << "RowPairCounts: " << rc1 << " " << rc2 << " " << rowPairCounts[rc1][rc2] << std::endl;
+                        caseMatch = cases[i].id;
+                    }
+                    if (!checkRows && colPairCounts[rc1][rc2] == 6) {
+                        std::cout << "ColPairCounts: " << rc1 << " " << rc2 << " " << colPairCounts[rc1][rc2] << std::endl;
+                        caseMatch = cases[i].id;
+                    }
+                    break;
+                }
+                default:
+                    caseMatch = cases[i].id;
+                    break;
+            }
         }
     }
 }
@@ -309,6 +350,11 @@ bool patternMatrix::case8SubCaseMatch() {
     return true;
 }
 
+std::string patternMatrix::getFirstCaseRearrangement() {
+    if (caseRearrangements.size() == 0) return toString();
+    return caseRearrangements.begin()->first;
+}
+
 bool patternMatrix::isTranspose(patternMatrix other) {
     // We need to do a complete check to verify that the pattern matrix is a transpose of the other
     bool isTranspose = (pT == other.p);
@@ -387,6 +433,59 @@ void patternMatrix::printDebug(std::ostream& os) {
     cVT.printDebug(os);
 }
 
+void patternMatrix::printLDEs(std::ostream& os){
+    for (int i = 0; i < rows; i++) {
+        os << "[";
+        for (int j = 0; j < cols; j++) {
+            os << entryLDEs[i][j];
+            if (j != cols-1) os << ","; // Don't print a comma after the last element
+        }
+        os << "]";
+        if (multilineOutput) os << std::endl;
+    }
+}
+
+void patternMatrix::printPossibleValues(std::ostream& os) {
+    for (int i = 0; i < rows; i++) {
+        os << "[";
+        for (int j = 0; j < cols; j++) {
+            os << "{";
+            for (int k = 0; k < possibleValues[i][j].size(); k++) {
+                int val = possibleValues[i][j][k];
+                if(!printOldEncoding) {
+                    val = (val == 1) ? 2 : (val == 2) ? 1 : val;
+                }
+                os << val;
+                if (k != possibleValues[i][j].size()-1) os << ","; // Don't print a comma after the last element
+            }
+            os << "}";
+            if (j != cols-1) os << ","; // Don't print a comma after the last element
+        }
+        os << "]";
+        if (multilineOutput) os << std::endl;
+    }
+}
+
+std::string patternMatrix::getMaxOfPossibleValues() {
+    std::string maxValues = "";
+    for (int i = 0; i < rows; i++) {
+        maxValues += "[";
+        for (int j = 0; j < cols; j++) {
+            int max = 0;
+            for (int k = 0; k < possibleValues[i][j].size(); k++) {
+                if (possibleValues[i][j][k] > max) max = possibleValues[i][j][k];
+            }
+            if(!printOldEncoding) {
+                    max = (max == 1) ? 2 : (max == 2) ? 1 : max;
+            }
+            maxValues += std::to_string(max);
+            if (j != cols-1) maxValues += ","; // Don't print a comma after the last element
+        }
+        maxValues += "]";
+    }
+    return maxValues;
+}
+
 // TODO - Add a note on which pattern encoding is being used
 // TODO - Refactor this mess, especially the new vs old encoding
 std::ostream& operator<<(std::ostream& os,const patternMatrix &pm) {
@@ -443,13 +542,14 @@ void patternMatrix::leftTGateMultiply(int pRow, int qRow) {
     //  Handle left T-gate multiplication
     //  This means adding rows p, q and replacing both with the result
     //  This might be different when p > q
-    //  TODO: Need to track LDEs here
     int result;
     for (int i = 0; i < p.z[pRow].size(); i++) {
         result = patternElementAddition(p.z[pRow][i], p.z[qRow][i]);
         p.z[pRow][i] = result;
         p.z[qRow][i] = result;
-        // Increment the LDEs
+        pNewEncoding.z[pRow][i] = (result == 1) ? 2 : (result == 2) ? 1 : result;
+        pNewEncoding.z[qRow][i] = (result == 1) ? 2 : (result == 2) ? 1 : result;
+        // Update the LDE
         entryLDEs[pRow][i]++;
         entryLDEs[qRow][i]++;
         // Groupings - Going to use the lower group number of the two
@@ -460,7 +560,6 @@ void patternMatrix::leftTGateMultiply(int pRow, int qRow) {
             pGroupings.z[qRow][i] = pGroupings.z[pRow][i];
         }
     }
-    // TODO - Do factorization which includes possible LDE reduction
 }
 
 // Right T-gate multiplication means adding columns p, q and replacing both with the result
@@ -468,13 +567,14 @@ void patternMatrix::rightTGateMultiply(int pCol, int qCol) {
     //  Handle right T-gate multiplication
     //  This means adding column p, q and replacing both with the result
     //  This might be different when p > q
-    // TODO: Need to track LDEs here
     int result;
     for (int i = 0; i < p.z.size(); i++) {
         result = patternElementAddition(p.z[i][pCol], p.z[i][qCol]);
         p.z[i][pCol] = result;
         p.z[i][qCol] = result;
-        // Increment the LDEs
+        pNewEncoding.z[i][pCol] = (result == 1) ? 2 : (result == 2) ? 1 : result;
+        pNewEncoding.z[i][qCol] = (result == 1) ? 2 : (result == 2) ? 1 : result;
+        // Update the LDE
         entryLDEs[i][pCol]++;
         entryLDEs[i][qCol]++;
         // Groupings - Going to use the lower group number of the two
@@ -485,8 +585,97 @@ void patternMatrix::rightTGateMultiply(int pCol, int qCol) {
             pGroupings.z[i][qCol] = pGroupings.z[i][pCol];
         }
     }
-    // TODO - Do factorization which includes possible LDE reduction
 }
+
+// LDE Reduction
+/*
+Resulting value
+0 -> {0,1,2,3} and k-1
+1 -> {2,3} and k
+2 -> {2} and k+1
+3 -> {3} and k+1
+
+// Need to update this....
+
+*/
+void patternMatrix::ldeReductionOnEntry(int row, int col,  int ldeReduction) {
+    if (ldeReduction == 0) return;
+    switch (p.z[row][col]) {
+        case 0:
+            if(ldeReduction == -1) {
+                // 0 -> {0,1} and k-1
+                possibleValues[row][col].clear();
+                possibleValues[row][col].push_back(0);
+                possibleValues[row][col].push_back(1);
+                entryLDEs[row][col]--;
+            } else {
+                // 0 -> {0,1,2,3} and k-2
+                possibleValues[row][col].clear();
+                possibleValues[row][col].push_back(0);
+                possibleValues[row][col].push_back(1);
+                possibleValues[row][col].push_back(2);
+                possibleValues[row][col].push_back(3);
+                entryLDEs[row][col] -= 2;
+            }
+            break;
+        case 1:
+            // This shouldn't be hit if LDE reduction != -1 and should probably throw an error
+            if (ldeReduction == -1) {
+                // 1 -> {2,3} and k-1
+                possibleValues[row][col].clear();
+                possibleValues[row][col].push_back(2);
+                possibleValues[row][col].push_back(3);
+                entryLDEs[row][col]--;
+            }
+            break;
+        case 2:
+            // 2 -> {2} and k
+            possibleValues[row][col].clear();
+            possibleValues[row][col].push_back(2);
+            break;
+        case 3:
+            // 3 -> {3} and k
+            possibleValues[row][col].clear();
+            possibleValues[row][col].push_back(3);
+            break;
+        default:
+            break;
+    }
+}
+
+// If ldeValue is negative, then we are reducing all LDEs
+//  Otherwise, we are only reducing the LDEs that match ldeValue
+void patternMatrix::ldeReductionOnPattern(int ldeValue) {
+    int ldeDecrease = -2;  // Assume we can reduce the LDEs by 2
+    for(int i = 0; i < rows; i++){
+        for(int j = 0; j < cols; j++){
+            if(ldeValue > -1 && entryLDEs[i][j] != ldeValue) {
+                continue;
+            }
+            // Entry values vs possible LDE reductions
+            // 0 -> {0,1} and k-1
+            // 0 -> {0,1,2,3} and k-2
+            // 1 -> {2,3} and k
+            if (p.z[i][j] == 1) {
+                ldeDecrease = -1;
+            } else if (p.z[i][j] >= 2) {
+                ldeDecrease = 0;
+                break;
+            }
+        }
+    }
+    if (ldeDecrease == 0) return;
+    for(int i = 0; i < rows; i++){
+        for(int j = 0; j < cols; j++){
+            if(ldeValue > -1 && entryLDEs[i][j] != ldeValue) {
+                continue;
+            }
+            ldeReductionOnEntry(i, j, ldeDecrease);
+        }
+    }
+}
+
+
 // ====== MULTIPLICATION BY T-GATES ======
 
 // TODO: Maybe move this out of the class?  It might need to stay in the class depending on how we handle the LDEs

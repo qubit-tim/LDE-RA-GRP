@@ -29,11 +29,9 @@ zmatrix::zmatrix(int rows, int cols, int maxValue) {
         zColCounts[i].resize(maxValue+1);
     }
     zCountRows.resize(maxValue+1);
-    for (int i = 0; i < maxValue+1; i++) {
-        zCountRows[i].resize(rows+1);
-    }
     zCountCols.resize(maxValue+1);
     for (int i = 0; i < maxValue+1; i++) {
+        zCountRows[i].resize(rows+1);
         zCountCols[i].resize(cols+1);
     }
 }
@@ -44,6 +42,7 @@ zmatrix::zmatrix(int rows, int cols, int maxValue) {
 void zmatrix::updateMetadata() {
     // Reset all the counts to 0
     zSum = 0;
+    // TODO - Make new vectors here to speed this up
     for (int i = 0; i < zNumCounts.size(); i++) {
         zNumCounts[i] = 0;
     }

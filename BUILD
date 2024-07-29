@@ -31,6 +31,15 @@ cc_binary(
     ],
 )
 
+cc_binary(
+    name = "lde-transition-testing",
+    srcs = ["transition-testing.cpp"],
+    deps = [
+        "//LDE-Matrix:pattern-matrix",
+        "//LDE-Matrix:zmatrix",
+    ],
+)
+
 filegroup(
         name = 'patterns',
         srcs = glob(['patterns/**'])
