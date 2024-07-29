@@ -74,6 +74,7 @@ class patternMatrix {
         bool case6SubCaseMatch();
         bool case7SubCaseMatch();
         bool case8SubCaseMatch();
+        std::string getFirstCaseRearrangement();
 
         // Duplicate Pattern Checks
         bool isTranspose(patternMatrix other);
@@ -83,15 +84,15 @@ class patternMatrix {
         void printDebug(std::ostream& os);
         void printLDEs(std::ostream& os);
         void printPossibleValues(std::ostream& os);
+        // Get the possible values
+        std::string getMaxOfPossibleValues();
         // T-Gate Multiplication Functions
         void leftTGateMultiply(int p, int q);
         void rightTGateMultiply(int p, int q);
         int patternElementAddition(int a, int b);
         // LDE Reduction Functions
-        void ldeReductionOnRow(int row);
-        void ldeReductionOnCol(int col);
-        void ldeReductionOnEntry(int row, int col);
-        void ldeReductionOnPattern();
+        void ldeReductionOnEntry(int row, int col, int ldeReduction);
+        void ldeReductionOnPattern(int ldeValue);
         // These could be private but are public for testing
         bool rearrangeMatrix();
         void rearrangeColumns(zmatrix patternVersion, zmatrix caseVersion, int currentColumn);

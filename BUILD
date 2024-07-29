@@ -32,8 +32,8 @@ cc_binary(
 )
 
 cc_binary(
-    name = "lde-case-transitions",
-    srcs = ["case-transitions.cpp"],
+    name = "lde-transition-testing",
+    srcs = ["transition-testing.cpp"],
     deps = [
         "//LDE-Matrix:pattern-matrix",
         "//LDE-Matrix:zmatrix",
