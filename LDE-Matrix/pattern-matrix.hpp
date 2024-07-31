@@ -69,6 +69,9 @@ class patternMatrix {
         bool case1SubCaseMatch();
         bool case2SubCaseMatch();
         bool case3SubCaseMatch();
+        bool case3aSubCaseCheck();
+        bool case3bSubCaseCheck();
+        bool case3cSubCaseCheck();
         bool case4SubCaseMatch();
         bool case5SubCaseMatch();
         bool case6SubCaseMatch();
