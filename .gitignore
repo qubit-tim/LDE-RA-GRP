@@ -81,3 +81,6 @@ eclipse-*bin/
 
 # User-specific .bazelrc
 user.bazelrc
+
+# Ignore bazel module lock
+MODULE.bazel.lock
