@@ -52,11 +52,11 @@ int main(int argc, char **argv) {
         // {1, matchedCasesDirectory + "/case1-matches-patterns928.txt"},  // No subcases
         // {2, matchedCasesDirectory + "/case2-matches-patterns928.txt"},  // No subcases
         {3, matchedCasesDirectory + "/case3-matches-patterns928.txt"},
-        {4, matchedCasesDirectory + "/case4-matches-patterns928.txt"},
-        {5, matchedCasesDirectory + "/case5-matches-patterns928.txt"},
-        {6, matchedCasesDirectory + "/case6-matches-patterns928.txt"},
+        //{4, matchedCasesDirectory + "/case4-matches-patterns928.txt"},
+        //{5, matchedCasesDirectory + "/case5-matches-patterns928.txt"},
+        //{6, matchedCasesDirectory + "/case6-matches-patterns928.txt"},
         // {7, matchedCasesDirectory + "/case7-matches-patterns928.txt"},  // No subcases
-        {8, matchedCasesDirectory + "/case8-matches-patterns928.txt"},
+        //{8, matchedCasesDirectory + "/case8-matches-patterns928.txt"},
         };
     for (auto const& pair : patternFiles) {
         int caseNumber = pair.first;

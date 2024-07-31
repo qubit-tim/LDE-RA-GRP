@@ -247,10 +247,28 @@ bool patternMatrix::case2SubCaseMatch() {
 }
 
 bool patternMatrix::case3SubCaseMatch() {
-    
-    
-    
-    // I don't think this should ever happen
+    if (case3aSubCaseCheck()) {
+        return true;
+    }
+    if (case3bSubCaseCheck()) {
+        std::cout << "Pattern " << id << " - Case 3b" << std::endl;
+        // Do additional check to make sure that the upper right [4x2] and lower left [2x4] are the same value
+        int col42sum = p.z[0][4] + p.z[0][5] + p.z[1][4] + p.z[1][5] + p.z[2][4] + p.z[2][5] + p.z[3][4] + p.z[3][5];
+        int row24sum = p.z[4][0] + p.z[5][0] + p.z[4][1] + p.z[5][1] + p.z[4][2] + p.z[5][2] + p.z[4][3] + p.z[5][3];
+        if (col42sum == 0 || col42sum == 8 || row24sum == 0 || row24sum == 8) {
+            return true;
+        }
+        std::cout << "Pattern " << id << " - Case 3b isn't paired correctly on the right 2 columns and bottom 2 rows" << std::endl;
+        // Reset the case match as this is an invalid state
+        caseMatch = -1;
+        subCaseMatch = '-';
+        return false;
+    }
+    if (case3cSubCaseCheck()) {
+        return true;
+    }
+    // If we don't match a subcase, then we have an invalid case 3 pattern
+    caseMatch = -1;
     return false;
 }
 
@@ -283,17 +301,18 @@ bool patternMatrix::case3bSubCaseCheck() {
 }
 
 bool patternMatrix::case3cSubCaseCheck() {
+    bool isCase3c = false;
     // 3c: there are only two paired numbers per row/column.
     // 3c: there are only two paired numbers per row/column.
     if ((rowPairCounts[0][1] == 2 && rowPairCounts[2][3] == 2) || (rowPairCounts[0][2] == 2 && rowPairCounts[1][3] == 2)) {
         subCaseMatch = 'c';
-        return true;
+        isCase3c = true;
     }
     if ((colPairCounts[0][1] == 2 && colPairCounts[2][3] == 2) || (colPairCounts[0][2] == 2 && colPairCounts[1][3] == 2)) {
         subCaseMatch = 'c';
-        return true;
+        isCase3c = true;
     }
-    
+    return isCase3c;
 }
 
 bool patternMatrix::case4SubCaseMatch() {
