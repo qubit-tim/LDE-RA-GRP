@@ -15,6 +15,7 @@
 class patternMatrix {
     public:
         patternMatrix();
+        patternMatrix(int pattern928Number);  // This will load a 928 pattern by number
         patternMatrix(int patternNumber, std::string matrix);
         patternMatrix(int pNum, std::string matrix, bool newEncoding);
         int id;  // Primary identifier for the pattern
@@ -59,6 +60,8 @@ class patternMatrix {
         int LDE = 0;  // This is the LDE of the pattern
         // This tracks an entry by entry LDE change based on T-Gate operations and factorization
         std::vector<std::vector<int>> entryLDEs;
+        // This will track the T-Gate operations applied to the pattern
+        std::vector<std::string> tGateOperations;
 
         void loadFromString(std::string m);
         void updatePairCounts();
@@ -87,6 +90,8 @@ class patternMatrix {
         void printDebug(std::ostream& os);
         void printLDEs(std::ostream& os);
         void printPossibleValues(std::ostream& os);
+        // Get a list of T-Gate operations applied
+        std::string printTGateOperations();
         // Get the possible values
         std::string getMaxOfPossibleValues();
         // T-Gate Multiplication Functions

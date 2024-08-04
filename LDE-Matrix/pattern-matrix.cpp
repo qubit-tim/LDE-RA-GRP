@@ -6,6 +6,7 @@
 #include "case-matrix.hpp"
 #include "pattern-matrix.hpp"
 #include "zmatrix.hpp"
+#include "data/patterns928.hpp"
 
 
 patternMatrix::patternMatrix() {
@@ -35,6 +36,18 @@ void patternMatrix::init() {
         possibleValues[i].resize(cols);
     }
     loadCases();
+}
+
+// TODO - Refactor so a rearrangement is not needed which means updating the 928 data
+patternMatrix::patternMatrix(int pattern928Number) {
+    init();
+    id = pattern928Number;
+    id928 = pattern928Number;
+    singleCaseRearrangement = true;
+    loadFromString(PATTERNS_928[pattern928Number]);
+    rearrangeMatrix();
+    loadFromString(getFirstCaseRearrangement());
+    updatePairCounts();
 }
 
 patternMatrix::patternMatrix(int pNum, std::string matrix) {
@@ -95,6 +108,7 @@ void patternMatrix::loadFromString(std::string m) {
             pT.z[col][row] = mv;
             // Since we know the pattern, the possible values are just the pattern values
             //  This will change after LDE reduction
+            possibleValues[row][col].clear();
             possibleValues[row][col].push_back(mv);
             swap23.z[row][col] = (mv == 2) ? 3 : (mv == 3) ? 2 : mv;
             swap23T.z[col][row] = (mv == 2) ? 3 : (mv == 3) ? 2 : mv;
@@ -168,7 +182,6 @@ void patternMatrix::matchOnCases() {
             {
                 case 2: {
                     // Case 2 requires that the rows / columns with the 4 case entries are fully paired
-                    bool checkRows = true;
                     int rc1 = -1;
                     int rc2 = -1;
                     for (int j = 0; j < rows; j++) {
@@ -183,12 +196,12 @@ void patternMatrix::matchOnCases() {
                             else rc2 = j;
                         }
                     }
-                    if (checkRows && rowPairCounts[rc1][rc2] == 6) {
-                        std::cout << "RowPairCounts: " << rc1 << " " << rc2 << " " << rowPairCounts[rc1][rc2] << std::endl;
+                    // make sure rc1 and rc2 are set
+                    if (rowPairCounts[rc1][rc2] == 6) {
+                        //std::cout << "RowPairCounts: " << rc1 << " " << rc2 << " " << rowPairCounts[rc1][rc2] << std::endl;
                         caseMatch = cases[i].id;
-                    }
-                    if (!checkRows && colPairCounts[rc1][rc2] == 6) {
-                        std::cout << "ColPairCounts: " << rc1 << " " << rc2 << " " << colPairCounts[rc1][rc2] << std::endl;
+                    } else if (colPairCounts[rc1][rc2] == 6) {
+                        //std::cout << "ColPairCounts: " << rc1 << " " << rc2 << " " << colPairCounts[rc1][rc2] << std::endl;
                         caseMatch = cases[i].id;
                     }
                     break;
@@ -247,10 +260,15 @@ bool patternMatrix::case2SubCaseMatch() {
 }
 
 bool patternMatrix::case3SubCaseMatch() {
+    return case3aSubCaseCheck() || case3bSubCaseCheck() || case3cSubCaseCheck();
+    /*
+    TODO - Either add this back or remove the the comment block
+    Keeping this, for now, as the case 3b check might be useful in the future but, for now, it's not.  
     if (case3aSubCaseCheck()) {
         return true;
     }
     if (case3bSubCaseCheck()) {
+        
         std::cout << "Pattern " << id << " - Case 3b" << std::endl;
         // Do additional check to make sure that the upper right [4x2] and lower left [2x4] are the same value
         int col42sum = p.z[0][4] + p.z[0][5] + p.z[1][4] + p.z[1][5] + p.z[2][4] + p.z[2][5] + p.z[3][4] + p.z[3][5];
@@ -263,6 +281,7 @@ bool patternMatrix::case3SubCaseMatch() {
         caseMatch = -1;
         subCaseMatch = '-';
         return false;
+        
     }
     if (case3cSubCaseCheck()) {
         return true;
@@ -270,6 +289,7 @@ bool patternMatrix::case3SubCaseMatch() {
     // If we don't match a subcase, then we have an invalid case 3 pattern
     caseMatch = -1;
     return false;
+    */
 }
 
 bool patternMatrix::case3aSubCaseCheck() {
@@ -503,6 +523,15 @@ void patternMatrix::printPossibleValues(std::ostream& os) {
     }
 }
 
+std::string patternMatrix::printTGateOperations() {
+    std::ostringstream os;
+    for (int i = 0; i < tGateOperations.size(); i++) {
+        os << tGateOperations[i];
+        if(i != tGateOperations.size()-1) os << " ";
+    }
+    return os.str();
+}
+
 std::string patternMatrix::getMaxOfPossibleValues() {
     std::string maxValues = "";
     for (int i = 0; i < rows; i++) {
@@ -576,6 +605,10 @@ std::ostream& operator<<(std::ostream& os,const patternMatrix &pm) {
 
 // Left T-gate multiplication means adding rows p, q and replacing both with the result
 void patternMatrix::leftTGateMultiply(int pRow, int qRow) {
+    tGateOperations.push_back("T" + std::to_string(pRow) + std::to_string(qRow) + "x");
+    // Since we, humans, are 1-indexed, we need to subtract 1 from the row numbers
+    --pRow;
+    --qRow;
     //  Handle left T-gate multiplication
     //  This means adding rows p, q and replacing both with the result
     //  This might be different when p > q
@@ -597,10 +630,15 @@ void patternMatrix::leftTGateMultiply(int pRow, int qRow) {
             pGroupings.z[qRow][i] = pGroupings.z[pRow][i];
         }
     }
+    
 }
 
 // Right T-gate multiplication means adding columns p, q and replacing both with the result
 void patternMatrix::rightTGateMultiply(int pCol, int qCol) {
+    tGateOperations.push_back("xT" + std::to_string(pCol) + std::to_string(qCol));
+    // Since we, humans, are 1-indexed, we need to subtract 1 from the column numbers
+    --pCol;
+    --qCol;
     //  Handle right T-gate multiplication
     //  This means adding column p, q and replacing both with the result
     //  This might be different when p > q

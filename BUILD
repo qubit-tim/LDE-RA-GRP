@@ -10,6 +10,17 @@ cc_binary(
 )
 
 cc_binary(
+    name = "lde-ming-testing",
+    srcs = ["ming-testing.cpp"],
+    deps = [
+        "//LDE-Matrix:pattern-matrix",
+    ],
+    data = [
+        ":patterns",
+    ],
+)
+
+cc_binary(
     name = "lde-pattern-generator",
     srcs = ["pattern-generator.cpp"],
     deps = [

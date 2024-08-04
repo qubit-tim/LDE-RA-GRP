@@ -46,12 +46,11 @@ std::map <int, std::vector<std::string>> CASE_TO_VALID_PATTERN_MAP = {
         2, // "[1,1,0,0,0,0][1,1,0,0,0,0][1,1,0,0,0,0][1,1,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"
         {
             "[2,2,0,0,0,0][2,2,0,0,0,0][2,2,0,0,0,0][2,2,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]",
-            "[2,3,0,0,0,0][3,2,0,0,0,0][2,2,0,0,0,0][3,3,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]",
             "[3,3,0,0,0,0][3,3,0,0,0,0][3,3,0,0,0,0][3,3,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]",
-            "[0,0,3,0,0,3][0,0,0,0,0,0][0,0,2,0,0,2][0,0,0,0,0,0][0,0,3,0,0,2][0,0,2,0,0,3]",
+            "[0,0,3,0,0,3][0,0,0,0,0,0][0,0,2,0,0,2][0,0,0,0,0,0][0,0,3,0,0,3][0,0,2,0,0,2]",
             // transpose cases
             "[2,2,2,2,0,0][2,2,2,2,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]",
-            "[0,0,0,0,0,0][0,0,0,0,0,0][2,0,3,0,2,3][0,0,0,0,0,0][3,0,2,0,3,2][0,0,0,0,0,0]",
+            "[0,0,0,0,0,0][0,0,0,0,0,0][2,0,3,0,2,3][0,0,0,0,0,0][2,0,3,0,2,3][0,0,0,0,0,0]",
         }
     },
     {
@@ -174,8 +173,8 @@ std::map <int, std::vector<std::string>> REARRANGE_CASES_SHORT = {
     {
         2, // "[1,1,0,0,0,0][1,1,0,0,0,0][1,1,0,0,0,0][1,1,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]"
         {
-            "[0,0,3,0,0,3][0,0,0,0,0,0][0,0,2,0,0,2][0,0,0,0,0,0][0,0,3,0,0,2][0,0,2,0,0,3]",
-            "[0,0,0,0,0,0][0,0,0,0,0,0][2,0,3,0,2,3][0,0,0,0,0,0][3,0,2,0,3,2][0,0,0,0,0,0]",
+            "[0,0,3,0,0,3][0,0,0,0,0,0][0,0,2,0,0,2][0,0,0,0,0,0][0,0,3,0,0,3][0,0,2,0,0,2]",
+            "[0,0,0,0,0,0][0,0,0,0,0,0][2,0,3,0,2,3][0,0,0,0,0,0][2,0,3,0,2,3][0,0,0,0,0,0]",
         }
     },
     {
@@ -304,6 +303,22 @@ TEST(PatternMatrixTest, PatternMatrixLoadFromString) {
     EXPECT_NO_THROW(pm.loadFromString(VALID_NUMERICAL_PATTERN));
 }
 
+// TODO - Add a few more test cases and verify that the entire data structure is populated correctly
+//  I found that possible values wasn't but has been fixed so there might be more issues
+TEST(PatternMatrixTest, PatternMatrixLoadFrom928Pattern) {
+    patternMatrix pm = patternMatrix(1);
+    EXPECT_EQ(pm.id, 1);
+    EXPECT_EQ(pm.id2704, 0);
+    EXPECT_EQ(pm.id928, 1);
+    EXPECT_EQ(pm.id785, 0);
+    EXPECT_EQ(pm.caseMatch, 1);
+    EXPECT_EQ(pm.subCaseMatch, '-');
+    EXPECT_EQ(pm.printID, false);
+    EXPECT_EQ(pm.printCaseMatch, false);
+    EXPECT_EQ(pm.printAllIDs, false);
+    EXPECT_EQ(pm.originalMatrix, "[2,2,0,1,0,0][2,2,0,1,0,0][0,0,0,0,0,0][1,1,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]");
+}
+
 TEST(PatternMatrixTest,PatternMatrixStringConstructor) {
     patternMatrix pm = patternMatrix(1, ALL_ZEROS_PATTERN);
     zmatrix pmz = zmatrix(6,6,3);
@@ -338,10 +353,11 @@ TEST(PatternMatrixTest,PatternMatrixNewEncodingConstructor) {
     // Using a case match from the 928 group to test the new encoding
     // Case 2 - 27 [1,1,0,2,0,0][1,1,2,0,0,0][1,1,0,0,0,2][1,1,2,2,0,2][0,0,0,0,0,0][0,0,0,0,0,0]
     patternMatrix pm = patternMatrix(27, "[1,1,0,2,0,0][1,1,2,0,0,0][1,1,0,0,0,2][1,1,2,2,0,2][0,0,0,0,0,0][0,0,0,0,0,0]", true);
-    EXPECT_EQ(pm.caseMatch, -1);
+    pm.printOldEncoding = true;
+    EXPECT_EQ(pm.caseMatch, -1) << "Case Match should be -1";
     EXPECT_EQ(pm.subCaseMatch, '-');
     pm.matchOnCases();
-    EXPECT_EQ(pm.caseMatch, 2);
+    EXPECT_EQ(pm.caseMatch, 2) << "Case Match should be 2";
     EXPECT_EQ(pm.subCaseMatch, '-');
 }
 
@@ -477,7 +493,7 @@ TEST(PatternMatrixTest,PatternMatrixRearrangeMatrixShort) {
         //std::cout << "Case: " << caseNumber << std::endl;
         for (auto const& pattern : patterns) {
             patternMatrix pm = patternMatrix(1, pattern);
-            EXPECT_TRUE(pm.rearrangeMatrix());
+            EXPECT_TRUE(pm.rearrangeMatrix()) << "Failed to rearrange matrix for pattern: " << pattern;
             /*  Uncomment this to see the first rearrangement for each case
             std::cout << "Pattern: " << pattern << " has " << pm.caseRearrangements.size() << " rearrangements" << std::endl;
             bool print = true;
@@ -524,7 +540,7 @@ TEST(PatternMatrixTest,PatternMatrixLeftTGateMultiply) {
     pmR.printOldEncoding = true;
     std::cout << "Rearranged Matrix: " << std::endl;
     std::cout << pmR << std::endl;
-    pmR.leftTGateMultiply(0,1);
+    pmR.leftTGateMultiply(1,2);
     std::cout << "leftTGateMultiply: " << std::endl;
     std::cout << pmR << std::endl;
     std::cout << "Groupings" << std::endl;
@@ -553,7 +569,7 @@ TEST(PatternMatrixTest,PatternMatrixRightTGateMultiply) {
     pmR.printOldEncoding = true;
     std::cout << "Rearranged Matrix: " << std::endl;
     std::cout << pmR << std::endl;
-    pmR.rightTGateMultiply(0,1);
+    pmR.rightTGateMultiply(1,2);
     std::cout << "RightTGateMultiply: " << std::endl;
     std::cout << pmR << std::endl;
     std::cout << "Groupings" << std::endl;

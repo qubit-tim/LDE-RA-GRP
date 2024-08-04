@@ -31,10 +31,10 @@ int main(int argc, char **argv) {
     p879.multilineOutput = true;
     p879.printOldEncoding = printOldEncoding;
 
-    /*
+    
     std::cout << "Case 3c: pattern 352:\n" << p352 << std::endl;
-    p352.rightTGateMultiply(0,3);
-    p352.rightTGateMultiply(1,2);
+    p352.rightTGateMultiply(1,4);
+    p352.rightTGateMultiply(2,3);
     p352.ldeReductionOnPattern(1);
 
     std::cout << "After T-Gate multiplication (xT14xT23):\n" << p352 << std::endl;
@@ -48,11 +48,12 @@ int main(int argc, char **argv) {
     p352Post.matchOnCases();
     std::cout << "Case Match of p352 post: " << p352Post.caseMatch << std::endl;
 
+    /*
     std::cout << "\n----------------------------------------\n" << std::endl;
 
     std::cout << "Case 3c: pattern 879:\n" << p879 << std::endl;
-    p879.rightTGateMultiply(0,1);
-    p879.rightTGateMultiply(2,3);
+    p879.rightTGateMultiply(1,2);
+    p879.rightTGateMultiply(3,4);
     p879.ldeReductionOnPattern(1);
     std::cout << "After T-Gate multiplication (xT12xT34):\n" << p879 << std::endl;
     std::cout << "Groupings:\n" << p879.pGroupings << std::endl;
@@ -64,7 +65,6 @@ int main(int argc, char **argv) {
     patternMatrix p879Post = patternMatrix(879, p879.getMaxOfPossibleValues(), !printOldEncoding);
     p879Post.matchOnCases();
     std::cout << "Case Match of p879 post: " << p879Post.caseMatch << std::endl;
-    */
 
     std::cout << "\n----------------------------------------\n" << std::endl;
     p64a.pGroupings.multilineOutput = true;
@@ -72,10 +72,12 @@ int main(int argc, char **argv) {
     p64a.printOldEncoding = printOldEncoding;
     
     std::cout << "Case 3b: pattern 64 path A:\n" << p64a << std::endl;
-    p64a.rightTGateMultiply(0,3);
-    p64a.rightTGateMultiply(1,2);
+    p64a.rightTGateMultiply(1,4);
+    p64a.rightTGateMultiply(2,3);
     p64a.ldeReductionOnPattern(1);
-    std::cout << "After T-Gate multiplication:\n" << p64a << std::endl;
+    
+    std::cout << "After T-Gate multiplication " << p64a.printTGateOperations() << ":" << std::endl;
+    std::cout << p64a << std::endl;
     std::cout << "Groupings:\n" << p64a.pGroupings << std::endl;
     std::cout << "LDEs:" << std::endl;
     p64a.printLDEs(std::cout);
@@ -85,14 +87,14 @@ int main(int argc, char **argv) {
     patternMatrix p64aPost = patternMatrix(64, p64a.getMaxOfPossibleValues(), !printOldEncoding);
     p64aPost.matchOnCases();
     std::cout << "Case Match of p64 path A post: " << p64aPost.caseMatch << std::endl;
-    /*p64aPost.rearrangeMatrix();
+    p64aPost.rearrangeMatrix();
     patternMatrix p64aPostRearranged = patternMatrix(64, p64aPost.getFirstCaseRearrangement(), false);
     p64aPostRearranged.multilineOutput = true;
     p64aPostRearranged.pGroupings.multilineOutput = true;
     p64aPostRearranged.printOldEncoding = printOldEncoding;
     std::cout << "After rearrangement:\n" << p64aPost.getFirstCaseRearrangement() << std::endl;
-    p64aPostRearranged.rightTGateMultiply(0,1);
-    //p64aPostRearranged.leftTGateMultiply(4,5);
+    p64aPostRearranged.rightTGateMultiply(1,2);
+    //p64aPostRearranged.leftTGateMultiply(5,6);
     p64aPostRearranged.ldeReductionOnPattern(1);
     std::cout << "After T-Gate multiplication:\n" <<  p64aPostRearranged << std::endl;
     std::cout << "Groupings:\n" << p64aPostRearranged.pGroupings << std::endl;
@@ -110,8 +112,8 @@ int main(int argc, char **argv) {
     p64b.multilineOutput = true;
 
     std::cout << "Case 3b: pattern 64 path B:\n" << p64b << std::endl;
-    p64b.leftTGateMultiply(0,1);
-    p64b.leftTGateMultiply(2,3);
+    p64b.leftTGateMultiply(1,2);
+    p64b.leftTGateMultiply(3,4);
     p64b.ldeReductionOnPattern(1);
     std::cout << "After T-Gate multiplication:\n" << p64b << std::endl;
     std::cout << "Groupings:\n" << p64b.pGroupings << std::endl;
