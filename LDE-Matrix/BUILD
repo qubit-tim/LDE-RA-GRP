@@ -40,10 +40,18 @@ cc_test(
 )
 
 cc_library(
+    name = "patterns928",
+    #srcs = ["data/patterns928.cpp"],
+    hdrs = ["data/patterns928.hpp"],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
     name = "pattern-matrix",
     srcs = ["pattern-matrix.cpp"],
     hdrs = ["pattern-matrix.hpp"],
     deps = [
+        ":patterns928",
         ":case-matrix",
         ":zmatrix",
     ],
