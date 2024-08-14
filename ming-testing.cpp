@@ -3,7 +3,7 @@
 #include "LDE-Matrix/pattern-matrix.hpp"
 #include "LDE-Matrix/zmatrix.hpp"
 
-void main(int argc, char **argv) {
+int main(int argc, char **argv) {
     // 352 is the pattern number from the 928 file
     //  Feel free to replace with any other pattern number you want to test
     patternMatrix test = patternMatrix(352);
@@ -38,5 +38,5 @@ void main(int argc, char **argv) {
     std::cout << "Groupings:\n" << test.pGroupings << std::endl;
     */
 
-    return;
+    return 0;
 }
