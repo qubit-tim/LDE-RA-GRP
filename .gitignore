@@ -84,6 +84,3 @@ user.bazelrc
 
 # Ignore bazel module lock
 MODULE.bazel.lock
-
-# ignore bazel locks
-*.bazel.lock
