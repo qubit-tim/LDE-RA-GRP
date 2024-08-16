@@ -32,7 +32,7 @@ void recursiveSet(int position, zmatrix z, std::vector<patternMatrix> &results) 
             os << z;
             patternMatrix pm = patternMatrix(1, os.str());
             pm.matchOnCases();
-            if (pm.caseMatch > 0 && pm.isOrthonormal()) {
+            if (pm.caseMatch > 0 && pm.isOrthogonal() && pm.isNormalized()) {
                 std::cout << "Case: " << pm.caseMatch << " Valid Pattern:" << pm << std::endl;
                 results.push_back(pm);
             }

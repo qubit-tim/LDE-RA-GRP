@@ -612,6 +612,7 @@ TEST(PatternMatrixTest,PatternMatrixPatternElementAddition) {
     }
 }
 
+// TODO: Split this into 2 tests, one for isNormalized and one for isOrthogonal
 TEST(PatternMatrixTest,PatternMatrixIsOrthonormal) {
     for (auto const& [expected, patterns] : ORTHONORMAL_PATTERN_CHECKS) {
         for (auto const& pattern : patterns) {
@@ -622,13 +623,18 @@ TEST(PatternMatrixTest,PatternMatrixIsOrthonormal) {
             //    pm.printDebugInfo = true;
             //   std::cout << "Pattern: " << pattern << "; Case: " << pm.caseMatch << std::endl;
             //}
-            bool got = pm.isOrthonormal();
+            bool got = pm.isNormalized() && pm.isOrthogonal();
             EXPECT_EQ(got, expected) << "Expected: " << expected << " Got: " << got << " with Pattern: " << pattern << "; Case: " << pm.caseMatch;
             // Debugging for failed tests
             if (got != expected) {
                 pm.printDebugInfo = true;
-                pm.isOrthonormal();
+                pm.isNormalized();
+                pm.isOrthogonal();
             }
         }
     }
+}
+
+TEST(PatternMatrixTest,PatternMatrixGenerateAllPossibleValuePatterns) {
+    GTEST_SKIP() << "Not finished";
 }

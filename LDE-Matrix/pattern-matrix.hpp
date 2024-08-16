@@ -54,6 +54,7 @@ class patternMatrix {
         //    See line 160 in the Latex document
         std::string originalMatrix; // This is the original matrix string
         std::map<std::string, bool> caseRearrangements; // This is a map of all the possible case rearrangements
+        std::map<std::string, bool> allPossibleValuePatterns; // This is a map of all the possible case rearrangements
         std::vector<std::vector<int>> rowPairCounts;  // This is the row pair counts for the pattern
         std::vector<std::vector<int>> colPairCounts;  // This is the col pair counts for the pattern
         // LDE Tracking
@@ -94,6 +95,8 @@ class patternMatrix {
         std::string printTGateOperations();
         // Get the possible values
         std::string getMaxOfPossibleValues();
+        void generateAllPossibleValuePatterns();
+        void recursiveAllPossibleValueSet(int position, zmatrix z);
         // T-Gate Multiplication Functions
         void leftTGateMultiply(int p, int q);
         void rightTGateMultiply(int p, int q);
@@ -107,7 +110,8 @@ class patternMatrix {
         void rearrangeRows(zmatrix patternVersion, zmatrix caseVersion, int currentRow);
         std::string toString();
         // TODO: Add a csv output for the pattern matrix
-        bool isOrthonormal();
+        bool isNormalized();
+        bool isOrthogonal();
 
         // Friends
         friend std::ostream& operator<<(std::ostream&,const patternMatrix &);
@@ -117,6 +121,7 @@ class patternMatrix {
         void loadCases();
         int rows = 6;
         int cols = 6;
+        int maxValue = 3;
 };
 
 #endif // PATTERN_MATRIX_HPP

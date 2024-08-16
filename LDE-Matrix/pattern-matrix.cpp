@@ -18,11 +18,11 @@ void patternMatrix::init() {
     id = 0;
     caseMatch = -1;
     subCaseMatch = '-';
-    pNewEncoding = zmatrix(rows, cols, 3);
-    p = zmatrix(rows, cols, 3);
-    pT = zmatrix(cols, rows, 3);
-    swap23 = zmatrix(rows, cols, 3);
-    swap23T = zmatrix(cols, rows, 3);
+    pNewEncoding = zmatrix(rows, cols, maxValue);
+    p = zmatrix(rows, cols, maxValue);
+    pT = zmatrix(cols, rows, maxValue);
+    swap23 = zmatrix(rows, cols, maxValue);
+    swap23T = zmatrix(cols, rows, maxValue);
     cV = zmatrix(rows, cols, 1);
     cVT = zmatrix(cols, rows, 1);
     pGroupings = zmatrix(rows, cols, 36);
@@ -552,6 +552,33 @@ std::string patternMatrix::getMaxOfPossibleValues() {
     return maxValues;
 }
 
+void patternMatrix::generateAllPossibleValuePatterns() {
+    // Need to iterate through all possible values and generate a unique pattern for each combination
+    //  This pattern will be stored in allPossibleValuePatterns
+    // This will be very similar to generating all possible patterns, so we can use that as a base
+    allPossibleValuePatterns.clear();
+    zmatrix z = zmatrix(rows, cols, maxValue);
+    recursiveAllPossibleValueSet(0, z);
+}
+
+void patternMatrix::recursiveAllPossibleValueSet(int position, zmatrix z) {
+    if (position == rows*cols) return;
+    for (int i = 0; i < possibleValues[position / cols][position % cols].size(); i++) {
+        z.z[position / cols][position % cols] = possibleValues[position / cols][position % cols][i];
+        if (position == (rows * cols) - 1) {
+            std::ostringstream os;
+            os << z;
+            patternMatrix pm = patternMatrix(1, os.str());
+            pm.matchOnCases();
+            if (pm.caseMatch > 0 && pm.isOrthogonal() && pm.isNormalized()) {
+                if (printDebugInfo) std::cout << "Case: " << pm.caseMatch << " Valid Pattern:" << pm << std::endl;
+                allPossibleValuePatterns[pm.toString()] = true;
+            }
+        }
+        recursiveAllPossibleValueSet(position + 1, z);
+    }
+}
+
 // TODO - Add a note on which pattern encoding is being used
 // TODO - Refactor this mess, especially the new vs old encoding
 std::ostream& operator<<(std::ostream& os,const patternMatrix &pm) {
@@ -900,20 +927,8 @@ void patternMatrix::rearrangeRows(zmatrix patternVersion, zmatrix caseVersion, i
     }
 }
 
-// TODO - Refactor this
-/* Rules for orthnormality:
-   // definition of mij which is a different encoding
-   mij = 2yij + xij
-    // These are normality
-    i. ∑ mij = 0 (mod4)
-    ii. mij = 3 has to be paired if exists
-    // These are orthogonality
-    iii. ri · rj = 0 (mod2) when i  ̸= j
-    iv. the count of (1, 2), (1, 3), and (2, 3) pairs in  ri and  rj should be even
 
-*/
-bool patternMatrix::isOrthonormal() {
-    bool orthNorm = true;
+/* Orthonormality checks
     // Map of N / M vs letters in the paper:
     //  a = N, b = M;
     //  x = N, y = M;
@@ -924,7 +939,19 @@ bool patternMatrix::isOrthonormal() {
     //               1 == N=0, M=1
     //               2 == N=1, M=0
     //               3 == N=1, M=1
-    // Normality checks
+    Rules for orthnormality:
+    // definition of mij which is a different encoding
+    mij = 2yij + xij
+    // These are normality
+    i. ∑ mij = 0 (mod4)
+    ii. mij = 3 has to be paired if exists
+    // These are orthogonality
+    iii. ri · rj = 0 (mod2) when i  ̸= j
+    iv. the count of (1, 2), (1, 3), and (2, 3) pairs in  ri and  rj should be even
+
+*/
+bool patternMatrix::isNormalized() {
+    bool isNormal = true;
     for (int i = 0; i < p.z.size(); i++) {
         int m4Row = 0;
         int m2Row = 0;
@@ -948,25 +975,28 @@ bool patternMatrix::isOrthonormal() {
             // Rule ii. mij = 3 has to be paired if exists (col check)
             if (mji == 3) m2Col++;
         }
-        // TODO: refactor this
-        if (printDebugInfo) {
-            if (m4Row % 4 != 0 || m2Row % 2 != 0) {
+        if (m4Row % 4 != 0 || m2Row % 2 != 0) {
+            if (printDebugInfo) {
                 std::cout << "Row " << i+1 << " is not normalized" << std::endl;
                 std::cout << "  Rule i. ∑ mij = " << m4Row << "; mod4: " << m4Row % 4 << std::endl;
                 std::cout << "  Rule ii. mij = 3 has to be paired if exists; count: " << m2Row << "; mod2: " << m2Row % 2 << std::endl;
-                orthNorm = false;
             }
-            if (m4Col % 4 != 0 || m2Col % 2 != 0) {
+            isNormal = false;
+        }
+        if (m4Col % 4 != 0 || m2Col % 2 != 0) {
+            if (printDebugInfo) {
                 std::cout << "Column " << i+1 << " is not normalized" << std::endl;
                 std::cout << "  Rule i. ∑ mji = " << m4Col << "; mod4: " << m4Col % 4 << std::endl;
                 std::cout << "  Rule ii. mij = 3 has to be paired if exists; count: " << m2Col << "; mod2: " << m2Col % 2 << std::endl;
-                orthNorm = false;
             }
-        }
-        if (!printDebugInfo && (m4Row % 4 != 0 || m2Row % 2 != 0 || m4Col % 4 != 0 || m2Col % 2 != 0)) {
-            return false;
+            isNormal = false;
         }
     }
+    return isNormal;
+}
+
+bool patternMatrix::isOrthogonal() {
+    bool isOrthogonal = true;
     // Orthogonality Checks
     for (int i = 0; i < p.z.size(); i++) {
         for (int j = i + 1; j < p.z.size(); j++) {
@@ -990,25 +1020,24 @@ bool patternMatrix::isOrthonormal() {
                 if (mik != 0 && mjk != 0 && mik != mjk) m2RowPairs++;
                 if (mki != 0 && mkj != 0 && mki != mkj) m2ColPairs++;
             }
-            // TODO: refactor this
-            if (printDebugInfo) {
-                if (m2RowDotProd % 2 != 0 || m2RowPairs % 2 != 0 ) {
+            if (m2RowDotProd % 2 != 0 || m2RowPairs % 2 != 0 ) {
+                if (printDebugInfo) {
                     std::cout << "Rows " << i+1 << " and " << j+1 << " are not orthogonal" << std::endl;
                     std::cout << "  Dot Product = " << m2RowDotProd << "; mod2 = " << m2RowDotProd % 2 << std::endl;
                     std::cout << "  (1, 2), (1, 3), and (2, 3) pairs should be even; count = " << m2RowPairs << "; mod2 = " << m2RowPairs % 2 << std::endl;
-                    orthNorm = false;
                 }
-                if (m2ColDotProd % 2 != 0 || m2ColPairs % 2 != 0) {
+                isOrthogonal = false;
+            }
+            if (m2ColDotProd % 2 != 0 || m2ColPairs % 2 != 0) {
+                if (printDebugInfo) {
                     std::cout << "Columns " << i+1 << " and " << j+1 << " are not orthogonal" << std::endl;
                     std::cout << "  Dot Product = " << m2ColDotProd << "; mod2 = " << m2ColDotProd % 2 << std::endl;
                     std::cout << "  (1, 2), (1, 3), and (2, 3) pairs should be even; count = " << m2ColPairs << "; mod2 = " << m2ColPairs % 2 << std::endl;
-                    orthNorm = false;
                 }
-            }
-            if (!printDebugInfo && (m2RowDotProd % 2 != 0 || m2RowPairs % 2 != 0 || m2ColDotProd % 2 != 0 || m2ColPairs % 2 != 0)) {
-                return false;
+                isOrthogonal = false;
             }
         }
     }
-    return orthNorm;
+    return isOrthogonal;
 }
+
