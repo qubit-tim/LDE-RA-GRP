@@ -140,6 +140,7 @@ void case352SubCaseMatching() {
             pm.singleCaseRearrangement = true;
             pm.rearrangeMatrix();
             patternMatrix pm2 = patternMatrix(pm.id, pm.getFirstCaseRearrangement());
+            pm2.updatePairCounts();
             if(!pm2.matchesCase(caseNumber)) {
                 std::cout << "Pattern " << pm2.id << " does not match case " << caseNumber << " and is in the wrong file" << std::endl;
                 std::cout << pm2 << std::endl;

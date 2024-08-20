@@ -295,11 +295,16 @@ bool patternMatrix::case3SubCaseMatch() {
 bool patternMatrix::case3aSubCaseCheck() {
     bool isCase3a = false;
     // 3a: The four columns/rows with odd entries are fully paired
-    if ((rowPairCounts[0][1] == 6 && rowPairCounts[2][3] == 6) || (rowPairCounts[0][2] == 6 && rowPairCounts[1][3] == 6)) {
+    if ((rowPairCounts[0][1] == 6 && rowPairCounts[2][3] == 6) || 
+        (rowPairCounts[0][2] == 6 && rowPairCounts[1][3] == 6) ||
+        (rowPairCounts[0][3] == 6 && rowPairCounts[1][2] == 6)) {
         subCaseMatch = 'a';
         isCase3a = true;
     }
-    if ((colPairCounts[0][1] == 6 && colPairCounts[2][3] == 6) || (colPairCounts[0][2] == 6 && colPairCounts[1][3] == 6)) {
+    if ((colPairCounts[0][1] == 6 && colPairCounts[2][3] == 6) || 
+        (colPairCounts[0][2] == 6 && colPairCounts[1][3] == 6) ||
+        (colPairCounts[0][3] == 6 && colPairCounts[1][2] == 6)
+        ) {
         subCaseMatch = 'a';
         isCase3a = true;
     }
@@ -309,11 +314,15 @@ bool patternMatrix::case3aSubCaseCheck() {
 bool patternMatrix::case3bSubCaseCheck() {
     bool isCase3b = false;
     // 3b: In the first four rows/columns, four entries of every row/column are paired.
-    if ((rowPairCounts[0][1] == 4 && rowPairCounts[2][3] == 4) || (rowPairCounts[0][2] == 4 && rowPairCounts[1][3] == 4)) {
+    if ((rowPairCounts[0][1] == 4 && rowPairCounts[2][3] == 4) ||
+        (rowPairCounts[0][2] == 4 && rowPairCounts[1][3] == 4) ||
+        (rowPairCounts[0][3] == 4 && rowPairCounts[1][2] == 4)) {
         subCaseMatch = 'b';
         isCase3b = true;
     }
-    if ((colPairCounts[0][1] == 4 && colPairCounts[2][3] == 4) || (colPairCounts[0][2] == 4 && colPairCounts[1][3] == 4)) {
+    if ((colPairCounts[0][1] == 4 && colPairCounts[2][3] == 4) || 
+        (colPairCounts[0][2] == 4 && colPairCounts[1][3] == 4) ||
+        (colPairCounts[0][3] == 4 && colPairCounts[1][2] == 4)) {
         subCaseMatch = 'b';
         isCase3b = true;
     }
@@ -324,11 +333,15 @@ bool patternMatrix::case3cSubCaseCheck() {
     bool isCase3c = false;
     // 3c: there are only two paired numbers per row/column.
     // 3c: there are only two paired numbers per row/column.
-    if ((rowPairCounts[0][1] == 2 && rowPairCounts[2][3] == 2) || (rowPairCounts[0][2] == 2 && rowPairCounts[1][3] == 2)) {
+    if ((rowPairCounts[0][1] == 2 && rowPairCounts[2][3] == 2) ||
+        (rowPairCounts[0][2] == 2 && rowPairCounts[1][3] == 2) ||
+        (rowPairCounts[0][3] == 2 && rowPairCounts[1][2] == 2)) {
         subCaseMatch = 'c';
         isCase3c = true;
     }
-    if ((colPairCounts[0][1] == 2 && colPairCounts[2][3] == 2) || (colPairCounts[0][2] == 2 && colPairCounts[1][3] == 2)) {
+    if ((colPairCounts[0][1] == 2 && colPairCounts[2][3] == 2) ||
+        (colPairCounts[0][2] == 2 && colPairCounts[1][3] == 2) ||
+        (colPairCounts[0][3] == 2 && colPairCounts[1][2] == 2)) {
         subCaseMatch = 'c';
         isCase3c = true;
     }
