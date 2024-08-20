@@ -28,6 +28,7 @@ cc_binary(
     ],
     data = [
         ":patterns",
+        ":tfc-output",
     ],
 )
 

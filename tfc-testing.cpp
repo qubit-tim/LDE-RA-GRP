@@ -137,24 +137,27 @@ void case352SubCaseMatching() {
 
         for (patternMatrix pm : patterns) {
             std::cout << "Pattern " << pm.id << std::endl;
-            if(!pm.matchesCase(caseNumber)) {
-                std::cout << "Pattern " << pm.id << " does not match case " << caseNumber << " and is in the wrong file" << std::endl;
-                std::cout << pm << std::endl;
+            pm.singleCaseRearrangement = true;
+            pm.rearrangeMatrix();
+            patternMatrix pm2 = patternMatrix(pm.id, pm.getFirstCaseRearrangement());
+            if(!pm2.matchesCase(caseNumber)) {
+                std::cout << "Pattern " << pm2.id << " does not match case " << caseNumber << " and is in the wrong file" << std::endl;
+                std::cout << pm2 << std::endl;
                 continue;
             }
-            pm.caseMatch = caseNumber;
-            pm.printID = true;
+            pm2.caseMatch = caseNumber;
+            pm2.printID = true;
             
-            if(pm.determineSubCase()) {
-                int index = pm.subCaseMatch - 'a' + 1;
-                matchedCasesFiles[index] << pm << std::endl;
-                pm.multilineOutput = true;
-                matchedCasesFilesHumanReadable[index] << pm << std::endl;
+            if(pm2.determineSubCase()) {
+                int index = pm2.subCaseMatch - 'a' + 1;
+                matchedCasesFiles[index] << pm2 << std::endl;
+                pm2.multilineOutput = true;
+                matchedCasesFilesHumanReadable[index] << pm2 << std::endl;
             } else {
-                std::cout << "Pattern " << pm.id << " has no subcase matches." << std::endl;
-                matchedCasesFiles[0] << pm << std::endl;
-                pm.multilineOutput = true;
-                matchedCasesFilesHumanReadable[0] << pm << std::endl;
+                std::cout << "Pattern " << pm2.id << " has no subcase matches." << std::endl;
+                matchedCasesFiles[0] << pm2 << std::endl;
+                pm2.multilineOutput = true;
+                matchedCasesFilesHumanReadable[0] << pm2 << std::endl;
             
             }
         }
@@ -197,6 +200,6 @@ void test352Possible() {
 }
 
 int main(int argc, char **argv) {
-    test352Possible();
+    case352SubCaseMatching();
     return 0;
 }
