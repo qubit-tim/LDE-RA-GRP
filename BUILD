@@ -50,6 +50,7 @@ cc_binary(
     data = [
         ":patterns",
         ":matched-cases",
+        ":tfc-output",
     ],
 )
 
@@ -70,4 +71,9 @@ filegroup(
 filegroup(
         name = 'matched-cases',
         srcs = glob(['matched-cases/**'])
+)
+
+filegroup(
+        name = 'tfc-output',
+        srcs = glob(['tfc-output/**'])
 )

@@ -523,6 +523,37 @@ void patternMatrix::printPossibleValues(std::ostream& os) {
     }
 }
 
+void patternMatrix::printPairCounts(std::ostream& os) {
+    printRowPairCounts(os);
+    printColPairCounts(os);
+}
+
+void patternMatrix::printRowPairCounts(std::ostream& os) {
+    os << "Row Pair Counts:" << std::endl;
+    for (int i = 0; i < rows; i++) {
+        os << "[";
+        for (int j = 0; j < rows; j++) {
+            os << rowPairCounts[i][j];
+            if (j != rows-1) os << ","; // Don't print a comma after the last element
+        }
+        os << "]";
+        if (multilineOutput) os << std::endl;
+    }
+}
+
+void patternMatrix::printColPairCounts(std::ostream& os) {
+    os << "Column Pair Counts:" << std::endl;
+    for (int i = 0; i < cols; i++) {
+        os << "[";
+        for (int j = 0; j < cols; j++) {
+            os << colPairCounts[i][j];
+            if (j != cols-1) os << ","; // Don't print a comma after the last element
+        }
+        os << "]";
+        if (multilineOutput) os << std::endl;
+    }
+}
+
 std::string patternMatrix::printTGateOperations() {
     std::ostringstream os;
     for (int i = 0; i < tGateOperations.size(); i++) {
