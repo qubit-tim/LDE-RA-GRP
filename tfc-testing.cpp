@@ -303,7 +303,7 @@ void dedupeP352() {
         } else {
             std::cout << pm.id << " is unique" << std::endl;
             tfcout << pm.id << " is unique" << std::endl;
-            tfcUniques << pm << std::endl;
+            tfcUniques << pm.id << " " << pm << std::endl;
         }
     }
     tfcout << "Duplicate Counts:" << std::endl;

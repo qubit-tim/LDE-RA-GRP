@@ -1,0 +1,39 @@
+352000584 [1,1,3,3,0,0][1,1,3,3,0,0][0,0,0,0,2,2][0,0,0,0,2,2][3,3,3,3,0,0][3,3,3,3,0,0]
+352000592 [1,1,3,3,0,0][1,1,3,3,0,0][0,0,2,2,2,2][0,0,2,2,2,2][3,3,3,3,0,0][3,3,3,3,0,0]
+352000640 [1,1,3,3,0,0][1,1,3,3,0,0][2,2,2,2,2,2][2,2,2,2,2,2][3,3,3,3,0,0][3,3,3,3,0,0]
+352000645 [1,1,3,3,0,0][1,3,1,3,0,0][0,0,0,0,2,2][0,0,0,0,2,2][3,1,1,3,0,0][3,3,3,3,0,0]
+352000653 [1,1,3,3,0,0][1,3,1,3,0,0][0,0,2,2,2,2][0,0,2,2,2,2][3,1,1,3,0,0][3,3,3,3,0,0]
+352000701 [1,1,3,3,0,0][1,3,1,3,0,0][2,2,2,2,2,2][2,2,2,2,2,2][3,1,1,3,0,0][3,3,3,3,0,0]
+352004040 [3,3,3,3,0,0][3,3,3,3,0,0][0,0,0,0,2,2][0,0,0,0,2,2][3,3,3,3,0,0][3,3,3,3,0,0]
+352004048 [3,3,3,3,0,0][3,3,3,3,0,0][0,0,2,2,2,2][0,0,2,2,2,2][3,3,3,3,0,0][3,3,3,3,0,0]
+352004096 [3,3,3,3,0,0][3,3,3,3,0,0][2,2,2,2,2,2][2,2,2,2,2,2][3,3,3,3,0,0][3,3,3,3,0,0]
+Duplicate Counts:
+Duplicate ID: 426 Count: 1
+Duplicate ID: 427 Count: 36
+Duplicate ID: 428 Count: 6
+Duplicate ID: 429 Count: 96
+Duplicate ID: 430 Count: 72
+Duplicate ID: 431 Count: 6
+Duplicate ID: 432 Count: 72
+Duplicate ID: 433 Count: 90
+Duplicate ID: 757 Count: 1
+Duplicate ID: 758 Count: 6
+Duplicate ID: 759 Count: 36
+Duplicate ID: 760 Count: 216
+Duplicate ID: 763 Count: 12
+Duplicate ID: 764 Count: 36
+Duplicate ID: 771 Count: 36
+Duplicate ID: 799 Count: 96
+Duplicate ID: 800 Count: 576
+Duplicate ID: 802 Count: 144
+Duplicate ID: 803 Count: 432
+Duplicate ID: 805 Count: 432
+Duplicate ID: 832 Count: 90
+Duplicate ID: 833 Count: 540
+Duplicate ID: 352000584 Count: 35
+Duplicate ID: 352000592 Count: 215
+Duplicate ID: 352000640 Count: 35
+Duplicate ID: 352000645 Count: 95
+Duplicate ID: 352000653 Count: 575
+Duplicate ID: 352000701 Count: 95
+Duplicate ID: 352004048 Count: 5

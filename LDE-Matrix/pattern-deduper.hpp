@@ -19,9 +19,11 @@ class patternDeduper {
 
     private:
         void loadPatterns();
-        // Case number -> Pattern Sum -> Pattern ID -> Pattern
+        // Case number -> Pattern Sum -> ID* -> Pattern
+        //  * This ID is unique to the map and does not correspond to the pattern ID
+        //      this is because pattern IDs might not be unique across sets
         std::map <int, std::map <int, std::map <int, patternMatrix>>> caseSumPatternMap;
-        int newPatternID = 1000;
+        int nextID = 0;
 };
 
 #endif // PATTERN_DEDUPER_HPP
