@@ -47,14 +47,15 @@ patternMatrix::patternMatrix(int pattern928Number) {
     loadFromString(PATTERNS_928[pattern928Number]);
     rearrangeMatrix();
     loadFromString(getFirstCaseRearrangement());
-    updatePairCounts();
 }
 
+
+// This constructor uses the old encoding and should probably be updated or something
+//  as the new vs old encoding is a bit confusing
 patternMatrix::patternMatrix(int pNum, std::string matrix) {
     init();
     id = pNum;
     loadFromString(matrix);
-    updatePairCounts();
 }
 
 patternMatrix::patternMatrix(int pNum, std::string matrix, bool newEncoding) {
@@ -69,7 +70,6 @@ patternMatrix::patternMatrix(int pNum, std::string matrix, bool newEncoding) {
         }
     }
     loadFromString(matrix);
-    updatePairCounts();
 }
 
 void patternMatrix::loadFromString(std::string m) {
@@ -139,6 +139,7 @@ void patternMatrix::loadFromString(std::string m) {
     pGroupings.updateMetadata();  // This probably isn't necessary but it's good to be consistent
     // Now we know we have a valid matrix string so let's save it
     originalMatrix = toString();
+    updatePairCounts();
 }
 
 void patternMatrix::updatePairCounts(){
@@ -423,6 +424,14 @@ bool patternMatrix::case8SubCaseMatch() {
 std::string patternMatrix::getFirstCaseRearrangement() {
     if (caseRearrangements.size() == 0) return toString();
     return caseRearrangements.begin()->first;
+}
+
+bool patternMatrix::isDuplicate(patternMatrix other) {
+    if (p == other.p) return true;
+    if (isTranspose(other)) return true;
+    if (is23Swap(other)) return true;
+    if (is23SwapT(other)) return true;
+    return false;
 }
 
 bool patternMatrix::isTranspose(patternMatrix other) {
@@ -880,6 +889,8 @@ void patternMatrix::loadCases() {
     cases.push_back(caseMatrix(8, "[1,1,1,1,0,0][1,1,1,1,0,0][1,1,0,0,1,1][1,1,0,0,1,1][0,0,1,1,1,1][0,0,1,1,1,1]"));
 }
 
+// TODO - Refactor this to output either the new or old encoding
+//  it might be betteer to have a function for toStringOldEncoding and toStringNewEncoding
 std::string patternMatrix::toString() {
     std::ostringstream os;
     os << p;

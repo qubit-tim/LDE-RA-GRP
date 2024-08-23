@@ -25,6 +25,7 @@ cc_binary(
     srcs = ["tfc-testing.cpp"],
     deps = [
         "//LDE-Matrix:pattern-matrix",
+        "//LDE-Matrix:pattern-deduper",
     ],
     data = [
         ":patterns",

@@ -9,6 +9,8 @@
 
 #include "LDE-Matrix/pattern-matrix.hpp"
 #include "LDE-Matrix/zmatrix.hpp"
+#include "LDE-Matrix/data/patterns928.hpp"
+#include "LDE-Matrix/pattern-deduper.hpp"
 
 std::string TFC_OUT_DIR = "tfc-output";
 
@@ -53,14 +55,21 @@ std::vector<patternMatrix> loadPatterns(std::string filename)
 void case352AllPossible() {
     std::filesystem::create_directory(TFC_OUT_DIR);
     std::ofstream tfcout = std::ofstream(TFC_OUT_DIR + "/tfc-output.txt");
+    std::ofstream tfcUniques = std::ofstream(TFC_OUT_DIR + "/tfc-uniques.txt");
+
     if (!tfcout.is_open()) {
         std::cerr << "Error opening file:" << TFC_OUT_DIR + "/tfc-output.txt" << std::endl;
         return;
     }
-    
+
+    if (!tfcUniques.is_open()) {
+        std::cerr << "Error opening file:" << TFC_OUT_DIR + "/tfc-uniques.txt" << std::endl;
+        return;
+    }
+
     patternMatrix test = patternMatrix(352);
     test.multilineOutput = true;
-    //test.printDebugInfo = true;
+    test.printDebugInfo = true;
 
     std::cout << "Before T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
     std::cout << test << std::endl;
@@ -81,6 +90,7 @@ void case352AllPossible() {
     
     std::cout << "Starting to generate all possible patterns" << std::endl;
     auto start_time = std::chrono::high_resolution_clock::now();
+    // This generates all possible value patterns and stores them in the old encoding scheme
     test.generateAllPossibleValuePatterns();
     auto end_time = std::chrono::high_resolution_clock::now();
     std::cout << "Time to generate all possible patterns: " << std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count() << " milliseconds" << std::endl;
@@ -89,12 +99,33 @@ void case352AllPossible() {
     tfcout << "Time to generate all possible patterns: " << std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count() << " milliseconds" << std::endl;
     tfcout << "Time to generate 1 possible pattern: " << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() / test.allPossibleValuePatterns.size() << " microseconds" << std::endl;
     tfcout << "Number of possible value patterns: " << test.allPossibleValuePatterns.size() << std::endl;
-    tfcout << "All possible value patterns:" << std::endl;
+    tfcout << "Deduping:" << std::endl;
+    patternDeduper pd = patternDeduper();
+    int newPatternID = 352000000;
+    std::map<int, int> dupCount;
     for (auto pm : test.allPossibleValuePatterns) {
-        tfcout << pm.first << std::endl;
-
+        int duplicateID = -1;
+        // By default, these are in the old encoding but this could change :(
+        patternMatrix pmCopy = patternMatrix(++newPatternID, pm.first);
+        if (pd.isDuplicate(pmCopy, duplicateID, true)) {
+            std::cout << pmCopy.id << " is a duplicate of " << duplicateID << std::endl;
+            tfcout << pmCopy.id << " is a duplicate of " << duplicateID << std::endl;
+            dupCount[duplicateID]++;
+        } else {
+            std::cout << pmCopy.id << " is unique" << std::endl;
+            tfcout << pmCopy.id << " is unique" << std::endl;
+            tfcUniques << pmCopy << std::endl;
+        }
+    }
+    tfcout << "Duplicate Counts:" << std::endl;
+    tfcUniques << "Duplicate Counts:" << std::endl;
+    for (auto const& [id, count] : dupCount) {
+        std::cout << "Duplicate ID: " << id << " Count: " << count << std::endl;
+        tfcout << "Duplicate ID: " << id << " Count: " << count << std::endl;
+        tfcUniques << "Duplicate ID: " << id << " Count: " << count << std::endl;
     }
     tfcout.close();
+    tfcUniques.close();
     std::cout << "Done" << std::endl;
 }
 
@@ -200,7 +231,59 @@ void test352Possible() {
     std::cout << "Max of possible values: " << test.getMaxOfPossibleValues() << std::endl;
 }
 
+void generateCaseSumMaps() {
+    // int1 = case number, int2 = sum, int3 = id, string = pattern
+    std::map <int, std::map <int, std::map <int, std::string>>> caseSumMap;
+    for (int i = 1; i <=928; i++) {
+        patternMatrix pm = patternMatrix(i);
+        std::cout << pm.id << " " << pm << std::endl;
+        pm.matchOnCases();
+        caseSumMap[pm.caseMatch][pm.p.zSum][pm.id] = pm.toString();
+    }
+    
+    std::filesystem::create_directory(TFC_OUT_DIR);
+    std::ofstream tfcout = std::ofstream(TFC_OUT_DIR + "/case-sum-map.txt");
+    if (!tfcout.is_open()) {
+        std::cerr << "Error opening file:" << TFC_OUT_DIR + "/case-sum-map.txt" << std::endl;
+        return;
+    }
+    for (auto const& [caseNumber, sumMap] : caseSumMap) {
+        tfcout << "    {" << caseNumber << ", {" << std::endl;
+        std::cout << "Case: " << caseNumber << std::endl;
+        for (auto const& [sum, idMap] : sumMap) {
+            tfcout << "        {" << sum << ", {" << std::endl;
+            std::cout << "Sum: " << sum << std::endl;
+            for (auto const& [id, pattern] : idMap) {
+                tfcout << "            {" << id << ", \"" << pattern << "\"}," << std::endl;
+            }
+            tfcout << "        }}," << std::endl;
+        }
+        tfcout << "    }}," << std::endl;
+    }
+}
+
+void outputCaseSumMap() {
+    for (auto const& [caseNumber, sumMap] : CASE_SUM_MAP_PATTERNS_928) {
+        std::cout << "Case: " << caseNumber << std::endl;
+        for (auto const& [sum, idMap] : sumMap) {
+            std::cout << "Sum: " << sum << std::endl;
+            for (auto const& [id, pattern] : idMap) {
+                std::cout << "ID: " << id << " Pattern: " << pattern << std::endl;
+            }
+        }
+    }
+}
+
+void patternDeduperTest() {
+    patternDeduper pd = patternDeduper();
+    patternMatrix pm = patternMatrix(182);
+    pm.multilineOutput = true;
+    int duplicateID = 0;
+    bool isDuplicate = pd.isDuplicate(pm, duplicateID, true);
+    std::cout << "Is duplicate: " << isDuplicate << " Duplicate ID: " << duplicateID << std::endl;
+}
+
 int main(int argc, char **argv) {
-    case352SubCaseMatching();
+    case352AllPossible();
     return 0;
 }

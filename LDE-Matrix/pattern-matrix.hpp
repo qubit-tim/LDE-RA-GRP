@@ -84,6 +84,7 @@ class patternMatrix {
         std::string getFirstCaseRearrangement();
 
         // Duplicate Pattern Checks
+        bool isDuplicate(patternMatrix other);
         bool isTranspose(patternMatrix other);
         bool is23Swap(patternMatrix other);
         bool is23SwapT(patternMatrix other);
