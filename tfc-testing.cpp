@@ -283,7 +283,42 @@ void patternDeduperTest() {
     std::cout << "Is duplicate: " << isDuplicate << " Duplicate ID: " << duplicateID << std::endl;
 }
 
+void dedupeP352() {
+    std::filesystem::create_directory(TFC_OUT_DIR);
+    std::ofstream tfcout = std::ofstream(TFC_OUT_DIR + "/tfc-output.txt");
+    std::ofstream tfcUniques = std::ofstream(TFC_OUT_DIR + "/tfc-uniques.txt");
+
+    std::vector<patternMatrix> patterns = loadPatterns(TFC_OUT_DIR + "/p352-xT14-xT23-all-possible.txt");
+
+    patternDeduper pd = patternDeduper();
+    int newPatternID = 352000000;
+    std::map<int, int> dupCount;
+    for (auto pm : patterns) {
+        int duplicateID = -1;
+        pm.id = ++newPatternID;
+        if (pd.isDuplicate(pm, duplicateID, true)) {
+            std::cout << pm.id << " is a duplicate of " << duplicateID << std::endl;
+            tfcout << pm.id << " is a duplicate of " << duplicateID << std::endl;
+            dupCount[duplicateID]++;
+        } else {
+            std::cout << pm.id << " is unique" << std::endl;
+            tfcout << pm.id << " is unique" << std::endl;
+            tfcUniques << pm << std::endl;
+        }
+    }
+    tfcout << "Duplicate Counts:" << std::endl;
+    tfcUniques << "Duplicate Counts:" << std::endl;
+    for (auto const& [id, count] : dupCount) {
+        std::cout << "Duplicate ID: " << id << " Count: " << count << std::endl;
+        tfcout << "Duplicate ID: " << id << " Count: " << count << std::endl;
+        tfcUniques << "Duplicate ID: " << id << " Count: " << count << std::endl;
+    }
+    tfcout.close();
+    tfcUniques.close();
+    std::cout << "Done" << std::endl;
+}
+
 int main(int argc, char **argv) {
-    case352AllPossible();
+    dedupeP352();
     return 0;
 }
