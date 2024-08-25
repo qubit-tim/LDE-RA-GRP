@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <string>
 #include <chrono>
 #include <iostream>
@@ -6,6 +7,9 @@
 #include <vector>
 #include <sstream>
 #include <filesystem>
+#include <map>
+#include <regex>
+#include <future>
 
 #include "LDE-Matrix/pattern-matrix.hpp"
 #include "LDE-Matrix/zmatrix.hpp"
@@ -29,6 +33,24 @@ std::string matchedCasesDirectory = "tfc-output";
 std::string matchedSubcasesDirectory = "tfc-output";
 bool useNewEncoding = false;
 
+std::string replace_all(
+    const std::string & str ,   // where to work
+    const std::string & find ,  // substitute 'find'
+    const std::string & replace //      by 'replace'
+) {
+    using namespace std;
+    string result;
+    size_t find_len = find.size();
+    size_t pos,from=0;
+    while ( string::npos != ( pos=str.find(find,from) ) ) {
+        result.append( str, from, pos-from );
+        result.append( replace );
+        from = pos + find_len;
+    }
+    result.append( str, from , string::npos );
+    return result;
+}
+
 std::vector<patternMatrix> loadPatterns(std::string filename)
 {
     std::ifstream file(filename);
@@ -47,6 +69,37 @@ std::vector<patternMatrix> loadPatterns(std::string filename)
             continue;
         }
         patterns.push_back(patternMatrix(++lineNumber, line, useNewEncoding));
+    }
+    file.close();
+    return patterns;
+}
+
+std::vector<patternMatrix> loadPatternsExtraBrackets(std::string filename) {
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        std::cerr << "Error opening file:" << filename << std::endl;
+        return {}; // Indicate error
+    }
+    std::vector<patternMatrix> patterns;
+    std::string line;
+
+    int lineNumber = 0;
+    while (std::getline(file, line)) {
+        // ignore comments
+        if (line[0] == '#') {
+            std::cout << "Ignoring comment: " << line << std::endl;
+            continue;
+        }
+        // Remove the leading and trailing brackets
+        line = line.substr(1, line.size() - 2);
+        // Replace spaces with commas
+        std::replace(line.begin(), line.end(), ' ', ',');
+        // Replace all instances of "],[" with "]["
+        line = replace_all(line, "],[", "][");
+        patterns.push_back(patternMatrix(++lineNumber, line, false));
+        if (lineNumber % 1000 == 0) {
+            std::cout << "Loaded " << lineNumber << " patterns" << std::endl;
+        }
     }
     file.close();
     return patterns;
@@ -318,7 +371,108 @@ void dedupeP352() {
     std::cout << "Done" << std::endl;
 }
 
+bool dedupTest(int caseNumber) {
+    std::filesystem::create_directory("temp");
+    int newPatternID = 1000000 * caseNumber;
+    
+    
+    auto start_time = std::chrono::high_resolution_clock::now();
+    std::cout << "Case: " << caseNumber << std::endl;
+    std::ofstream dedupeOut = std::ofstream("temp/case-" + std::to_string(caseNumber) + "-dedupe-out.txt");
+    std::ofstream uniquesOut = std::ofstream("temp/case-" + std::to_string(caseNumber) + "-uniques-out.txt");
+    if (!dedupeOut.is_open()) {
+        std::cerr << "Error opening file:" << "temp/case-" + std::to_string(caseNumber) + "-dedupe-out.txt" << std::endl;
+        return false;
+    }
+    if (!uniquesOut.is_open()) {
+        std::cerr << "Error opening file:" << "temp/case-" + std::to_string(caseNumber) + "-uniques-out.txt" << std::endl;
+        return false;
+    }
+    std::string filename = "temp/case-" + std::to_string(caseNumber) + ".txt";
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        std::cerr << "Error opening file:" << filename << std::endl;
+        return false;
+    }
+    std::ifstream lineCount(filename);
+    int totalLines = std::count(std::istreambuf_iterator<char>(lineCount), std::istreambuf_iterator<char>(), '\n');
+    std::cout << "Total lines: " << totalLines << std::endl;
+    std::cout << "Files opened" << std::endl;
+    std::cout << "Iterating through patterns" << std::endl;
+    
+    patternDeduper pd = patternDeduper();
+    std::cout << "Deduper Loaded" << std::endl;
+    std::map<int, int> dupCount;
+    std::cout << "Starting dedupe" << std::endl;
+    std::string line;
+    int lineNumber = 0;
+    while (std::getline(file, line)) {
+        // ignore comments
+        if (line[0] == '#') {
+            std::cout << "Ignoring comment: " << line << std::endl;
+            continue;
+        }
+        // Remove the leading and trailing brackets
+        line = line.substr(1, line.size() - 2);
+        // Replace spaces with commas
+        std::replace(line.begin(), line.end(), ' ', ',');
+        // Replace all instances of "],[" with "]["
+        line = replace_all(line, "],[", "][");
+        patternMatrix pm = patternMatrix(++lineNumber, line, false);
+        //std::cout << pm.id << " " << pm << std::endl;
+        pm.matchOnCases();
+        int duplicateID = -1;
+        if (pd.isDuplicate(pm, duplicateID, true)) {
+            //std::cout << pm.id << " is a duplicate of " << duplicateID << std::endl;
+            dupCount[duplicateID]++;
+        } else {
+            pm.id = ++newPatternID;
+            //std::cout << pm.id << " is unique" << std::endl;
+            uniquesOut << pm.id << " " << pm << std::endl;
+            dedupeOut << pm.id << " " << pm << std::endl;
+        }
+        if (lineNumber % 10000 == 0) {
+            std::cout << "Deduped " << lineNumber << " patterns" << std::endl;
+            std::cout << "Deduped 1 pattern: " << std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count() / lineNumber << " microseconds" << std::endl;
+            std::cout << "Percent done: " << floorf(lineNumber * 100) / totalLines << "%" << std::endl;
+        }
+        file.close();
+        std::cout << "\nDuplicate Counts:" << std::endl;
+        dedupeOut << "\nDuplicate Counts:" << std::endl;
+        for (auto const& [id, count] : dupCount) {
+            std::cout << "Duplicate ID: " << id << " Count: " << count << std::endl;
+            dedupeOut << "Duplicate ID: " << id << " Count: " << count << std::endl;
+        }
+        auto end_time = std::chrono::high_resolution_clock::now();
+        std::cout << "Time to dedupe: " << std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count() << " milliseconds" << std::endl;
+        std::cout << "Time to dedupe 1 pattern: " << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() / lineNumber << " microseconds" << std::endl;
+        dedupeOut << "Time to dedupe: " << std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count() << " milliseconds" << std::endl;
+        dedupeOut << "Time to dedupe 1 pattern: " << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() / lineNumber << " microseconds" << std::endl;
+        dedupeOut.close();
+        uniquesOut.close();
+    }
+    return true;
+}
+
 int main(int argc, char **argv) {
-    dedupeP352();
+    auto start_time = std::chrono::high_resolution_clock::now();
+    std::vector<std::future<bool>> futures;
+     for (int i = 1; i <= 8; i++) {
+        auto res = std::async(std::launch::async, dedupTest, i);
+        futures.push_back(std::move(res));
+    }
+    for (auto &f : futures) {
+        f.wait();
+    }
+    auto end_time = std::chrono::high_resolution_clock::now();
+    std::cout << "Done!" << std::endl;
+    std::cout << "Time to dedupe: " << std::chrono::duration_cast<std::chrono::seconds>(end_time - start_time).count() << " seconds" << std::endl;
+    std::cout << "Results are:\n";
+    int caseNumber = 1;
+    for (auto &f : futures) {
+        bool result = f.get();
+        std::cout << "Case " << std::to_string(caseNumber)  << "Result: " << result << std::endl;
+        caseNumber++;
+    }
     return 0;
 }
