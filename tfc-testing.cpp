@@ -375,7 +375,6 @@ bool dedupTest(int caseNumber) {
     std::filesystem::create_directory("temp");
     int newPatternID = 1000000 * caseNumber;
     
-    
     auto start_time = std::chrono::high_resolution_clock::now();
     std::cout << "Case: " << caseNumber << std::endl;
     std::ofstream dedupeOut = std::ofstream("temp/case-" + std::to_string(caseNumber) + "-dedupe-out.txt");
@@ -399,6 +398,7 @@ bool dedupTest(int caseNumber) {
     std::cout << "Total lines: " << totalLines << std::endl;
     std::cout << "Files opened" << std::endl;
     std::cout << "Iterating through patterns" << std::endl;
+    lineCount.close();
     
     patternDeduper pd = patternDeduper();
     std::cout << "Deduper Loaded" << std::endl;
@@ -436,21 +436,21 @@ bool dedupTest(int caseNumber) {
             std::cout << "Deduped 1 pattern: " << std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count() / lineNumber << " microseconds" << std::endl;
             std::cout << "Percent done: " << floorf(lineNumber * 100) / totalLines << "%" << std::endl;
         }
-        file.close();
-        std::cout << "\nDuplicate Counts:" << std::endl;
-        dedupeOut << "\nDuplicate Counts:" << std::endl;
-        for (auto const& [id, count] : dupCount) {
-            std::cout << "Duplicate ID: " << id << " Count: " << count << std::endl;
-            dedupeOut << "Duplicate ID: " << id << " Count: " << count << std::endl;
-        }
-        auto end_time = std::chrono::high_resolution_clock::now();
-        std::cout << "Time to dedupe: " << std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count() << " milliseconds" << std::endl;
-        std::cout << "Time to dedupe 1 pattern: " << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() / lineNumber << " microseconds" << std::endl;
-        dedupeOut << "Time to dedupe: " << std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count() << " milliseconds" << std::endl;
-        dedupeOut << "Time to dedupe 1 pattern: " << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() / lineNumber << " microseconds" << std::endl;
-        dedupeOut.close();
-        uniquesOut.close();
     }
+    file.close();
+    std::cout << "\nDuplicate Counts:" << std::endl;
+    dedupeOut << "\nDuplicate Counts:" << std::endl;
+    for (auto const& [id, count] : dupCount) {
+        std::cout << "Duplicate ID: " << id << " Count: " << count << std::endl;
+        dedupeOut << "Duplicate ID: " << id << " Count: " << count << std::endl;
+    }
+    auto end_time = std::chrono::high_resolution_clock::now();
+    std::cout << "Time to dedupe: " << std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count() << " milliseconds" << std::endl;
+    std::cout << "Time to dedupe 1 pattern: " << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() / lineNumber << " microseconds" << std::endl;
+    dedupeOut << "Time to dedupe: " << std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count() << " milliseconds" << std::endl;
+    dedupeOut << "Time to dedupe 1 pattern: " << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() / lineNumber << " microseconds" << std::endl;
+    dedupeOut.close();
+    uniquesOut.close();
     return true;
 }
 
