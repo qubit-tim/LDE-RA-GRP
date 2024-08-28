@@ -372,11 +372,16 @@ void dedupeP352() {
 }
 
 bool dedupTest(int caseNumber) {
+    if (caseNumber < 1 || caseNumber > 8) {
+        std::cerr << "Invalid case number" << std::endl;
+        return false;
+    }
+    std::string caseString = "Case: " + std::to_string(caseNumber);
     std::filesystem::create_directory("temp");
     int newPatternID = 1000000 * caseNumber;
     
     auto start_time = std::chrono::high_resolution_clock::now();
-    std::cout << "Case: " << caseNumber << std::endl;
+    std::cout << "Case " << caseNumber << std::endl;
     std::ofstream dedupeOut = std::ofstream("temp/case-" + std::to_string(caseNumber) + "-dedupe-out.txt");
     std::ofstream uniquesOut = std::ofstream("temp/case-" + std::to_string(caseNumber) + "-uniques-out.txt");
     if (!dedupeOut.is_open()) {
@@ -395,15 +400,15 @@ bool dedupTest(int caseNumber) {
     }
     std::ifstream lineCount(filename);
     int totalLines = std::count(std::istreambuf_iterator<char>(lineCount), std::istreambuf_iterator<char>(), '\n');
-    std::cout << "Total lines: " << totalLines << std::endl;
-    std::cout << "Files opened" << std::endl;
-    std::cout << "Iterating through patterns" << std::endl;
+    std::cout << caseString << " - Total lines: " << totalLines << std::endl;
+    std::cout << caseString << " - Files opened" << std::endl;
+    std::cout << caseString << " - Iterating through patterns" << std::endl;
     lineCount.close();
     
     patternDeduper pd = patternDeduper();
-    std::cout << "Deduper Loaded" << std::endl;
+    std::cout << caseString << " - Deduper Loaded" << std::endl;
     std::map<int, int> dupCount;
-    std::cout << "Starting dedupe" << std::endl;
+    std::cout << caseString << " - Starting dedupe" << std::endl;
     std::string line;
     int lineNumber = 0;
     while (std::getline(file, line)) {
@@ -411,6 +416,13 @@ bool dedupTest(int caseNumber) {
         if (line[0] == '#') {
             std::cout << "Ignoring comment: " << line << std::endl;
             continue;
+        }
+        //std::cout << caseString << " - Line " << lineNumber << " size: " << line.size() << std::endl;
+        // Silly me for putting in the LDE1only after the pattern as this was causing the pattern loads to fail :(
+        // [[3 3 2 2 0 0] [3 3 2 2 0 0] [2 2 1 1 0 1] [2 2 1 1 0 1] [1 1 1 1 0 0] [1 1 0 0 0 0]] LDE1only
+        if (line.size() > 85) {
+            std::cout << caseString << " - Line " << lineNumber << " is too long: " << line.size() << std::endl;
+            line = line.substr(0, 85);
         }
         // Remove the leading and trailing brackets
         line = line.substr(1, line.size() - 2);
@@ -421,6 +433,12 @@ bool dedupTest(int caseNumber) {
         patternMatrix pm = patternMatrix(++lineNumber, line, false);
         //std::cout << pm.id << " " << pm << std::endl;
         pm.matchOnCases();
+        // There might be some case 2 patterns that hit this as new rules have been added.
+        if (pm.caseMatch != caseNumber) {
+            // probably should kick this over to the error bucket
+            std::cout << caseString << " - Pattern: " << pm.id << " Case Match: " << pm.caseMatch << " does not match: " << caseNumber << std::endl;
+            continue;
+        }
         int duplicateID = -1;
         if (pd.isDuplicate(pm, duplicateID, true)) {
             //std::cout << pm.id << " is a duplicate of " << duplicateID << std::endl;
@@ -432,21 +450,23 @@ bool dedupTest(int caseNumber) {
             dedupeOut << pm.id << " " << pm << std::endl;
         }
         if (lineNumber % 10000 == 0) {
-            std::cout << "Deduped " << lineNumber << " patterns" << std::endl;
-            std::cout << "Deduped 1 pattern: " << std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count() / lineNumber << " microseconds" << std::endl;
-            std::cout << "Percent done: " << floorf(lineNumber * 100) / totalLines << "%" << std::endl;
+            std::cout << caseString << " - Deduped " << lineNumber << " patterns" << std::endl;
+            std::cout << caseString << " - Deduping 1 pattern: " << std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count() / lineNumber << " microseconds" << std::endl;
+            std::cout << caseString << " - Percent done: " << floorf(lineNumber * 100) / totalLines << "%" << std::endl;
+            std::cout << caseString << " - Unique count: " << pd.getUniqueCaseCount(caseNumber) << std::endl;
         }
     }
     file.close();
-    std::cout << "\nDuplicate Counts:" << std::endl;
+    std::cout << std::endl;
+    std::cout << caseString << " - Duplicate Counts:" << std::endl;
     dedupeOut << "\nDuplicate Counts:" << std::endl;
     for (auto const& [id, count] : dupCount) {
-        std::cout << "Duplicate ID: " << id << " Count: " << count << std::endl;
+        std::cout << caseString << " - Duplicate ID: " << id << " Count: " << count << std::endl;
         dedupeOut << "Duplicate ID: " << id << " Count: " << count << std::endl;
     }
     auto end_time = std::chrono::high_resolution_clock::now();
-    std::cout << "Time to dedupe: " << std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count() << " milliseconds" << std::endl;
-    std::cout << "Time to dedupe 1 pattern: " << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() / lineNumber << " microseconds" << std::endl;
+    std::cout << caseString << " - Time to dedupe: " << std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count() << " milliseconds" << std::endl;
+    std::cout << caseString << " - Time to dedupe 1 pattern: " << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() / lineNumber << " microseconds" << std::endl;
     dedupeOut << "Time to dedupe: " << std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count() << " milliseconds" << std::endl;
     dedupeOut << "Time to dedupe 1 pattern: " << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() / lineNumber << " microseconds" << std::endl;
     dedupeOut.close();
@@ -455,6 +475,21 @@ bool dedupTest(int caseNumber) {
 }
 
 int main(int argc, char **argv) {
+    // argv version for a per case run
+    if (argc < 2) {
+        std::cerr << "Usage: tfc-testing <case#>" << std::endl;
+        return 1;
+    }
+    int caseNumber = std::stoi(argv[1]);
+    auto start_time = std::chrono::high_resolution_clock::now();
+    bool result = dedupTest(caseNumber);
+    auto end_time = std::chrono::high_resolution_clock::now();
+    std::cout << "Done!" << std::endl;
+    std::cout << "Time to dedupe: " << std::chrono::duration_cast<std::chrono::seconds>(end_time - start_time).count() << " seconds" << std::endl;
+    std::cout << "Results are:\n";
+    std::cout << "Case " << std::to_string(caseNumber)  << "Result: " << result << std::endl;
+    /*
+    // trying a multi-threaded version
     auto start_time = std::chrono::high_resolution_clock::now();
     std::vector<std::future<bool>> futures;
      for (int i = 1; i <= 8; i++) {
@@ -474,5 +509,6 @@ int main(int argc, char **argv) {
         std::cout << "Case " << std::to_string(caseNumber)  << "Result: " << result << std::endl;
         caseNumber++;
     }
+    */
     return 0;
 }

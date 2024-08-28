@@ -16,6 +16,7 @@ class patternDeduper {
     public:
         patternDeduper();
         bool isDuplicate(patternMatrix, int &, bool);
+        int getUniqueCaseCount(int);
 
     private:
         void loadPatterns();

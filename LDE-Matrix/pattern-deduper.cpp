@@ -38,3 +38,12 @@ bool patternDeduper::isDuplicate(patternMatrix pattern, int &duplicateID, bool a
     }
     return false;
 }
+
+int patternDeduper::getUniqueCaseCount(int caseNumber) {
+    int uniqueCount = 0;
+    for (auto const& [sum, idMap] : caseSumPatternMap[caseNumber]) {
+        uniqueCount += idMap.size();
+    }
+    return uniqueCount;
+
+}
