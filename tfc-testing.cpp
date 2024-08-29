@@ -475,6 +475,9 @@ bool dedupTest(int caseNumber) {
 }
 
 int main(int argc, char **argv) {
+    dedupeP352();
+    return 0;
+    /*
     // argv version for a per case run
     if (argc < 2) {
         std::cerr << "Usage: tfc-testing <case#>" << std::endl;
@@ -488,6 +491,7 @@ int main(int argc, char **argv) {
     std::cout << "Time to dedupe: " << std::chrono::duration_cast<std::chrono::seconds>(end_time - start_time).count() << " seconds" << std::endl;
     std::cout << "Results are:\n";
     std::cout << "Case " << std::to_string(caseNumber)  << "Result: " << result << std::endl;
+    */
     /*
     // trying a multi-threaded version
     auto start_time = std::chrono::high_resolution_clock::now();

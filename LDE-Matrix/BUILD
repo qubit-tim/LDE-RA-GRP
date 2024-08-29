@@ -87,6 +87,17 @@ cc_library(
     visibility = ["//visibility:public"],
 )
 
+cc_test(
+    name = "pattern-deduper_test",
+    size = "small",
+    srcs = ["pattern-deduper_test.cpp"],
+    deps = [
+      "@googletest//:gtest_main",
+      ":pattern-deduper",
+      ":lde-matrix-test-utils",
+    ],
+)
+
 cc_library(
     name = "lde-matrix-test-utils",
     srcs = ["test-utils.cpp"],
