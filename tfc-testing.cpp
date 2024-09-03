@@ -343,6 +343,15 @@ void dedupeP352() {
 
     std::vector<patternMatrix> patterns = loadPatterns(TFC_OUT_DIR + "/p352-xT14-xT23-all-possible.txt");
 
+    std::vector<patternMatrix> p928Patterns;
+    for (int i = 0; i <= 928; i++) {
+        if (i == 0) {
+            p928Patterns.push_back(patternMatrix());
+            continue;
+        }
+        p928Patterns.push_back(patternMatrix(i));
+    }
+
     patternDeduper pd = patternDeduper();
     int newPatternID = 352000000;
     std::map<int, int> dupCount;
@@ -350,8 +359,8 @@ void dedupeP352() {
         int duplicateID = -1;
         pm.id = ++newPatternID;
         if (pd.isDuplicate(pm, duplicateID, true)) {
-            std::cout << pm.id << " is a duplicate of " << duplicateID << std::endl;
-            tfcout << pm.id << " is a duplicate of " << duplicateID << std::endl;
+            std::cout << pm.id << " " << pm << " is a duplicate of " << duplicateID << " " << p928Patterns[duplicateID] << std::endl;
+            tfcout << pm.id << " " << pm << " is a duplicate of " << duplicateID << " " << p928Patterns[duplicateID] << std::endl;
             dupCount[duplicateID]++;
         } else {
             std::cout << pm.id << " is unique" << std::endl;
@@ -476,7 +485,6 @@ bool dedupTest(int caseNumber) {
 
 int main(int argc, char **argv) {
     dedupeP352();
-    return 0;
     /*
     // argv version for a per case run
     if (argc < 2) {

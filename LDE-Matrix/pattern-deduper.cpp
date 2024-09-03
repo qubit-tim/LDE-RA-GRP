@@ -24,6 +24,7 @@ void patternDeduper::loadPatterns() {
 }
 
 bool patternDeduper::isDuplicate(patternMatrix pattern, int &duplicateID, bool addUniquePatterns) {
+    duplicateID = 0;
     pattern.matchOnCases();
     //std::cout << "Pattern " << pattern.id << " matches case " << pattern.caseMatch << std::endl;
     for (auto const& [id, pm] : caseSumPatternMap[pattern.caseMatch][pattern.p.zSum]) {
@@ -31,6 +32,16 @@ bool patternDeduper::isDuplicate(patternMatrix pattern, int &duplicateID, bool a
         if (pattern.isDuplicate(pm)) {
                 duplicateID = pm.id;
                 return true;
+        }
+    }
+    // The swap23.zSum maybe be different, so we need to check that as well
+    if (pattern.swap23.zSum != pattern.p.zSum) {
+        for (auto const& [id, pm] : caseSumPatternMap[pattern.caseMatch][pattern.swap23.zSum]) {
+            //std::cout << "Comparing to pattern " << id << std::endl;
+            if (pattern.isDuplicate(pm)) {
+                    duplicateID = pm.id;
+                    return true;
+            }
         }
     }
     if (addUniquePatterns) {

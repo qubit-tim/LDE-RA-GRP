@@ -89,6 +89,47 @@ void zmatrix::updateMetadata() {
             zCountCols[j][zColCounts[i][j]]++;
         }
     }
+    updatePairCounts();
+}
+
+void zmatrix::updatePairCounts(){
+    rowPairCountsTotals.clear();
+    rowPairCountsTotals.resize(rows+1);
+    colPairCountsTotals.clear();
+    colPairCountsTotals.resize(cols+1);
+    // Reset the pair counts
+    rowPairCounts.clear();
+    rowPairCounts.resize(rows);
+    for (int i = 0; i < rows; i++) {
+        rowPairCounts[i].resize(rows);
+    }
+    colPairCounts.clear();
+    colPairCounts.resize(cols);
+    for (int i = 0; i < cols; i++) {
+        colPairCounts[i].resize(cols);
+    }
+    // Now to update the pair counts
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < rows; j++) {
+            rowPairCounts[i][j] = 0;
+            colPairCounts[i][j] = 0;
+            if (i == j) {
+                rowPairCounts[i][j] = 6;
+                colPairCounts[i][j] = 6;
+                continue;
+            }
+            for (int k = 0; k < cols; k++) {
+                if (z[i][k] == z[j][k]) rowPairCounts[i][j]++;
+                if (z[k][i] == z[k][j]) colPairCounts[i][j]++;
+            }
+        }
+    }
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < rows; j++) {
+            rowPairCountsTotals[rowPairCounts[i][j]]++;
+            colPairCountsTotals[colPairCounts[i][j]]++;
+        }
+    }
 }
 
 void zmatrix::swapRows(int i, int j) {
@@ -207,6 +248,13 @@ bool zmatrix::operator==(const zmatrix &other) const {
     if (zCountCols.size() != other.zCountCols.size()) return false;
     // We do not check for 1:1 matches in zRowCounts and zColCounts here
     // because the rows and columns can be rearranged and still be considered the same matrix
+    // but the row pair counts and column pair counts must match
+    for (int i = 0; i < rowPairCountsTotals.size(); i++) {
+        if (rowPairCountsTotals[i] != other.rowPairCountsTotals[i]) return false;
+    }
+    for (int i = 0; i < colPairCountsTotals.size(); i++) {
+        if (colPairCountsTotals[i] != other.colPairCountsTotals[i]) return false;
+    }
     for (int i = 0; i < zCountRows.size(); i++) {
         if (zCountRows[i] != other.zCountRows[i]) return false;
     }

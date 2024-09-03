@@ -24,8 +24,16 @@ class zmatrix {
         std::vector<std::vector<int>> zColCounts;  // Count of the number of 0s, 1s, 2s, 3s, ..., n's in each column
         std::vector<std::vector<int>> zCountRows;  // Number of rows with a count of  0, 1, 2, 3, 4, 5, 6, ..n (based on columns) of 0s, 1s, 2s, 3s, ..., n's
         std::vector<std::vector<int>> zCountCols;  // Number of columns with a count of 0, 1, 2, 3, 4, 5, 6, ..n (based on rows) of 0s, 1s, 2s, 3s, ..., n's
+        // These are the pair counts for the matrix when comparing row[i] to row[j] and col[i] to col[j]
+        std::vector<std::vector<int>> rowPairCounts;  // This is the row pair counts for the pattern
+        std::vector<std::vector<int>> colPairCounts;  // This is the col pair counts for the pattern
+        // The following totals are counts of the pair counts
+        //  i=0 -> number of rows/cols with no pairs, i=2 -> number of rows/cols with 2 pairs, i=4 -> number of rows/cols with 4 pairs, i=6 -> number of rows/cols with 6 pairs
+        std::vector<int> rowPairCountsTotals;  // This contains the totals of the row pair counts for the pattern 
+        std::vector<int> colPairCountsTotals;  // This contains the totals of the col pair counts for the pattern
 
         void updateMetadata();
+        void updatePairCounts();
         void swapRows(int i, int j);
         void swapColumns(int i, int j);
 

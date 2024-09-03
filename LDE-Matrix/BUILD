@@ -92,6 +92,7 @@ cc_test(
     size = "small",
     srcs = ["pattern-deduper_test.cpp"],
     deps = [
+      "@googletest//:gtest",
       "@googletest//:gtest_main",
       ":pattern-deduper",
       ":lde-matrix-test-utils",

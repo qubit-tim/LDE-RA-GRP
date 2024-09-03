@@ -57,6 +57,10 @@ class patternMatrix {
         std::map<std::string, bool> allPossibleValuePatterns; // This is a map of all the possible case rearrangements
         std::vector<std::vector<int>> rowPairCounts;  // This is the row pair counts for the pattern
         std::vector<std::vector<int>> colPairCounts;  // This is the col pair counts for the pattern
+        // The following totals are counts of the pair counts
+        //  i=0 -> number of rows/cols with no pairs, i=2 -> number of rows/cols with 2 pairs, i=4 -> number of rows/cols with 4 pairs, i=6 -> number of rows/cols with 6 pairs
+        std::vector<int> rowPairCountsTotals;  // This contains the totals of the row pair counts for the pattern 
+        std::vector<int> colPairCountsTotals;  // This contains the totals of the col pair counts for the pattern
         // LDE Tracking
         int LDE = 0;  // This is the LDE of the pattern
         // This tracks an entry by entry LDE change based on T-Gate operations and factorization
@@ -123,6 +127,7 @@ class patternMatrix {
     private:
         void init();
         void loadCases();
+        // These need to be refactored to only use 1 value as the matrix will always be a square matrix
         int rows = 6;
         int cols = 6;
         int maxValue = 3;

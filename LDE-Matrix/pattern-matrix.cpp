@@ -142,12 +142,19 @@ void patternMatrix::loadFromString(std::string m) {
     updatePairCounts();
 }
 
+// I need to refactor this to, instead, use the zmatrix pair values
 void patternMatrix::updatePairCounts(){
+    rowPairCountsTotals.clear();
+    rowPairCountsTotals.resize(rows+1);
+    colPairCountsTotals.clear();
+    colPairCountsTotals.resize(cols+1);
     // Reset the pair counts
+    rowPairCounts.clear();
     rowPairCounts.resize(rows);
     for (int i = 0; i < rows; i++) {
         rowPairCounts[i].resize(rows);
     }
+    colPairCounts.clear();
     colPairCounts.resize(cols);
     for (int i = 0; i < cols; i++) {
         colPairCounts[i].resize(cols);
@@ -166,6 +173,12 @@ void patternMatrix::updatePairCounts(){
                 if (p.z[i][k] == p.z[j][k]) rowPairCounts[i][j]++;
                 if (p.z[k][i] == p.z[k][j]) colPairCounts[i][j]++;
             }
+        }
+    }
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < rows; j++) {
+            rowPairCountsTotals[rowPairCounts[i][j]]++;
+            colPairCountsTotals[colPairCounts[i][j]]++;
         }
     }
 }
@@ -441,60 +454,13 @@ bool patternMatrix::isTranspose(patternMatrix other) {
 }
 
 bool patternMatrix::is23Swap(patternMatrix other) {
-   // Now to check details starting with rows.
-   std::vector<std::vector<int>> zRowCounts = swap23.zRowCounts;
-    for (int i = 0; i < other.p.zRowCounts.size(); i++) {
-        for (int j = 0; j < zRowCounts.size(); j++) {
-            if (zRowCounts[j] == other.p.zRowCounts[i]) {
-                zRowCounts.erase(zRowCounts.begin() + j);
-                break;
-            }
-        }
-    }
-    if (zRowCounts.size() != 0) return false;
-    // Now to check details of columns.
-    std::vector<std::vector<int>> zColCounts = swap23.zColCounts;
-    for (int i = 0; i < other.p.zColCounts.size(); i++) {
-        for (int j = 0; j < zColCounts.size(); j++) {
-            if ( zColCounts[j] == other.p.zColCounts[i]) {
-                zColCounts.erase(zColCounts.begin() + j);
-                break;
-            }
-        }
-    }
-    if (zColCounts.size() != 0) return false;
-    // If we made it this far, then we have a match (I think)
-    return true;
+    if (p == other.swap23) return true;
+    return false;
 }
 
-
-// This is essentially the same as is23Swap, but we are checking the transposed swap23 matrix
-// TODO - Refactor this to use a common function with is23Swap
 bool patternMatrix::is23SwapT(patternMatrix other) {
-   // Now to check details starting with rows.
-   std::vector<std::vector<int>> zRowCounts = swap23T.zRowCounts;
-    for (int i = 0; i < other.p.zRowCounts.size(); i++) {
-        for (int j = 0; j < zRowCounts.size(); j++) {
-            if ( zRowCounts[j] == other.p.zRowCounts[i]) {
-                zRowCounts.erase(zRowCounts.begin() + j);
-                break;
-            }
-        }
-    }
-    if (zRowCounts.size() != 0) return false;
-    // Now to check details of columns.
-    std::vector<std::vector<int>> zColCounts = swap23T.zColCounts;
-    for (int i = 0; i < other.p.zColCounts.size(); i++) {
-        for (int j = 0; j < zColCounts.size(); j++) {
-            if ( zColCounts[j] == other.p.zColCounts[i]) {
-                zColCounts.erase(zColCounts.begin() + j);
-                break;
-            }
-        }
-    }
-    if (zColCounts.size() != 0) return false;
-    // If we made it this far, then we have a match (I think)
-    return true;
+    if (p == other.swap23T) return true;
+    return false;
 }
 
 void patternMatrix::printDebug(std::ostream& os) {
@@ -555,12 +521,18 @@ void patternMatrix::printRowPairCounts(std::ostream& os) {
     for (int i = 0; i < rows; i++) {
         os << "[";
         for (int j = 0; j < rows; j++) {
-            os << rowPairCounts[i][j];
+            os << p.rowPairCounts[i][j];
             if (j != rows-1) os << ","; // Don't print a comma after the last element
         }
         os << "]";
         if (multilineOutput) os << std::endl;
     }
+    os << "Row Pair Counts Totals:" << std::endl;
+    for (int i = 0; i < p.rowPairCountsTotals.size(); i++) {
+        os << p.rowPairCountsTotals[i];
+        if (i != rows) os << ","; // Don't print a comma after the last element
+    }
+    if (multilineOutput) os << std::endl;
 }
 
 void patternMatrix::printColPairCounts(std::ostream& os) {
@@ -568,12 +540,18 @@ void patternMatrix::printColPairCounts(std::ostream& os) {
     for (int i = 0; i < cols; i++) {
         os << "[";
         for (int j = 0; j < cols; j++) {
-            os << colPairCounts[i][j];
+            os << p.colPairCounts[i][j];
             if (j != cols-1) os << ","; // Don't print a comma after the last element
         }
         os << "]";
         if (multilineOutput) os << std::endl;
     }
+    os << "Column Pair Counts Totals:" << std::endl;
+    for (int i = 0; i < p.colPairCountsTotals.size(); i++) {
+        os << p.colPairCountsTotals[i];
+        if (i != cols) os << ","; // Don't print a comma after the last element
+    }
+    if (multilineOutput) os << std::endl;
 }
 
 std::string patternMatrix::printTGateOperations() {
