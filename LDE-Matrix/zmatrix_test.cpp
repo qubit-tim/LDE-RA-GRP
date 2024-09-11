@@ -36,12 +36,21 @@ std::vector<std::vector<int>> CASE7 = {
 };
 
 std::vector<std::vector<int>> PATTERN_A = {
-    {2, 3, 0, 0, 0, 0},
-    {3, 2, 0, 0, 0, 0},
-    {0, 0, 3, 3, 0, 0},
-    {0, 0, 3, 3, 0, 0},
-    {0, 0, 0, 0, 2, 2},
-    {0, 0, 0, 0, 2, 2}
+    {2, 3, 0, 0, 0, 0}, // Row 0
+    {3, 2, 0, 0, 0, 0}, // Row 1
+    {0, 0, 3, 3, 0, 0}, // Row 2
+    {0, 0, 3, 3, 0, 0}, // Row 3
+    {0, 0, 0, 0, 2, 2}, // Row 4
+    {0, 0, 0, 0, 2, 2}, // Row 5
+};
+
+std::vector<std::vector<int>> PATTERN_A_ROW_SWAPS = {
+    {3, 2, 0, 0, 0, 0}, // Row 1
+    {0, 0, 3, 3, 0, 0}, // Row 3
+    {0, 0, 0, 0, 2, 2}, // Row 5
+    {0, 0, 3, 3, 0, 0}, // Row 2
+    {0, 0, 0, 0, 2, 2}, // Row 4
+    {2, 3, 0, 0, 0, 0}, // Row 0
 };
 
 std::vector<std::vector<int>> PATTERN_B = {
@@ -60,6 +69,24 @@ std::vector<std::vector<int>> NEGATIVE_VALUE_PATTERN = {
     {1, 1, 3, 3, 1, 1},
     {0, 0, 0, 0, 3, 2},
     {0, 0, 0, 0, 2, 3}
+};
+
+std::vector<std::vector<int>> REARRANGE_A_1 = {
+    {0, 0, 0, 0, 0, 0},
+    {3, 0, 0, 0, 0, 0},
+    {3, 3, 0, 0, 0, 0},
+    {3, 3, 3, 1, 0, 0},
+    {3, 3, 3, 3, 1, 0},
+    {3, 3, 3, 3, 3, 1},
+};
+
+std::vector<std::vector<int>> REARRANGE_A_2 = {
+    {3, 0, 0, 0, 0, 0},
+    {3, 3, 0, 0, 0, 0},
+    {3, 3, 3, 1, 0, 0},
+    {3, 3, 3, 3, 1, 0},
+    {3, 3, 3, 3, 3, 1},
+    {0, 0, 0, 0, 0, 0},
 };
 
 TEST(ZMatrixTest, DefaultZMatrixConstructor) {
@@ -494,4 +521,30 @@ TEST(ZMatrixTest, ZMatrixSwapCols) {
 
 TEST(ZMatrixTest, ZMatrixSwapRows) {
     GTEST_SKIP() << "Not implemented yet";
+}
+
+TEST(ZMatrixTest, ZMatrixRearrangeMatch) {
+    
+    zmatrix z1 = zmatrix(ROWS, COLS, PATTERN_MAX_VALUE);
+    z1.z = PATTERN_A;
+    z1.updateMetadata();
+    EXPECT_TRUE(z1.rearrangeMatch(z1)) << "Pattern A should match itself";
+
+    zmatrix z2 = zmatrix(ROWS, COLS, PATTERN_MAX_VALUE);
+    z2.z = PATTERN_B;
+    z2.updateMetadata();
+    EXPECT_FALSE(z1.rearrangeMatch(z2)) << "Pattern A should not match Pattern B";
+
+    zmatrix zRA1 = zmatrix(ROWS, COLS, PATTERN_MAX_VALUE);
+    zmatrix zRA2 = zmatrix(ROWS, COLS, PATTERN_MAX_VALUE);
+    zRA1.z = REARRANGE_A_1;
+    zRA2.z = REARRANGE_A_2;
+    zRA1.updateMetadata();
+    zRA2.updateMetadata();
+    EXPECT_TRUE(zRA1.rearrangeMatch(zRA2));
+
+    zmatrix z3 = zmatrix(ROWS, COLS, PATTERN_MAX_VALUE);
+    z3.z = PATTERN_A_ROW_SWAPS;
+    z3.updateMetadata();
+    EXPECT_TRUE(z1.rearrangeMatch(z3)) << "Pattern A should match Pattern A with row swaps";
 }

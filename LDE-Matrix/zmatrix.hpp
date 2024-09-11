@@ -39,9 +39,18 @@ class zmatrix {
 
         bool operator==(const zmatrix &) const;  // Read the comments in zmatrix.cpp for more information on what equality means
         bool operator!=(const zmatrix &) const;
-        bool strictMatch(const zmatrix &other);
+        bool rearrangeMatch(const zmatrix &other) const;
+        bool strictMatch(const zmatrix &other) const;
 
         void printDebug(std::ostream&);
+        void printPairCounts(std::ostream&);
+        void printRowPairCounts(std::ostream&);
+        void printColPairCounts(std::ostream&);
+        void printCounts(std::ostream&);
+        void printRowCounts(std::ostream&);
+        void printColCounts(std::ostream&);
+        void printCountRows(std::ostream&);
+        void printCountCols(std::ostream&);
         friend std::ostream& operator<<(std::ostream&,const zmatrix &);
     
     private:

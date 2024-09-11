@@ -99,6 +99,11 @@ class patternMatrix {
         void printPairCounts(std::ostream& os);
         void printRowPairCounts(std::ostream& os);
         void printColPairCounts(std::ostream& os);
+        void printCounts(std::ostream& os);
+        void printRowCounts(std::ostream& os);
+        void printColCounts(std::ostream& os);
+        void printCountRows(std::ostream& os);
+        void printCountCols(std::ostream& os);
         // Get a list of T-Gate operations applied
         std::string printTGateOperations();
         // Get the possible values

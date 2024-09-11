@@ -424,11 +424,11 @@ bool patternMatrix::case7SubCaseMatch() {
 }
 
 bool patternMatrix::case8SubCaseMatch() {
-    // 8a: V11, V12 have the same parity
-    // 8b: V11, V12 have different parity
+    // 8a: V11, V12 have the same parity or V11, V21 have the same parity
+    // 8b: V11, V12 have different parity and V11, V21 have different parity
     // Assume subcase 'a' and change to 'b' if the parity is different
     subCaseMatch = 'a';
-    if (p.z[0][0] % 2 != p.z[0][1] % 2) {
+    if (p.z[0][0] % 2 != p.z[0][1] % 2 && p.z[0][0] % 2 != p.z[1][0]) {
         subCaseMatch = 'b';
     }
     return true;
@@ -440,27 +440,35 @@ std::string patternMatrix::getFirstCaseRearrangement() {
 }
 
 bool patternMatrix::isDuplicate(patternMatrix other) {
-    if (p == other.p) return true;
-    if (isTranspose(other)) return true;
-    if (is23Swap(other)) return true;
-    if (is23SwapT(other)) return true;
+    if (p == other.p) {
+        std::cout << "Pattern " << id << " is a duplicate of " << other.id << std::endl;
+        return true;
+    }
+    if (isTranspose(other)) {
+        std::cout << "Pattern " << id << " is a transpose of " << other.id << std::endl;
+        return true;
+    }
+    if (is23Swap(other)) {
+        std::cout << "Pattern " << id << " is a 2-3 swap of " << other.id << std::endl;
+        return true;
+    }
+    if (is23SwapT(other)) {
+        std::cout << "Pattern " << id << " is a transpose of a 2-3 swap of " << other.id << std::endl;
+        return true;
+    }
     return false;
 }
 
 bool patternMatrix::isTranspose(patternMatrix other) {
-    // We need to do a complete check to verify that the pattern matrix is a transpose of the other
-    bool isTranspose = (pT == other.p);
-    return isTranspose;
+    return pT == other.p;
 }
 
 bool patternMatrix::is23Swap(patternMatrix other) {
-    if (p == other.swap23) return true;
-    return false;
+    return swap23 == other.p;
 }
 
 bool patternMatrix::is23SwapT(patternMatrix other) {
-    if (p == other.swap23T) return true;
-    return false;
+    return swap23T == other.p;
 }
 
 void patternMatrix::printDebug(std::ostream& os) {
@@ -552,6 +560,29 @@ void patternMatrix::printColPairCounts(std::ostream& os) {
         if (i != cols) os << ","; // Don't print a comma after the last element
     }
     if (multilineOutput) os << std::endl;
+}
+
+void patternMatrix::printCounts(std::ostream& os) {
+    printRowCounts(os);
+    printColCounts(os);
+    printCountRows(os);
+    printCountCols(os);
+}
+
+void patternMatrix::printRowCounts(std::ostream& os) {
+    p.printRowCounts(os);
+}
+
+void patternMatrix::printColCounts(std::ostream& os) {
+    p.printColCounts(os);
+}
+
+void patternMatrix::printCountRows(std::ostream& os) {
+    p.printCountRows(os);
+}
+
+void patternMatrix::printCountCols(std::ostream& os) {
+    p.printCountCols(os);
 }
 
 std::string patternMatrix::printTGateOperations() {
