@@ -218,6 +218,7 @@ void zmatrix::printDebug(std::ostream& os) {
         }
         os << "]" << std::endl;
     }
+    printPairCounts(os);
 }
 
 void zmatrix::printPairCounts(std::ostream& os) {
@@ -235,6 +236,10 @@ void zmatrix::printRowPairCounts(std::ostream& os) {
         }
         os << "]" << std::endl;
     }
+    os << "Row Pair Count Totals:" << std::endl;
+    for (int i = 0; i < rowPairCountsTotals.size(); i++) {
+        os << i << "=" << rowPairCountsTotals[i] << std::endl;
+    }
 }
 
 void zmatrix::printColPairCounts(std::ostream& os) {
@@ -246,6 +251,10 @@ void zmatrix::printColPairCounts(std::ostream& os) {
             if (j != colPairCounts[i].size()-1) os << ", ";
         }
         os << "]" << std::endl;
+    }
+    os << "Column Pair Count Totals:" << std::endl;
+    for (int i = 0; i < colPairCountsTotals.size(); i++) {
+        os << i << "=" << colPairCountsTotals[i] << std::endl;
     }
 }
 
@@ -335,17 +344,32 @@ bool zmatrix::operator==(const zmatrix &other) const {
     // because the rows and columns can be rearranged and still be considered the same matrix
     // but the row pair counts and column pair counts must match
     for (int i = 0; i < rowPairCountsTotals.size(); i++) {
-        if (rowPairCountsTotals[i] != other.rowPairCountsTotals[i]) return false;
+        if (rowPairCountsTotals[i] != other.rowPairCountsTotals[i]) {
+            std::cout << "Row Pair Counts Totals Mismatch: " <<  "Pair Count(" << i << "): " << " self(" << rowPairCountsTotals[i] << ") != other(" << other.rowPairCountsTotals[i] << ")" << std::endl;
+            return false;
+        }
     }
     for (int i = 0; i < colPairCountsTotals.size(); i++) {
-        if (colPairCountsTotals[i] != other.colPairCountsTotals[i]) return false;
+        if (colPairCountsTotals[i] != other.colPairCountsTotals[i]) {
+            std::cout << "Col Pair Counts Totals Mismatch: " << "Pair Count(" << i << ")" << " self(" << colPairCountsTotals[i] << ") != other(" << other.colPairCountsTotals[i] << ")" << std::endl;
+            return false;
+        }
     }
     for (int i = 0; i < zCountRows.size(); i++) {
-        if (zCountRows[i] != other.zCountRows[i]) return false;
+        if (zCountRows[i] != other.zCountRows[i]) {
+            std::cout << "Row Count Mismatch: " << i << std::endl;
+            return false;
+        }
     }
     for (int i = 0; i < zCountCols.size(); i++) {
-        if (zCountCols[i] != other.zCountCols[i]) return false;
+        if (zCountCols[i] != other.zCountCols[i]) {
+            std::cout << "Col Count Mismatch: " << i << std::endl;
+            return false;
+        }
     }
+    // maxValue == 1 means that this a case pattern and not an actual pattern so we do not need to check for a rearrange match
+    // This should probably be a flag or something else
+    // TODO - Refactor this to make the maxValue == 1 => Case Matrix more explicit
     if (maxValue == 1) return true;
     return rearrangeMatch(other);
 }
@@ -353,45 +377,16 @@ bool zmatrix::operator==(const zmatrix &other) const {
 bool zmatrix::rearrangeMatch(const zmatrix &other) const {
     // attempt a strict match first before attempting to rearrange to match
     if (strictMatch(other)) return true;
-    // Ok, this might be easier than expected
-    //  Since we already know about pair counts and row / column counts, we can use those to construct
-    //  possible arrangements of the matrix to see if they match.  We might be able to do this in a multithreaded way
-    //  to speed up the process.  
-    //    To do this, we need to find the row / column / pair counts that match for each matrix and then map them to possible locations
-    //    So, for example, z[0] could map to either other.z[3] / other.z[4], 
-    //     so the map would be 0 -> 3, 4 (z -> other.z) 
-    //     or we could flip it to 3 -> 0, 4-> 0 (other.z -> z) which might make rearranging easier as we can just iterate
-    //     the rows and columns, put values in place, and see if we have a match.  This should limit the number of possibilities.
-    //     I think we can go through the row / columns and quickly check values, so do r0 / c0 and check new[0][0] == other.z[0][0]
-    //     then do c1 and check new[0][1] == other.z[0][1] and so on.  If we get a mismatch, we can break out and try the next possibility.
-    //     This probably will be recursive.
-    // 
-    // Here we need to make sure all of the rows and columns match regardless of how they are arranged
-    // Here, the specific row and column value counts must match along with the specific pair counts
-    //  If those match, then we need to verify that entry by entry they match regardless of how they are rearranged
-    //for (int i = 0; i < z.size(); i++) {
-        // ideas -> find which rows that row i can match with then repeat for    
-    //}
-    // rowMap: zRow -> otherRow
-    // colMap: zCol -> otherCol
-    //std::map<int, std::vector<int>> rowMap;
-    //std::map<int, std::vector<int>> colMap;
     zmatrix newZ(rows, cols, maxValue);
     // if the row counts and column counts match, then we can map the rows and columns
     // i is the row index of z, j is the row index of other
     std::vector<std::map<int, int>> rowMaps;
     std::vector<std::map<int, int>> colMaps;
-    // *** NEW NOTES ***
-    //  Need to compare the rearranged other to this zmatrix
-    //  So make a map of other -> z
+    
     for (int i = 0; i < rows; i++) {
         std::vector<std::map<int, int>> nextRowMaps;
         for (int j = 0; j < other.rows; j++) {
-            for (int k = 0; k < zRowCounts[i].size(); k++) {
-                //std::cout << "zRowCounts[" << i << "][" << k << "] = " << zRowCounts[i][k] << " other.zRowCounts[" << j << "][" << k << "] = " << other.zRowCounts[j][k] << std::endl;
-            }
             if (zRowCounts[i] == other.zRowCounts[j]) {
-                //std::cout << "Row " << i << " matches with other row " << j << std::endl;
                 if (i==0) {
                     std::map<int, int> newMap;
                     newMap[j] = i;
@@ -415,7 +410,6 @@ bool zmatrix::rearrangeMatch(const zmatrix &other) const {
         std::vector<std::map<int, int>> nextColMaps;
         for (int j = 0; j < other.cols; j++) {
             if (zColCounts[i] == other.zColCounts[j]) {
-                std::cout << "Column " << i << " matches with other column " << j << std::endl;
                 if (i==0) {
                     std::map<int, int> newMap;
                     newMap[j] = i;
@@ -432,6 +426,7 @@ bool zmatrix::rearrangeMatch(const zmatrix &other) const {
         }
         colMaps = nextColMaps;
     }
+    /*
     // print the rowMaps
     for (int i = 0; i < rowMaps.size(); i++) {
         std::cout << "Row Map " << i << std::endl;
@@ -446,14 +441,15 @@ bool zmatrix::rearrangeMatch(const zmatrix &other) const {
             std::cout << key << " -> " << val << std::endl;
         }
     }
+    */
     for (int i = 0; i < rowMaps.size(); i++) {
         for (int j = 0; j < colMaps.size(); j++) {
             if (z[rowMaps[i][0]][colMaps[j][0]] != other.z[0][0]) continue;
             for (int k = 0; k < rows; k++) {
-                //std::cout << "Row " << k << " maps to " << rowMaps[i][k] << std::endl;
                 for (int l = 0; l < cols; l++) {
                     newZ.z[rowMaps[i][k]][colMaps[j][l]] = other.z[k][l];
                     // we can move to the next possibility if we find a mismatch between newZ and current z
+                    // but we can optimize this later
                 }
             }
         }

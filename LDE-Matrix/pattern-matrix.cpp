@@ -186,6 +186,7 @@ void patternMatrix::updatePairCounts(){
 void patternMatrix::matchOnCases() {
     caseMatch = -1;
     for (int i = 0; i < cases.size(); i++) {
+        std::cout << "Matching on case " << cases[i].id << std::endl;
         if (matchesCase(i)) {
             if (caseMatch != -1) {
                 std::ostringstream caseErr;
@@ -440,6 +441,7 @@ std::string patternMatrix::getFirstCaseRearrangement() {
 }
 
 bool patternMatrix::isDuplicate(patternMatrix other) {
+    std::cout << "Checking for duplicates between " << id << " and " << other.id << std::endl;
     if (p == other.p) {
         std::cout << "Pattern " << id << " is a duplicate of " << other.id << std::endl;
         return true;

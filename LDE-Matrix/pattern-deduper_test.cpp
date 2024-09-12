@@ -14,6 +14,7 @@ TEST(PatternDeduper, patternDeduperConstructor) {
 TEST(PatternDeduper, patternDeduperIsDuplicate) {
     int duplicateID = 0;
     patternDeduper pd = patternDeduper();
+    /*
     // bool isDuplicate(patternMatrix, int &, bool);
     patternMatrix pm759 = patternMatrix(759);
     pd.isDuplicate(pm759, duplicateID, false);
@@ -39,6 +40,17 @@ TEST(PatternDeduper, patternDeduperIsDuplicate) {
     pd.isDuplicate(p831, duplicateID, false);
     EXPECT_EQ(duplicateID, 831);
 
+    patternMatrix pm802 = patternMatrix(802);
+    pd.isDuplicate(pm802, duplicateID, false);
+    EXPECT_EQ(duplicateID, 802);
+    */
+    patternMatrix pm2 = patternMatrix(352000134, "[1,1,1,1,0,0][1,3,1,3,0,0][0,0,0,0,2,2][0,0,0,0,2,2][3,1,3,1,0,0][3,3,3,3,0,0]", true);
+    EXPECT_TRUE(pd.isDuplicate(pm2, duplicateID, false));
+    std::cout << "Duplicate ID: " << duplicateID << std::endl;
+    //pm2.printDebug(std::cout);
+
+    caseMatrix c3 = caseMatrix(3, "[1,1,1,1,0,0][1,1,1,1,0,0][1,1,1,1,0,0][1,1,1,1,0,0][0,0,0,0,0,0][0,0,0,0,0,0]");
+    //c3.printDebug();
     /*
     std::cout << "----------" << std::endl;
     std::cout << "p816:" << std::endl;

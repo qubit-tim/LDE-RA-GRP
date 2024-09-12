@@ -358,8 +358,9 @@ void dedupeP352() {
     for (auto pm : patterns) {
         int duplicateID = -1;
         pm.id = ++newPatternID;
+        std::cout << "Pattern " << pm.id << std::endl;
         if (pd.isDuplicate(pm, duplicateID, true)) {
-            std::cout << pm.id << " " << pm << " is a duplicate of " << duplicateID << " " << p928Patterns[duplicateID] << std::endl;
+            //std::cout << pm.id << " " << pm << " is a duplicate of " << duplicateID << " " << p928Patterns[duplicateID] << std::endl;
             tfcout << pm.id << " " << pm << " is a duplicate of " << duplicateID << " " << p928Patterns[duplicateID] << std::endl;
             dupCount[duplicateID]++;
         } else {
@@ -484,7 +485,11 @@ bool dedupTest(int caseNumber) {
 }
 
 int main(int argc, char **argv) {
-    dedupeP352();
+    //dedupeP352();
+    patternMatrix pm = patternMatrix(352000134, "[1,1,1,1,0,0][1,3,1,3,0,0][0,0,0,0,2,2][0,0,0,0,2,2][3,1,3,1,0,0][3,3,3,3,0,0]", true);
+    pm.multilineOutput = true;
+    pm.matchOnCases();
+    std::cout << pm.caseMatch << std::endl;
     /*
     // argv version for a per case run
     if (argc < 2) {
