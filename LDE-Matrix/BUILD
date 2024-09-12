@@ -41,7 +41,7 @@ cc_test(
 
 cc_library(
     name = "patterns928",
-    #srcs = ["data/patterns928.cpp"],
+    srcs = ["data/patterns928.cpp"],
     hdrs = ["data/patterns928.hpp"],
     visibility = ["//visibility:public"],
 )
@@ -76,6 +76,26 @@ cc_test(
     deps = [
       "@googletest//:gtest_main",
       ":pattern-matrix",
+    ],
+)
+
+cc_library(
+    name = "pattern-deduper",
+    srcs = ["pattern-deduper.cpp"],
+    hdrs = ["pattern-deduper.hpp"],
+    deps = [":pattern-matrix"],
+    visibility = ["//visibility:public"],
+)
+
+cc_test(
+    name = "pattern-deduper_test",
+    size = "small",
+    srcs = ["pattern-deduper_test.cpp"],
+    deps = [
+      "@googletest//:gtest",
+      "@googletest//:gtest_main",
+      ":pattern-deduper",
+      ":lde-matrix-test-utils",
     ],
 )
 

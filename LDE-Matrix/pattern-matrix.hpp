@@ -54,8 +54,13 @@ class patternMatrix {
         //    See line 160 in the Latex document
         std::string originalMatrix; // This is the original matrix string
         std::map<std::string, bool> caseRearrangements; // This is a map of all the possible case rearrangements
+        std::map<std::string, bool> allPossibleValuePatterns; // This is a map of all the possible case rearrangements
         std::vector<std::vector<int>> rowPairCounts;  // This is the row pair counts for the pattern
         std::vector<std::vector<int>> colPairCounts;  // This is the col pair counts for the pattern
+        // The following totals are counts of the pair counts
+        //  i=0 -> number of rows/cols with no pairs, i=2 -> number of rows/cols with 2 pairs, i=4 -> number of rows/cols with 4 pairs, i=6 -> number of rows/cols with 6 pairs
+        std::vector<int> rowPairCountsTotals;  // This contains the totals of the row pair counts for the pattern 
+        std::vector<int> colPairCountsTotals;  // This contains the totals of the col pair counts for the pattern
         // LDE Tracking
         int LDE = 0;  // This is the LDE of the pattern
         // This tracks an entry by entry LDE change based on T-Gate operations and factorization
@@ -83,6 +88,7 @@ class patternMatrix {
         std::string getFirstCaseRearrangement();
 
         // Duplicate Pattern Checks
+        bool isDuplicate(patternMatrix other);
         bool isTranspose(patternMatrix other);
         bool is23Swap(patternMatrix other);
         bool is23SwapT(patternMatrix other);
@@ -90,10 +96,20 @@ class patternMatrix {
         void printDebug(std::ostream& os);
         void printLDEs(std::ostream& os);
         void printPossibleValues(std::ostream& os);
+        void printPairCounts(std::ostream& os);
+        void printRowPairCounts(std::ostream& os);
+        void printColPairCounts(std::ostream& os);
+        void printCounts(std::ostream& os);
+        void printRowCounts(std::ostream& os);
+        void printColCounts(std::ostream& os);
+        void printCountRows(std::ostream& os);
+        void printCountCols(std::ostream& os);
         // Get a list of T-Gate operations applied
         std::string printTGateOperations();
         // Get the possible values
         std::string getMaxOfPossibleValues();
+        void generateAllPossibleValuePatterns();
+        void recursiveAllPossibleValueSet(int position, zmatrix z);
         // T-Gate Multiplication Functions
         void leftTGateMultiply(int p, int q);
         void rightTGateMultiply(int p, int q);
@@ -107,7 +123,8 @@ class patternMatrix {
         void rearrangeRows(zmatrix patternVersion, zmatrix caseVersion, int currentRow);
         std::string toString();
         // TODO: Add a csv output for the pattern matrix
-        bool isOrthonormal();
+        bool isNormalized();
+        bool isOrthogonal();
 
         // Friends
         friend std::ostream& operator<<(std::ostream&,const patternMatrix &);
@@ -115,8 +132,10 @@ class patternMatrix {
     private:
         void init();
         void loadCases();
+        // These need to be refactored to only use 1 value as the matrix will always be a square matrix
         int rows = 6;
         int cols = 6;
+        int maxValue = 3;
 };
 
 #endif // PATTERN_MATRIX_HPP

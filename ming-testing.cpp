@@ -22,7 +22,6 @@ int main(int argc, char **argv) {
     std::cout << "After T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
     std::cout << test << std::endl;
 
-    /*
     // If you want to reduce and see the LDEs then see possible values, uncomment this block
     test.ldeReductionOnPattern(1);
     std::cout << "LDEs:" << std::endl;
@@ -30,7 +29,6 @@ int main(int argc, char **argv) {
     std::cout << "Possible values:" << std::endl;
     test.printPossibleValues(std::cout);
     std::cout << "Max of possible values: " << test.getMaxOfPossibleValues() << std::endl;
-    */
 
     /*
     // If you want to see groupings, uncomment this block

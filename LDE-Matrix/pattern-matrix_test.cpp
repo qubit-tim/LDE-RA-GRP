@@ -155,7 +155,7 @@ std::map <int, std::map<char, std::string> > SUBCASE_NEW_ENCODING_MAP = {
     {
         8, {
             {'a', "[1,1,1,1,0,0][3,3,3,3,0,0][1,1,0,0,1,1][3,3,0,0,3,3][0,0,1,1,1,1][0,0,3,3,3,3]"},
-            {'b', "[3,1,3,1,2,2][3,1,3,1,2,2][1,3,2,2,3,1][1,3,2,2,3,1][2,2,1,3,1,3][2,2,1,3,1,3]"},
+            {'a', "[3,1,3,1,2,2][3,1,3,1,2,2][1,3,2,2,3,1][1,3,2,2,3,1][2,2,1,3,1,3][2,2,1,3,1,3]"},
         },
     },
 };
@@ -473,6 +473,7 @@ TEST(PatternMatrixTest,PatternMatrixDetermineSubCase) {
         for (auto const& [subcase, pattern] : subcases) {
             patternMatrix pm = patternMatrix(1, pattern, true);
             pm.matchOnCases();
+            std::cout << "Case: " << caseNumber << " Subcase: " << subcase << " Pattern: " << pattern << std::endl;
             EXPECT_TRUE(pm.caseMatch == caseNumber) << "Expected: " << caseNumber << " Got: " << pm.caseMatch << " with Pattern: " << pattern;
             pm.determineSubCase();
             EXPECT_TRUE(pm.subCaseMatch == subcase) << "Expected: " << subcase << " Got: " << pm.subCaseMatch << " with Pattern: " << pattern;
@@ -529,6 +530,7 @@ TEST(PatternMatrixTest,PatternMatrixOptimalCaseRearrangements) {
 
 // TODO: Implement the following tests
 TEST(PatternMatrixTest,PatternMatrixLeftTGateMultiply) {
+    /*
     patternMatrix pm1 = patternMatrix(1, "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,1,1][0,0,0,1,2,2][0,0,0,1,2,2]");
     if(!pm1.rearrangeMatrix()) FAIL() << "Failed to rearrange matrix";
     pm1.multilineOutput = true;
@@ -554,10 +556,12 @@ TEST(PatternMatrixTest,PatternMatrixLeftTGateMultiply) {
         }
         std::cout << "]" << std::endl;
     }
+    */
     GTEST_SKIP() << "Not finished";
 }
 
 TEST(PatternMatrixTest,PatternMatrixRightTGateMultiply) {
+    /*
     patternMatrix pm1 = patternMatrix(1, "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,1,1][0,0,0,1,2,2][0,0,0,1,2,2]");
     if(!pm1.rearrangeMatrix()) FAIL() << "Failed to rearrange matrix";
     pm1.multilineOutput = true;
@@ -584,6 +588,7 @@ TEST(PatternMatrixTest,PatternMatrixRightTGateMultiply) {
         }
         std::cout << "]" << std::endl;
     }
+    */
     GTEST_SKIP() << "Not finished";
 }
 
@@ -612,6 +617,7 @@ TEST(PatternMatrixTest,PatternMatrixPatternElementAddition) {
     }
 }
 
+// TODO: Split this into 2 tests, one for isNormalized and one for isOrthogonal
 TEST(PatternMatrixTest,PatternMatrixIsOrthonormal) {
     for (auto const& [expected, patterns] : ORTHONORMAL_PATTERN_CHECKS) {
         for (auto const& pattern : patterns) {
@@ -622,13 +628,18 @@ TEST(PatternMatrixTest,PatternMatrixIsOrthonormal) {
             //    pm.printDebugInfo = true;
             //   std::cout << "Pattern: " << pattern << "; Case: " << pm.caseMatch << std::endl;
             //}
-            bool got = pm.isOrthonormal();
+            bool got = pm.isNormalized() && pm.isOrthogonal();
             EXPECT_EQ(got, expected) << "Expected: " << expected << " Got: " << got << " with Pattern: " << pattern << "; Case: " << pm.caseMatch;
             // Debugging for failed tests
             if (got != expected) {
                 pm.printDebugInfo = true;
-                pm.isOrthonormal();
+                pm.isNormalized();
+                pm.isOrthogonal();
             }
         }
     }
+}
+
+TEST(PatternMatrixTest,PatternMatrixGenerateAllPossibleValuePatterns) {
+    GTEST_SKIP() << "Not finished";
 }

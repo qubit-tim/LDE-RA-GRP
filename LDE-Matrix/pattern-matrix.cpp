@@ -18,11 +18,11 @@ void patternMatrix::init() {
     id = 0;
     caseMatch = -1;
     subCaseMatch = '-';
-    pNewEncoding = zmatrix(rows, cols, 3);
-    p = zmatrix(rows, cols, 3);
-    pT = zmatrix(cols, rows, 3);
-    swap23 = zmatrix(rows, cols, 3);
-    swap23T = zmatrix(cols, rows, 3);
+    pNewEncoding = zmatrix(rows, cols, maxValue);
+    p = zmatrix(rows, cols, maxValue);
+    pT = zmatrix(cols, rows, maxValue);
+    swap23 = zmatrix(rows, cols, maxValue);
+    swap23T = zmatrix(cols, rows, maxValue);
     cV = zmatrix(rows, cols, 1);
     cVT = zmatrix(cols, rows, 1);
     pGroupings = zmatrix(rows, cols, 36);
@@ -47,14 +47,15 @@ patternMatrix::patternMatrix(int pattern928Number) {
     loadFromString(PATTERNS_928[pattern928Number]);
     rearrangeMatrix();
     loadFromString(getFirstCaseRearrangement());
-    updatePairCounts();
 }
 
+
+// This constructor uses the old encoding and should probably be updated or something
+//  as the new vs old encoding is a bit confusing
 patternMatrix::patternMatrix(int pNum, std::string matrix) {
     init();
     id = pNum;
     loadFromString(matrix);
-    updatePairCounts();
 }
 
 patternMatrix::patternMatrix(int pNum, std::string matrix, bool newEncoding) {
@@ -69,7 +70,6 @@ patternMatrix::patternMatrix(int pNum, std::string matrix, bool newEncoding) {
         }
     }
     loadFromString(matrix);
-    updatePairCounts();
 }
 
 void patternMatrix::loadFromString(std::string m) {
@@ -139,14 +139,22 @@ void patternMatrix::loadFromString(std::string m) {
     pGroupings.updateMetadata();  // This probably isn't necessary but it's good to be consistent
     // Now we know we have a valid matrix string so let's save it
     originalMatrix = toString();
+    updatePairCounts();
 }
 
+// I need to refactor this to, instead, use the zmatrix pair values
 void patternMatrix::updatePairCounts(){
+    rowPairCountsTotals.clear();
+    rowPairCountsTotals.resize(rows+1);
+    colPairCountsTotals.clear();
+    colPairCountsTotals.resize(cols+1);
     // Reset the pair counts
+    rowPairCounts.clear();
     rowPairCounts.resize(rows);
     for (int i = 0; i < rows; i++) {
         rowPairCounts[i].resize(rows);
     }
+    colPairCounts.clear();
     colPairCounts.resize(cols);
     for (int i = 0; i < cols; i++) {
         colPairCounts[i].resize(cols);
@@ -167,11 +175,18 @@ void patternMatrix::updatePairCounts(){
             }
         }
     }
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < rows; j++) {
+            rowPairCountsTotals[rowPairCounts[i][j]]++;
+            colPairCountsTotals[colPairCounts[i][j]]++;
+        }
+    }
 }
 
 void patternMatrix::matchOnCases() {
     caseMatch = -1;
     for (int i = 0; i < cases.size(); i++) {
+        //std::cout << "Matching on case " << cases[i].id << std::endl;
         if (matchesCase(i)) {
             if (caseMatch != -1) {
                 std::ostringstream caseErr;
@@ -295,11 +310,16 @@ bool patternMatrix::case3SubCaseMatch() {
 bool patternMatrix::case3aSubCaseCheck() {
     bool isCase3a = false;
     // 3a: The four columns/rows with odd entries are fully paired
-    if ((rowPairCounts[0][1] == 6 && rowPairCounts[2][3] == 6) || (rowPairCounts[0][2] == 6 && rowPairCounts[1][3] == 6)) {
+    if ((rowPairCounts[0][1] == 6 && rowPairCounts[2][3] == 6) || 
+        (rowPairCounts[0][2] == 6 && rowPairCounts[1][3] == 6) ||
+        (rowPairCounts[0][3] == 6 && rowPairCounts[1][2] == 6)) {
         subCaseMatch = 'a';
         isCase3a = true;
     }
-    if ((colPairCounts[0][1] == 6 && colPairCounts[2][3] == 6) || (colPairCounts[0][2] == 6 && colPairCounts[1][3] == 6)) {
+    if ((colPairCounts[0][1] == 6 && colPairCounts[2][3] == 6) || 
+        (colPairCounts[0][2] == 6 && colPairCounts[1][3] == 6) ||
+        (colPairCounts[0][3] == 6 && colPairCounts[1][2] == 6)
+        ) {
         subCaseMatch = 'a';
         isCase3a = true;
     }
@@ -309,11 +329,15 @@ bool patternMatrix::case3aSubCaseCheck() {
 bool patternMatrix::case3bSubCaseCheck() {
     bool isCase3b = false;
     // 3b: In the first four rows/columns, four entries of every row/column are paired.
-    if ((rowPairCounts[0][1] == 4 && rowPairCounts[2][3] == 4) || (rowPairCounts[0][2] == 4 && rowPairCounts[1][3] == 4)) {
+    if ((rowPairCounts[0][1] == 4 && rowPairCounts[2][3] == 4) ||
+        (rowPairCounts[0][2] == 4 && rowPairCounts[1][3] == 4) ||
+        (rowPairCounts[0][3] == 4 && rowPairCounts[1][2] == 4)) {
         subCaseMatch = 'b';
         isCase3b = true;
     }
-    if ((colPairCounts[0][1] == 4 && colPairCounts[2][3] == 4) || (colPairCounts[0][2] == 4 && colPairCounts[1][3] == 4)) {
+    if ((colPairCounts[0][1] == 4 && colPairCounts[2][3] == 4) || 
+        (colPairCounts[0][2] == 4 && colPairCounts[1][3] == 4) ||
+        (colPairCounts[0][3] == 4 && colPairCounts[1][2] == 4)) {
         subCaseMatch = 'b';
         isCase3b = true;
     }
@@ -324,11 +348,15 @@ bool patternMatrix::case3cSubCaseCheck() {
     bool isCase3c = false;
     // 3c: there are only two paired numbers per row/column.
     // 3c: there are only two paired numbers per row/column.
-    if ((rowPairCounts[0][1] == 2 && rowPairCounts[2][3] == 2) || (rowPairCounts[0][2] == 2 && rowPairCounts[1][3] == 2)) {
+    if ((rowPairCounts[0][1] == 2 && rowPairCounts[2][3] == 2) ||
+        (rowPairCounts[0][2] == 2 && rowPairCounts[1][3] == 2) ||
+        (rowPairCounts[0][3] == 2 && rowPairCounts[1][2] == 2)) {
         subCaseMatch = 'c';
         isCase3c = true;
     }
-    if ((colPairCounts[0][1] == 2 && colPairCounts[2][3] == 2) || (colPairCounts[0][2] == 2 && colPairCounts[1][3] == 2)) {
+    if ((colPairCounts[0][1] == 2 && colPairCounts[2][3] == 2) ||
+        (colPairCounts[0][2] == 2 && colPairCounts[1][3] == 2) ||
+        (colPairCounts[0][3] == 2 && colPairCounts[1][2] == 2)) {
         subCaseMatch = 'c';
         isCase3c = true;
     }
@@ -397,11 +425,11 @@ bool patternMatrix::case7SubCaseMatch() {
 }
 
 bool patternMatrix::case8SubCaseMatch() {
-    // 8a: V11, V12 have the same parity
-    // 8b: V11, V12 have different parity
+    // 8a: V11, V12 have the same parity or V11, V21 have the same parity
+    // 8b: V11, V12 have different parity and V11, V21 have different parity
     // Assume subcase 'a' and change to 'b' if the parity is different
     subCaseMatch = 'a';
-    if (p.z[0][0] % 2 != p.z[0][1] % 2) {
+    if (p.z[0][0] % 2 != p.z[0][1] % 2 && p.z[0][0] % 2 != p.z[1][0]) {
         subCaseMatch = 'b';
     }
     return true;
@@ -412,67 +440,37 @@ std::string patternMatrix::getFirstCaseRearrangement() {
     return caseRearrangements.begin()->first;
 }
 
+bool patternMatrix::isDuplicate(patternMatrix other) {
+    //std::cout << "Checking for duplicates between " << id << " and " << other.id << std::endl;
+    if (p == other.p) {
+        //std::cout << "Pattern " << id << " is a duplicate of " << other.id << std::endl;
+        return true;
+    }
+    if (isTranspose(other)) {
+        //std::cout << "Pattern " << id << " is a transpose of " << other.id << std::endl;
+        return true;
+    }
+    if (is23Swap(other)) {
+        //std::cout << "Pattern " << id << " is a 2-3 swap of " << other.id << std::endl;
+        return true;
+    }
+    if (is23SwapT(other)) {
+        //std::cout << "Pattern " << id << " is a transpose of a 2-3 swap of " << other.id << std::endl;
+        return true;
+    }
+    return false;
+}
+
 bool patternMatrix::isTranspose(patternMatrix other) {
-    // We need to do a complete check to verify that the pattern matrix is a transpose of the other
-    bool isTranspose = (pT == other.p);
-    return isTranspose;
+    return pT == other.p;
 }
 
 bool patternMatrix::is23Swap(patternMatrix other) {
-   // Now to check details starting with rows.
-   std::vector<std::vector<int>> zRowCounts = swap23.zRowCounts;
-    for (int i = 0; i < other.p.zRowCounts.size(); i++) {
-        for (int j = 0; j < zRowCounts.size(); j++) {
-            if (zRowCounts[j] == other.p.zRowCounts[i]) {
-                zRowCounts.erase(zRowCounts.begin() + j);
-                break;
-            }
-        }
-    }
-    if (zRowCounts.size() != 0) return false;
-    // Now to check details of columns.
-    std::vector<std::vector<int>> zColCounts = swap23.zColCounts;
-    for (int i = 0; i < other.p.zColCounts.size(); i++) {
-        for (int j = 0; j < zColCounts.size(); j++) {
-            if ( zColCounts[j] == other.p.zColCounts[i]) {
-                zColCounts.erase(zColCounts.begin() + j);
-                break;
-            }
-        }
-    }
-    if (zColCounts.size() != 0) return false;
-    // If we made it this far, then we have a match (I think)
-    return true;
+    return swap23 == other.p;
 }
 
-
-// This is essentially the same as is23Swap, but we are checking the transposed swap23 matrix
-// TODO - Refactor this to use a common function with is23Swap
 bool patternMatrix::is23SwapT(patternMatrix other) {
-   // Now to check details starting with rows.
-   std::vector<std::vector<int>> zRowCounts = swap23T.zRowCounts;
-    for (int i = 0; i < other.p.zRowCounts.size(); i++) {
-        for (int j = 0; j < zRowCounts.size(); j++) {
-            if ( zRowCounts[j] == other.p.zRowCounts[i]) {
-                zRowCounts.erase(zRowCounts.begin() + j);
-                break;
-            }
-        }
-    }
-    if (zRowCounts.size() != 0) return false;
-    // Now to check details of columns.
-    std::vector<std::vector<int>> zColCounts = swap23T.zColCounts;
-    for (int i = 0; i < other.p.zColCounts.size(); i++) {
-        for (int j = 0; j < zColCounts.size(); j++) {
-            if ( zColCounts[j] == other.p.zColCounts[i]) {
-                zColCounts.erase(zColCounts.begin() + j);
-                break;
-            }
-        }
-    }
-    if (zColCounts.size() != 0) return false;
-    // If we made it this far, then we have a match (I think)
-    return true;
+    return swap23T == other.p;
 }
 
 void patternMatrix::printDebug(std::ostream& os) {
@@ -523,6 +521,72 @@ void patternMatrix::printPossibleValues(std::ostream& os) {
     }
 }
 
+void patternMatrix::printPairCounts(std::ostream& os) {
+    printRowPairCounts(os);
+    printColPairCounts(os);
+}
+
+void patternMatrix::printRowPairCounts(std::ostream& os) {
+    os << "Row Pair Counts:" << std::endl;
+    for (int i = 0; i < rows; i++) {
+        os << "[";
+        for (int j = 0; j < rows; j++) {
+            os << p.rowPairCounts[i][j];
+            if (j != rows-1) os << ","; // Don't print a comma after the last element
+        }
+        os << "]";
+        if (multilineOutput) os << std::endl;
+    }
+    os << "Row Pair Counts Totals:" << std::endl;
+    for (int i = 0; i < p.rowPairCountsTotals.size(); i++) {
+        os << p.rowPairCountsTotals[i];
+        if (i != rows) os << ","; // Don't print a comma after the last element
+    }
+    if (multilineOutput) os << std::endl;
+}
+
+void patternMatrix::printColPairCounts(std::ostream& os) {
+    os << "Column Pair Counts:" << std::endl;
+    for (int i = 0; i < cols; i++) {
+        os << "[";
+        for (int j = 0; j < cols; j++) {
+            os << p.colPairCounts[i][j];
+            if (j != cols-1) os << ","; // Don't print a comma after the last element
+        }
+        os << "]";
+        if (multilineOutput) os << std::endl;
+    }
+    os << "Column Pair Counts Totals:" << std::endl;
+    for (int i = 0; i < p.colPairCountsTotals.size(); i++) {
+        os << p.colPairCountsTotals[i];
+        if (i != cols) os << ","; // Don't print a comma after the last element
+    }
+    if (multilineOutput) os << std::endl;
+}
+
+void patternMatrix::printCounts(std::ostream& os) {
+    printRowCounts(os);
+    printColCounts(os);
+    printCountRows(os);
+    printCountCols(os);
+}
+
+void patternMatrix::printRowCounts(std::ostream& os) {
+    p.printRowCounts(os);
+}
+
+void patternMatrix::printColCounts(std::ostream& os) {
+    p.printColCounts(os);
+}
+
+void patternMatrix::printCountRows(std::ostream& os) {
+    p.printCountRows(os);
+}
+
+void patternMatrix::printCountCols(std::ostream& os) {
+    p.printCountCols(os);
+}
+
 std::string patternMatrix::printTGateOperations() {
     std::ostringstream os;
     for (int i = 0; i < tGateOperations.size(); i++) {
@@ -550,6 +614,33 @@ std::string patternMatrix::getMaxOfPossibleValues() {
         maxValues += "]";
     }
     return maxValues;
+}
+
+void patternMatrix::generateAllPossibleValuePatterns() {
+    // Need to iterate through all possible values and generate a unique pattern for each combination
+    //  This pattern will be stored in allPossibleValuePatterns
+    // This will be very similar to generating all possible patterns, so we can use that as a base
+    allPossibleValuePatterns.clear();
+    zmatrix z = zmatrix(rows, cols, maxValue);
+    recursiveAllPossibleValueSet(0, z);
+}
+
+void patternMatrix::recursiveAllPossibleValueSet(int position, zmatrix z) {
+    if (position == rows*cols) return;
+    for (int i = 0; i < possibleValues[position / cols][position % cols].size(); i++) {
+        z.z[position / cols][position % cols] = possibleValues[position / cols][position % cols][i];
+        if (position == (rows * cols) - 1) {
+            std::ostringstream os;
+            os << z;
+            patternMatrix pm = patternMatrix(1, os.str());
+            pm.matchOnCases();
+            if (pm.caseMatch > 0 && pm.isOrthogonal() && pm.isNormalized()) {
+                if (printDebugInfo) std::cout << "Case: " << pm.caseMatch << " Valid Pattern:" << pm << std::endl;
+                allPossibleValuePatterns[pm.toString()] = true;
+            }
+        }
+        recursiveAllPossibleValueSet(position + 1, z);
+    }
 }
 
 // TODO - Add a note on which pattern encoding is being used
@@ -809,6 +900,8 @@ void patternMatrix::loadCases() {
     cases.push_back(caseMatrix(8, "[1,1,1,1,0,0][1,1,1,1,0,0][1,1,0,0,1,1][1,1,0,0,1,1][0,0,1,1,1,1][0,0,1,1,1,1]"));
 }
 
+// TODO - Refactor this to output either the new or old encoding
+//  it might be betteer to have a function for toStringOldEncoding and toStringNewEncoding
 std::string patternMatrix::toString() {
     std::ostringstream os;
     os << p;
@@ -900,20 +993,8 @@ void patternMatrix::rearrangeRows(zmatrix patternVersion, zmatrix caseVersion, i
     }
 }
 
-// TODO - Refactor this
-/* Rules for orthnormality:
-   // definition of mij which is a different encoding
-   mij = 2yij + xij
-    // These are normality
-    i. ∑ mij = 0 (mod4)
-    ii. mij = 3 has to be paired if exists
-    // These are orthogonality
-    iii. ri · rj = 0 (mod2) when i  ̸= j
-    iv. the count of (1, 2), (1, 3), and (2, 3) pairs in  ri and  rj should be even
 
-*/
-bool patternMatrix::isOrthonormal() {
-    bool orthNorm = true;
+/* Orthonormality checks
     // Map of N / M vs letters in the paper:
     //  a = N, b = M;
     //  x = N, y = M;
@@ -924,7 +1005,19 @@ bool patternMatrix::isOrthonormal() {
     //               1 == N=0, M=1
     //               2 == N=1, M=0
     //               3 == N=1, M=1
-    // Normality checks
+    Rules for orthnormality:
+    // definition of mij which is a different encoding
+    mij = 2yij + xij
+    // These are normality
+    i. ∑ mij = 0 (mod4)
+    ii. mij = 3 has to be paired if exists
+    // These are orthogonality
+    iii. ri · rj = 0 (mod2) when i  ̸= j
+    iv. the count of (1, 2), (1, 3), and (2, 3) pairs in  ri and  rj should be even
+
+*/
+bool patternMatrix::isNormalized() {
+    bool isNormal = true;
     for (int i = 0; i < p.z.size(); i++) {
         int m4Row = 0;
         int m2Row = 0;
@@ -948,25 +1041,28 @@ bool patternMatrix::isOrthonormal() {
             // Rule ii. mij = 3 has to be paired if exists (col check)
             if (mji == 3) m2Col++;
         }
-        // TODO: refactor this
-        if (printDebugInfo) {
-            if (m4Row % 4 != 0 || m2Row % 2 != 0) {
+        if (m4Row % 4 != 0 || m2Row % 2 != 0) {
+            if (printDebugInfo) {
                 std::cout << "Row " << i+1 << " is not normalized" << std::endl;
                 std::cout << "  Rule i. ∑ mij = " << m4Row << "; mod4: " << m4Row % 4 << std::endl;
                 std::cout << "  Rule ii. mij = 3 has to be paired if exists; count: " << m2Row << "; mod2: " << m2Row % 2 << std::endl;
-                orthNorm = false;
             }
-            if (m4Col % 4 != 0 || m2Col % 2 != 0) {
+            isNormal = false;
+        }
+        if (m4Col % 4 != 0 || m2Col % 2 != 0) {
+            if (printDebugInfo) {
                 std::cout << "Column " << i+1 << " is not normalized" << std::endl;
                 std::cout << "  Rule i. ∑ mji = " << m4Col << "; mod4: " << m4Col % 4 << std::endl;
                 std::cout << "  Rule ii. mij = 3 has to be paired if exists; count: " << m2Col << "; mod2: " << m2Col % 2 << std::endl;
-                orthNorm = false;
             }
-        }
-        if (!printDebugInfo && (m4Row % 4 != 0 || m2Row % 2 != 0 || m4Col % 4 != 0 || m2Col % 2 != 0)) {
-            return false;
+            isNormal = false;
         }
     }
+    return isNormal;
+}
+
+bool patternMatrix::isOrthogonal() {
+    bool isOrthogonal = true;
     // Orthogonality Checks
     for (int i = 0; i < p.z.size(); i++) {
         for (int j = i + 1; j < p.z.size(); j++) {
@@ -990,25 +1086,24 @@ bool patternMatrix::isOrthonormal() {
                 if (mik != 0 && mjk != 0 && mik != mjk) m2RowPairs++;
                 if (mki != 0 && mkj != 0 && mki != mkj) m2ColPairs++;
             }
-            // TODO: refactor this
-            if (printDebugInfo) {
-                if (m2RowDotProd % 2 != 0 || m2RowPairs % 2 != 0 ) {
+            if (m2RowDotProd % 2 != 0 || m2RowPairs % 2 != 0 ) {
+                if (printDebugInfo) {
                     std::cout << "Rows " << i+1 << " and " << j+1 << " are not orthogonal" << std::endl;
                     std::cout << "  Dot Product = " << m2RowDotProd << "; mod2 = " << m2RowDotProd % 2 << std::endl;
                     std::cout << "  (1, 2), (1, 3), and (2, 3) pairs should be even; count = " << m2RowPairs << "; mod2 = " << m2RowPairs % 2 << std::endl;
-                    orthNorm = false;
                 }
-                if (m2ColDotProd % 2 != 0 || m2ColPairs % 2 != 0) {
+                isOrthogonal = false;
+            }
+            if (m2ColDotProd % 2 != 0 || m2ColPairs % 2 != 0) {
+                if (printDebugInfo) {
                     std::cout << "Columns " << i+1 << " and " << j+1 << " are not orthogonal" << std::endl;
                     std::cout << "  Dot Product = " << m2ColDotProd << "; mod2 = " << m2ColDotProd % 2 << std::endl;
                     std::cout << "  (1, 2), (1, 3), and (2, 3) pairs should be even; count = " << m2ColPairs << "; mod2 = " << m2ColPairs % 2 << std::endl;
-                    orthNorm = false;
                 }
-            }
-            if (!printDebugInfo && (m2RowDotProd % 2 != 0 || m2RowPairs % 2 != 0 || m2ColDotProd % 2 != 0 || m2ColPairs % 2 != 0)) {
-                return false;
+                isOrthogonal = false;
             }
         }
     }
-    return orthNorm;
+    return isOrthogonal;
 }
+

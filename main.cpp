@@ -79,14 +79,15 @@ int main(int argc, char **argv) {
                     pmCopy.multilineOutput = true;
                     matchedCasesFilesHumanReadable[pm.caseMatch] << pmCopy << std::endl;
                     print = false;
-                    if (!pm.isOrthonormal()) {
+                    if (!(pm.isOrthogonal() && pm.isNormalized())) {
                         std::cout << "========================================" << std::endl;
                         std::cout << "Pattern " << pm.id << " is NOT orthonormal." << std::endl;
                         std::cout << "Case match: " << pm.caseMatch << std::endl;
                         std::cout << "Original Pattern: " << pm << std::endl;
                         std::cout << "Rearranged Version: " << key << std::endl;
                         pm.printDebugInfo = true;
-                        pm.isOrthonormal();
+                        pm.isOrthogonal();
+                        pm.isNormalized();
                         std::cout << "========================================" << std::endl;
                     }
                 }
