@@ -186,7 +186,7 @@ void patternMatrix::updatePairCounts(){
 void patternMatrix::matchOnCases() {
     caseMatch = -1;
     for (int i = 0; i < cases.size(); i++) {
-        std::cout << "Matching on case " << cases[i].id << std::endl;
+        //std::cout << "Matching on case " << cases[i].id << std::endl;
         if (matchesCase(i)) {
             if (caseMatch != -1) {
                 std::ostringstream caseErr;
@@ -441,21 +441,21 @@ std::string patternMatrix::getFirstCaseRearrangement() {
 }
 
 bool patternMatrix::isDuplicate(patternMatrix other) {
-    std::cout << "Checking for duplicates between " << id << " and " << other.id << std::endl;
+    //std::cout << "Checking for duplicates between " << id << " and " << other.id << std::endl;
     if (p == other.p) {
-        std::cout << "Pattern " << id << " is a duplicate of " << other.id << std::endl;
+        //std::cout << "Pattern " << id << " is a duplicate of " << other.id << std::endl;
         return true;
     }
     if (isTranspose(other)) {
-        std::cout << "Pattern " << id << " is a transpose of " << other.id << std::endl;
+        //std::cout << "Pattern " << id << " is a transpose of " << other.id << std::endl;
         return true;
     }
     if (is23Swap(other)) {
-        std::cout << "Pattern " << id << " is a 2-3 swap of " << other.id << std::endl;
+        //std::cout << "Pattern " << id << " is a 2-3 swap of " << other.id << std::endl;
         return true;
     }
     if (is23SwapT(other)) {
-        std::cout << "Pattern " << id << " is a transpose of a 2-3 swap of " << other.id << std::endl;
+        //std::cout << "Pattern " << id << " is a transpose of a 2-3 swap of " << other.id << std::endl;
         return true;
     }
     return false;

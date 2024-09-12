@@ -1,1 +1,36 @@
-352000134 [1,1,1,1,0,0][1,3,1,3,0,0][0,0,0,0,2,2][0,0,0,0,2,2][3,1,3,1,0,0][3,3,3,3,0,0]
+Duplicate Counts:
+Duplicate ID: 426 Count: 2
+Duplicate ID: 427 Count: 72
+Duplicate ID: 428 Count: 6
+Duplicate ID: 429 Count: 192
+Duplicate ID: 430 Count: 72
+Duplicate ID: 431 Count: 6
+Duplicate ID: 432 Count: 72
+Duplicate ID: 433 Count: 18
+Duplicate ID: 434 Count: 72
+Duplicate ID: 757 Count: 2
+Duplicate ID: 758 Count: 12
+Duplicate ID: 759 Count: 72
+Duplicate ID: 760 Count: 72
+Duplicate ID: 761 Count: 288
+Duplicate ID: 762 Count: 72
+Duplicate ID: 763 Count: 12
+Duplicate ID: 764 Count: 36
+Duplicate ID: 771 Count: 12
+Duplicate ID: 799 Count: 192
+Duplicate ID: 800 Count: 576
+Duplicate ID: 801 Count: 576
+Duplicate ID: 802 Count: 144
+Duplicate ID: 803 Count: 144
+Duplicate ID: 804 Count: 288
+Duplicate ID: 805 Count: 288
+Duplicate ID: 815 Count: 24
+Duplicate ID: 816 Count: 72
+Duplicate ID: 831 Count: 72
+Duplicate ID: 832 Count: 18
+Duplicate ID: 833 Count: 36
+Duplicate ID: 834 Count: 72
+Duplicate ID: 867 Count: 72
+Duplicate ID: 868 Count: 288
+Duplicate ID: 869 Count: 144
+Total duplicates: 4096

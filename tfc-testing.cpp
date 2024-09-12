@@ -360,7 +360,7 @@ void dedupeP352() {
         pm.id = ++newPatternID;
         std::cout << "Pattern " << pm.id << std::endl;
         if (pd.isDuplicate(pm, duplicateID, true)) {
-            //std::cout << pm.id << " " << pm << " is a duplicate of " << duplicateID << " " << p928Patterns[duplicateID] << std::endl;
+            std::cout << pm.id << " " << pm << " is a duplicate of " << duplicateID << " " << p928Patterns[duplicateID] << std::endl;
             tfcout << pm.id << " " << pm << " is a duplicate of " << duplicateID << " " << p928Patterns[duplicateID] << std::endl;
             dupCount[duplicateID]++;
         } else {
@@ -371,11 +371,17 @@ void dedupeP352() {
     }
     tfcout << "Duplicate Counts:" << std::endl;
     tfcUniques << "Duplicate Counts:" << std::endl;
+    int totalDupes = 0;
     for (auto const& [id, count] : dupCount) {
         std::cout << "Duplicate ID: " << id << " Count: " << count << std::endl;
         tfcout << "Duplicate ID: " << id << " Count: " << count << std::endl;
         tfcUniques << "Duplicate ID: " << id << " Count: " << count << std::endl;
+        totalDupes += count;
     }
+    std::cout << "Total duplicates: " << totalDupes << std::endl;
+    tfcout << "Total duplicates: " << totalDupes << std::endl;
+    tfcUniques << "Total duplicates: " << totalDupes << std::endl;
+    
     tfcout.close();
     tfcUniques.close();
     std::cout << "Done" << std::endl;
@@ -485,11 +491,7 @@ bool dedupTest(int caseNumber) {
 }
 
 int main(int argc, char **argv) {
-    //dedupeP352();
-    patternMatrix pm = patternMatrix(352000134, "[1,1,1,1,0,0][1,3,1,3,0,0][0,0,0,0,2,2][0,0,0,0,2,2][3,1,3,1,0,0][3,3,3,3,0,0]", true);
-    pm.multilineOutput = true;
-    pm.matchOnCases();
-    std::cout << pm.caseMatch << std::endl;
+    dedupeP352();
     /*
     // argv version for a per case run
     if (argc < 2) {
