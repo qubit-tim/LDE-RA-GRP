@@ -27,6 +27,7 @@ class patternMatrix {
         std::vector<caseMatrix> cases;
         int caseMatch;
         char subCaseMatch;
+        bool rearrangedToMatchCase = false;
         // These are the flags for the pattern matrix
         bool printDebugInfo = false;  // WIP: This is for printing debug information
         bool singleCaseRearrangement = false;  // This is stop the case rearrangement code after a single solution is found
@@ -114,6 +115,15 @@ class patternMatrix {
         void leftTGateMultiply(int p, int q);
         void rightTGateMultiply(int p, int q);
         int patternElementAddition(int a, int b);
+        bool tGateAutoMultiply();
+        bool tGateAutoMultiplyCase1();
+        bool tGateAutoMultiplyCase2();
+        bool tGateAutoMultiplyCase3();
+        bool tGateAutoMultiplyCase4();
+        bool tGateAutoMultiplyCase5();
+        bool tGateAutoMultiplyCase6();
+        bool tGateAutoMultiplyCase7();
+        bool tGateAutoMultiplyCase8();
         // LDE Reduction Functions
         void ldeReductionOnEntry(int row, int col, int ldeReduction);
         void ldeReductionOnPattern(int ldeValue);

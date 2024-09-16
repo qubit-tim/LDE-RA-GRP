@@ -31,11 +31,22 @@ class zmatrix {
         //  i=0 -> number of rows/cols with no pairs, i=2 -> number of rows/cols with 2 pairs, i=4 -> number of rows/cols with 4 pairs, i=6 -> number of rows/cols with 6 pairs
         std::vector<int> rowPairCountsTotals;  // This contains the totals of the row pair counts for the pattern 
         std::vector<int> colPairCountsTotals;  // This contains the totals of the col pair counts for the pattern
+        // These are the pair counts for the matrix when comparing row[i] to row[j] and col[i] to col[j] but split out by value
+        std::vector<std::vector<std::vector<int>>> rowValuePairCounts;  // This contains the pair counts for each value in the row vs another row
+        std::vector<std::vector<std::vector<int>>> colValuePairCounts;  // This contains the pair counts for each value in the col vs another col
+        // The following totals are counts of the pair value counts
+        //  i=0 -> number of rows/cols with no pairs for each value, i=2 -> number of rows/cols with 2 pairs for each value, i=4 -> number of rows/cols with 4 pairs for each value, i=6 -> number of rows/cols with 6 pairs for each value
+        std::vector<std::vector<int>> rowValuePairCountsTotals;  // This contains the counts for each value in the row
+        std::vector<std::vector<int>> colValuePairCountsTotals;  // This contains the counts for each value in the col
 
         void updateMetadata();
         void updatePairCounts();
         void swapRows(int i, int j);
         void swapColumns(int i, int j);
+
+        // These are used to find pair counts
+        int getRowPairCount(int i, int j, std::map<int, bool> values); //m.count(key) == 1
+        int getColPairCount(int i, int j, std::map<int, bool> values); //m.count(key) == 1
 
         bool operator==(const zmatrix &) const;  // Read the comments in zmatrix.cpp for more information on what equality means
         bool operator!=(const zmatrix &) const;
