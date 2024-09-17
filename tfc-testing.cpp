@@ -495,24 +495,32 @@ void flowTesting() {
     patternMatrix test = patternMatrix(352);
     test.multilineOutput = true;
     test.printDebugInfo = true;
+    patternMatrix test2 = patternMatrix(352);
+    test2.multilineOutput = true;
+    test2.printDebugInfo = true;
 
-    std::cout << "Before T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
-    std::cout << test << std::endl;
+    //std::cout << "Before T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
+    //std::cout << test << std::endl;
 
     test.tGateAutoMultiply();
-    //test.rightTGateMultiply(1,4);
-    //test.rightTGateMultiply(2,3);
+    test2.rightTGateMultiply(1,4);
+    test2.rightTGateMultiply(2,3);
 
-    std::cout << "After T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
-    std::cout << test << std::endl;
+    //std::cout << "After T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
+    //std::cout << test << std::endl;
 
-    // If you want to reduce and see the LDEs then see possible values, uncomment this block
     test.ldeReductionOnPattern(1);
-    std::cout << "LDEs:" << std::endl;
-    test.printLDEs(std::cout);
+    test2.ldeReductionOnPattern(1);
+    //std::cout << "LDEs:" << std::endl;
+    //test.printLDEs(std::cout);
     std::cout << "Possible values:" << std::endl;
+    std::cout << "Test 1 - Auto" << std::endl;
     test.printPossibleValues(std::cout);
-    std::cout << "Max of possible values: " << test.getMaxOfPossibleValues() << std::endl;
+    std::cout << "Test 2 - Manual" << std::endl;
+    test2.printPossibleValues(std::cout);
+    std::cout << "Max of possible values: " << std::endl;
+    std::cout << test.getMaxOfPossibleValues() << std::endl;
+    std::cout << test2.getMaxOfPossibleValues() << std::endl;
 }
 
 int main(int argc, char **argv) {

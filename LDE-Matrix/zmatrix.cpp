@@ -207,6 +207,22 @@ void zmatrix::swapColumns(int i, int j) {
     updateMetadata();
 }
 
+int zmatrix::getRowPairValuesCount(int i, int j, std::vector<int> values) {
+    int count = 0;
+    for (int k = 0; k < values.size(); k++) {
+        count += rowValuePairCounts[i][j][values[k]];
+    }
+    return count;
+} 
+
+int zmatrix::getColPairValuesCount(int i, int j, std::vector<int> values) {
+    int count = 0;
+    for (int k = 0; k < values.size(); k++) {
+        count += rowValuePairCounts[i][j][values[k]];
+    }
+    return count;
+} 
+
 // Print a debug of the matrix
 void zmatrix::printDebug(std::ostream& os) {
     

@@ -45,8 +45,8 @@ class zmatrix {
         void swapColumns(int i, int j);
 
         // These are used to find pair counts
-        int getRowPairCount(int i, int j, std::map<int, bool> values); //m.count(key) == 1
-        int getColPairCount(int i, int j, std::map<int, bool> values); //m.count(key) == 1
+        int getRowPairValuesCount(int i, int j, std::vector<int> values); //m.count(key) == 1
+        int getColPairValuesCount(int i, int j, std::vector<int> values); //m.count(key) == 1
 
         bool operator==(const zmatrix &) const;  // Read the comments in zmatrix.cpp for more information on what equality means
         bool operator!=(const zmatrix &) const;
