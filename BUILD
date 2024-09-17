@@ -14,9 +14,11 @@ cc_binary(
     srcs = ["ming-testing.cpp"],
     deps = [
         "//LDE-Matrix:pattern-matrix",
+        "//LDE-Matrix:pattern-deduper",
     ],
     data = [
         ":patterns",
+        ":ming-output",
     ],
 )
 
@@ -78,4 +80,9 @@ filegroup(
 filegroup(
         name = 'tfc-output',
         srcs = glob(['tfc-output/**'])
+)
+
+filegroup(
+        name = 'ming-output',
+        srcs = glob(['ming-output/**'])
 )
