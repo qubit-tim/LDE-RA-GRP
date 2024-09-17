@@ -109,26 +109,81 @@ void zmatrix::updatePairCounts(){
     for (int i = 0; i < cols; i++) {
         colPairCounts[i].resize(cols);
     }
+    // Reset the value pair counts
+    rowValuePairCountsTotals.clear();
+    rowValuePairCountsTotals.resize(rows+1);
+    for (int i = 0; i < rowValuePairCountsTotals.size(); i++) {
+        rowValuePairCountsTotals[i].resize(maxValue+1);
+    }
+    colValuePairCountsTotals.clear();
+    colValuePairCountsTotals.resize(cols+1);
+    for (int i = 0; i < colValuePairCountsTotals.size(); i++) {
+        colValuePairCountsTotals[i].resize(maxValue+1);
+    }
+    rowValuePairCounts.clear();
+    rowValuePairCounts.resize(rows);
+    colValuePairCounts.clear();
+    colValuePairCounts.resize(cols);
+    for (int i = 0; i < rows; i++) {
+        rowValuePairCounts[i].resize(rows);
+        for (int j = 0; j < rows; j++) {
+            rowValuePairCounts[i][j].resize(maxValue+1);
+        }
+    }
+    for (int i = 0; i < cols; i++) {
+        colValuePairCounts[i].resize(cols);
+        for (int j = 0; j < cols; j++) {
+            colValuePairCounts[i][j].resize(maxValue+1);
+        }
+    }
+    
     // Now to update the pair counts
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < rows; j++) {
+            // Initialize the pair counts to 0
             rowPairCounts[i][j] = 0;
             colPairCounts[i][j] = 0;
+            for (int k = 0; k < maxValue+1; k++) {
+                    rowValuePairCounts[i][j][k] = 0;
+                    colValuePairCounts[i][j][k] = 0;
+            }
+            // If i == j, then we are comparing the same row or column so we can skip this and preset values
             if (i == j) {
                 rowPairCounts[i][j] = 6;
                 colPairCounts[i][j] = 6;
+                for (int k = 0; k < maxValue+1; k++) {
+                    rowValuePairCounts[i][j][k] = 6;
+                    colValuePairCounts[i][j][k] = 6;
+                }
                 continue;
             }
+            // Now do the pair counts
             for (int k = 0; k < cols; k++) {
-                if (z[i][k] == z[j][k]) rowPairCounts[i][j]++;
-                if (z[k][i] == z[k][j]) colPairCounts[i][j]++;
+                if (z[i][k] == z[j][k]) {
+                    rowPairCounts[i][j]++;
+                    rowValuePairCounts[i][j][z[i][k]]++;
+                }
+                if (z[k][i] == z[k][j]) {
+                    colPairCounts[i][j]++;
+                    colValuePairCounts[i][j][z[k][i]]++;
+                }
             }
         }
     }
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < rows; j++) {
             rowPairCountsTotals[rowPairCounts[i][j]]++;
+            for (int k = 0; k < maxValue+1; k++) {
+                rowValuePairCountsTotals[rowValuePairCounts[i][j][k]][k]++;
+            }
+        }
+    }
+    for (int i = 0; i < cols; i++) {
+        for (int j = 0; j < cols; j++) {
             colPairCountsTotals[colPairCounts[i][j]]++;
+            for (int k = 0; k < maxValue+1; k++) {
+                colValuePairCountsTotals[colValuePairCounts[i][j][k]][k]++;
+            }
         }
     }
 }
@@ -151,6 +206,22 @@ void zmatrix::swapColumns(int i, int j) {
     // TODO - This is not the most efficient way to update the metadata, so it should be improved
     updateMetadata();
 }
+
+int zmatrix::getRowPairValuesCount(int i, int j, std::vector<int> values) {
+    int count = 0;
+    for (int k = 0; k < values.size(); k++) {
+        count += rowValuePairCounts[i][j][values[k]];
+    }
+    return count;
+} 
+
+int zmatrix::getColPairValuesCount(int i, int j, std::vector<int> values) {
+    int count = 0;
+    for (int k = 0; k < values.size(); k++) {
+        count += rowValuePairCounts[i][j][values[k]];
+    }
+    return count;
+} 
 
 // Print a debug of the matrix
 void zmatrix::printDebug(std::ostream& os) {
@@ -240,6 +311,29 @@ void zmatrix::printRowPairCounts(std::ostream& os) {
     for (int i = 0; i < rowPairCountsTotals.size(); i++) {
         os << i << "=" << rowPairCountsTotals[i] << std::endl;
     }
+    os << "Row Value Pair Counts: " << std::endl;
+    for (int i = 0; i < rowValuePairCounts.size(); i++) {
+        os << "Row " << i+1 << " = [";
+        for (int j = 0; j < rowValuePairCounts[i].size(); j++) {
+            os << "Value " << j << " = [";
+            for (int k = 0; k < rowValuePairCounts[i][j].size(); k++) {
+                os << k << "=" << rowValuePairCounts[i][j][k];
+                if (k != rowValuePairCounts[i][j].size()-1) os << ", ";
+            }
+            os << "]";
+            if (j != rowValuePairCounts[i].size()-1) os << ", ";
+        }
+        os << "]" << std::endl;
+    }
+    os << "Row Value Pair Count Totals:" << std::endl;
+    for (int i = 0; i < rowValuePairCountsTotals.size(); i++) {
+        os << "Value " << i << " = [";
+        for (int j = 0; j < rowValuePairCountsTotals[i].size(); j++) {
+            os << j << "=" << rowValuePairCountsTotals[i][j];
+            if (j != rowValuePairCountsTotals[i].size()-1) os << ", ";
+        }
+        os << "]" << std::endl;
+    }
 }
 
 void zmatrix::printColPairCounts(std::ostream& os) {
@@ -255,6 +349,20 @@ void zmatrix::printColPairCounts(std::ostream& os) {
     os << "Column Pair Count Totals:" << std::endl;
     for (int i = 0; i < colPairCountsTotals.size(); i++) {
         os << i << "=" << colPairCountsTotals[i] << std::endl;
+    }
+    os << "Column Value Pair Counts: " << std::endl;
+    for (int i = 0; i < colValuePairCounts.size(); i++) {
+        os << "Column " << i+1 << " = [";
+        for (int j = 0; j < colValuePairCounts[i].size(); j++) {
+            os << "Value " << j << " = [";
+            for (int k = 0; k < colValuePairCounts[i][j].size(); k++) {
+                os << k << "=" << colValuePairCounts[i][j][k];
+                if (k != colValuePairCounts[i][j].size()-1) os << ", ";
+            }
+            os << "]";
+            if (j != colValuePairCounts[i].size()-1) os << ", ";
+        }
+        os << "]" << std::endl;
     }
 }
 

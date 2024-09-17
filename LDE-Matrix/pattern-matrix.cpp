@@ -47,6 +47,9 @@ patternMatrix::patternMatrix(int pattern928Number) {
     loadFromString(PATTERNS_928[pattern928Number]);
     rearrangeMatrix();
     loadFromString(getFirstCaseRearrangement());
+    rearrangedToMatchCase = true;
+    // This could be removed if the p928 patters are updated to match the case style and labelled by case / subcase
+    determineSubCase();
 }
 
 
@@ -429,7 +432,7 @@ bool patternMatrix::case8SubCaseMatch() {
     // 8b: V11, V12 have different parity and V11, V21 have different parity
     // Assume subcase 'a' and change to 'b' if the parity is different
     subCaseMatch = 'a';
-    if (p.z[0][0] % 2 != p.z[0][1] % 2 && p.z[0][0] % 2 != p.z[1][0]) {
+    if (p.z[0][0] % 2 != p.z[0][1] % 2 && p.z[0][0] % 2 != p.z[1][0] % 2) {
         subCaseMatch = 'b';
     }
     return true;
@@ -685,7 +688,6 @@ std::ostream& operator<<(std::ostream& os,const patternMatrix &pm) {
 //   See your notes for that.
 
 
-
 // ====== MULTIPLICATION BY T-GATES ======
 // TODO: THIS IS FOR BOTH LEFT AND RIGHT MULTIPLICATION
 // TODO: Track LDEs during this process
@@ -751,6 +753,239 @@ void patternMatrix::rightTGateMultiply(int pCol, int qCol) {
             pGroupings.z[i][qCol] = pGroupings.z[i][pCol];
         }
     }
+}
+
+// This will attempt to apply optimal t-gate multiplications to the pattern matrix.
+//   The pattern should be rearranged to match the case prior to this being called but, if not,
+//    the code will attempt to rearrange it to match the case.
+bool patternMatrix::tGateAutoMultiply(){
+    if (!rearrangedToMatchCase) {
+        singleCaseRearrangement = true;
+        if(!rearrangeMatrix()) return false;  // If we can't rearrange the matrix, then we can't apply t-gates
+        loadFromString(getFirstCaseRearrangement());
+        rearrangedToMatchCase = true;
+        singleCaseRearrangement = false;
+        determineSubCase();  // This should be useful later
+    }
+    // This will attempt to apply optimal t-gate multiplications to the pattern matrix
+    switch (caseMatch)
+    {
+    case 1:
+        return tGateAutoMultiplyCase1();
+        break;
+    case 2:
+        return tGateAutoMultiplyCase2();
+        break;
+    case 3:
+        return tGateAutoMultiplyCase3();
+        break;
+    case 4:
+        return tGateAutoMultiplyCase4();
+        break;
+    case 5:
+        return tGateAutoMultiplyCase5();
+        break;
+    case 6:
+        return tGateAutoMultiplyCase6();
+        break;
+    case 7:
+        return tGateAutoMultiplyCase7();
+        break;
+    case 8:
+        return tGateAutoMultiplyCase8();
+        break;
+    default:
+        break;
+    }
+    return false;
+}
+
+bool patternMatrix::tGateAutoMultiplyCase1() {
+    std::vector<int> caseValues = {2,3};
+    if (p.getRowPairValuesCount(0, 1, caseValues) > p.getColPairValuesCount(0, 1, caseValues)) {
+        leftTGateMultiply(1, 2);
+        return true;
+    }
+    rightTGateMultiply(1, 2);
+    return true;
+}
+
+bool patternMatrix::tGateAutoMultiplyCase2() {
+    // 2: The first two columns must be fully paired
+    if (p.colPairCounts[0][1] != 6) {
+        return false;
+    }
+    rightTGateMultiply(1, 2);
+    return true;
+}
+
+bool patternMatrix::tGateAutoMultiplyCase3() {
+    std::vector<int> caseValues = {2,3};
+    // We need to prefer case pairings over overall pairs
+    for (int cpairs = 4; cpairs > 0; cpairs = cpairs-2) {
+        // The maximum overall pairings can only be +2 from the case pairings
+        for (int pairs= cpairs + 2; pairs >= cpairs; pairs = pairs - 2) {
+            // 
+            if ((p.getColPairValuesCount(0, 1, caseValues) == cpairs || p.getColPairValuesCount(2, 3, caseValues) == cpairs) &&
+                (p.colPairCounts[0][1] == pairs || p.colPairCounts[2][3] == pairs)) {
+                rightTGateMultiply(1, 2);
+                rightTGateMultiply(3, 4);
+                return true;
+            }
+            if ((p.getColPairValuesCount(0, 2, caseValues) == cpairs || p.getColPairValuesCount(1, 3, caseValues) == cpairs) &&
+                (p.colPairCounts[0][2] == pairs || p.colPairCounts[1][3] == pairs)) {
+                rightTGateMultiply(1, 3);
+                rightTGateMultiply(2, 4);
+                return true;
+            }
+            if ((p.getColPairValuesCount(0, 3, caseValues) == cpairs || p.getColPairValuesCount(1, 2, caseValues) == cpairs) &&
+                (p.colPairCounts[0][3] == pairs || p.colPairCounts[1][2] == pairs)) {
+                rightTGateMultiply(1, 4);
+                rightTGateMultiply(2, 3);
+                return true;
+            }
+            // Next check for fully paired rows
+            if ((p.getRowPairValuesCount(0, 1, caseValues) == cpairs || p.getRowPairValuesCount(2, 3, caseValues) == cpairs) &&
+                (p.rowPairCounts[0][1] == pairs || p.rowPairCounts[2][3] == pairs)) {
+                leftTGateMultiply(1, 2);
+                leftTGateMultiply(3, 4);
+                return true;
+            }
+            if ((p.getRowPairValuesCount(0, 2, caseValues) == cpairs || p.getRowPairValuesCount(1, 3, caseValues) == cpairs) &&
+                (p.rowPairCounts[0][2] == pairs || p.rowPairCounts[1][3] == pairs)) {
+                leftTGateMultiply(1, 3);
+                leftTGateMultiply(2, 4);
+                return true;
+            }
+            if ((p.getRowPairValuesCount(0, 3, caseValues) == cpairs || p.getRowPairValuesCount(1, 2, caseValues) == cpairs) &&
+                (p.rowPairCounts[0][3] == pairs || p.rowPairCounts[2][3] == pairs)) {
+                leftTGateMultiply(1, 4);
+                leftTGateMultiply(2, 3);
+                return true;
+            }
+        }
+    }
+    /*
+    // Possible options - 3a, 3b, 3c -> basically find the highest pair counts and use those for the t-gate multiplicatons
+    for (int count = 6; count > 0; count = count-2) {
+        // Prefer to use the columns first
+        std::cout << "Cur Count: " << count << std::endl;
+        if (colPairCounts[0][1] == count || colPairCounts[2][3] == count) {
+            std::cout << "Count: " << count << std::endl;
+            rightTGateMultiply(1, 2);
+            rightTGateMultiply(3, 4);
+            return true;
+        }
+        if (colPairCounts[0][2] == count || colPairCounts[1][3] == count) {
+            std::cout << "Count: " << count << std::endl;
+            rightTGateMultiply(1, 3);
+            rightTGateMultiply(2, 4);
+            return true;
+        }
+        if (colPairCounts[0][3] == count || colPairCounts[1][2] == count) {
+            std::cout << "Count: " << count << std::endl;
+            rightTGateMultiply(1, 4);
+            rightTGateMultiply(2, 3);
+            return true;
+        }
+        // If we can't use the columns, then use the rows
+        if (rowPairCounts[0][1] == count || rowPairCounts[2][3] == count) {
+            std::cout << "Count: " << count << std::endl;
+            leftTGateMultiply(1, 2);
+            leftTGateMultiply(3, 4);
+            return true;
+        }
+        if (rowPairCounts[0][2] == count || rowPairCounts[1][3] == count) {
+            std::cout << "Count: " << count << std::endl;
+            leftTGateMultiply(1, 3);
+            leftTGateMultiply(2, 4);
+            return true;
+        }
+        if (rowPairCounts[0][3] == count || rowPairCounts[1][2] == count) {
+            std::cout << "Count: " << count << std::endl;
+            leftTGateMultiply(1, 4);
+            leftTGateMultiply(2, 3);
+            return true;
+        }
+    }
+    */
+    return false;
+}
+
+// This is similar to case 1
+bool patternMatrix::tGateAutoMultiplyCase4() {
+    std::vector<int> caseValues = {2,3};
+    if (p.getRowPairValuesCount(0, 1, caseValues) > p.getColPairValuesCount(0, 1, caseValues)) {
+        leftTGateMultiply(1, 2);
+        return true;
+    }
+    rightTGateMultiply(1, 2);
+    return true;
+}
+
+// This is similar to case 1 but with another option for the middle block
+bool patternMatrix::tGateAutoMultiplyCase5() {
+    std::vector<int> caseValues = {2,3};
+    int rc1 = 0;
+    int rc2 = 1;
+    //UPDATE ALL OF THESE TO USE p.getColPairCounts() and p.getRowPairCounts() and specify the values wanted
+    if (p.colPairCounts[2][3] > p.colPairCounts[0][1] || p.rowPairCounts[2][3] > p.rowPairCounts[0][1]) {
+        rc1 = 2;
+        rc2 = 3;
+    }
+    if (p.colPairCounts[rc1][rc2] > p.rowPairCounts[rc1][rc2]) {
+        rightTGateMultiply(rc1+1, rc2+1);
+        return true;
+    }
+    leftTGateMultiply(rc1+1, rc2+1);
+    return true;
+}
+
+bool patternMatrix::tGateAutoMultiplyCase6() {
+    std::vector<int> caseValues = {2,3};
+    // From the original paper, this is a left T(3,4)
+    leftTGateMultiply(3, 4);
+    return true;
+}
+
+// This is similar to case 5 with an another option for a bottom left block
+bool patternMatrix::tGateAutoMultiplyCase7() {
+    std::vector<int> caseValues = {2,3};
+    int rc1 = 0;
+    int rc2 = 1;
+    if (p.colPairCounts[2][3] > p.colPairCounts[0][1] || p.rowPairCounts[2][3] > p.rowPairCounts[0][1]) {
+        rc1 = 2;
+        rc2 = 3;
+    }
+    if (p.colPairCounts[4][5] > p.colPairCounts[rc1][rc2] || p.rowPairCounts[4][5] > p.rowPairCounts[rc1][rc2]) {
+        rc1 = 4;
+        rc2 = 5;
+    }
+    if (p.colPairCounts[rc1][rc2] > p.rowPairCounts[rc1][rc2]) {
+        rightTGateMultiply(rc1+1, rc2+1);
+        return true;
+    }
+    leftTGateMultiply(rc1+1, rc2+1);
+    return true;
+}
+
+bool patternMatrix::tGateAutoMultiplyCase8() {
+    std::vector<int> caseValues = {2,3};
+    // 8: V11, V12 have the same parity -> right T(1,2) T(3,4) T(5,6)
+    if (p.z[0][0] % 2 == p.z[0][1] % 2) {
+        rightTGateMultiply(1, 2);
+        rightTGateMultiply(3, 4);
+        rightTGateMultiply(5, 6);
+    }
+    // 8: V11, V21 have the same parity -> left T(1,2) T(3,4) T(5,6)
+    if (p.z[0][0] % 2 != p.z[1][0] % 2) {
+        leftTGateMultiply(1, 2);
+        leftTGateMultiply(3, 4);
+        leftTGateMultiply(5, 6);
+    }
+    // 8: V11, V12 have different parity and V11, V21 have different parity
+    //   We don't have a path forward at this time
+    return false;
 }
 
 // LDE Reduction

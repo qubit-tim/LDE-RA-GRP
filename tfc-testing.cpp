@@ -381,7 +381,7 @@ void dedupeP352() {
     std::cout << "Total duplicates: " << totalDupes << std::endl;
     tfcout << "Total duplicates: " << totalDupes << std::endl;
     tfcUniques << "Total duplicates: " << totalDupes << std::endl;
-    
+
     tfcout.close();
     tfcUniques.close();
     std::cout << "Done" << std::endl;
@@ -490,8 +490,43 @@ bool dedupTest(int caseNumber) {
     return true;
 }
 
+
+void flowTesting() {
+    patternMatrix test = patternMatrix(352);
+    test.multilineOutput = true;
+    test.printDebugInfo = true;
+    patternMatrix test2 = patternMatrix(352);
+    test2.multilineOutput = true;
+    test2.printDebugInfo = true;
+
+    //std::cout << "Before T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
+    //std::cout << test << std::endl;
+
+    test.tGateAutoMultiply();
+    test2.rightTGateMultiply(1,4);
+    test2.rightTGateMultiply(2,3);
+
+    //std::cout << "After T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
+    //std::cout << test << std::endl;
+
+    test.ldeReductionOnPattern(1);
+    test2.ldeReductionOnPattern(1);
+    //std::cout << "LDEs:" << std::endl;
+    //test.printLDEs(std::cout);
+    std::cout << "Possible values:" << std::endl;
+    std::cout << "Test 1 - Auto" << std::endl;
+    test.printPossibleValues(std::cout);
+    std::cout << "Test 2 - Manual" << std::endl;
+    test2.printPossibleValues(std::cout);
+    std::cout << "Max of possible values: " << std::endl;
+    std::cout << test.getMaxOfPossibleValues() << std::endl;
+    std::cout << test2.getMaxOfPossibleValues() << std::endl;
+}
+
 int main(int argc, char **argv) {
-    dedupeP352();
+    // NEXT UP -> Need to take any pattern, apply the T-Gates, and then dedupe it to form the overall map
+    //dedupeP352();
+    flowTesting();
     /*
     // argv version for a per case run
     if (argc < 2) {

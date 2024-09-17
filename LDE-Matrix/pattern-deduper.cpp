@@ -14,6 +14,7 @@ patternDeduper::patternDeduper() {
 }
 
 void patternDeduper::loadPatterns() {
+    // TODO: Add additional buckets by taking row / column pair counts and using those as a key
     for (auto const& [caseNumber, sumMap] : CASE_SUM_MAP_PATTERNS_928) {
         for (auto const& [sum, idMap] : sumMap) {
             for (auto const& [id, pattern] : idMap) {
