@@ -755,44 +755,48 @@ void patternMatrix::rightTGateMultiply(int pCol, int qCol) {
     }
 }
 
-// This will attempt to apply optimal t-gate multiplications to the pattern matrix.
+
+// This will attempt to find optimal t-gate multiplication sets for the pattern matrix.
 //   The pattern should be rearranged to match the case prior to this being called but, if not,
 //    the code will attempt to rearrange it to match the case.
-bool patternMatrix::tGateAutoMultiply(){
+bool patternMatrix::findOptimalTGateOperations() {
     if (!rearrangedToMatchCase) {
+        bool oldSCR = singleCaseRearrangement;
         singleCaseRearrangement = true;
         if(!rearrangeMatrix()) return false;  // If we can't rearrange the matrix, then we can't apply t-gates
         loadFromString(getFirstCaseRearrangement());
         rearrangedToMatchCase = true;
-        singleCaseRearrangement = false;
+        singleCaseRearrangement = oldSCR;
         determineSubCase();  // This should be useful later
     }
-    // This will attempt to apply optimal t-gate multiplications to the pattern matrix
+    //std::vector<std::vector<std::string>> optimalTGateOperations
+    tGateOperationSets.clear();
+    // This will attempt to find optimal t-gate multiplication sets for the pattern matrix
     switch (caseMatch)
     {
     case 1:
-        return tGateAutoMultiplyCase1();
+        return optimalTGatesCase1();
         break;
     case 2:
-        return tGateAutoMultiplyCase2();
+        return optimalTGatesCase2();
         break;
     case 3:
-        return tGateAutoMultiplyCase3();
+        return optimalTGatesCase3();
         break;
     case 4:
-        return tGateAutoMultiplyCase4();
+        return optimalTGatesCase4();
         break;
     case 5:
-        return tGateAutoMultiplyCase5();
+        return optimalTGatesCase5();
         break;
     case 6:
-        return tGateAutoMultiplyCase6();
+        return optimalTGatesCase6();
         break;
     case 7:
-        return tGateAutoMultiplyCase7();
+        return optimalTGatesCase7();
         break;
     case 8:
-        return tGateAutoMultiplyCase8();
+        return optimalTGatesCase8();
         break;
     default:
         break;
@@ -800,148 +804,163 @@ bool patternMatrix::tGateAutoMultiply(){
     return false;
 }
 
-bool patternMatrix::tGateAutoMultiplyCase1() {
+bool patternMatrix::optimalTGatesCase1() {
+    return false; // check for symmetric patterns, if they are, then xT12 == T12x
+    bool optimalsFound = false;
     std::vector<int> caseValues = {2,3};
-    if (p.getRowPairValuesCount(0, 1, caseValues) > p.getColPairValuesCount(0, 1, caseValues)) {
-        leftTGateMultiply(1, 2);
-        return true;
+    // Case 1 has to go back to the origin, so one of options must have 2 case pairs 
+    //  and we can skip a loop for the case pairs
+    for (int pairs= 6; pairs > 0; pairs = pairs - 2) {
+        if (p.getColPairValuesCount(0, 1, caseValues) == 2 && p.colPairCounts[0][1] == pairs) {
+            std::vector<std::string> tGateOps;
+            tGateOperationSets.push_back({"xT12"});
+            optimalsFound = true;
+        }
+        if (p.getRowPairValuesCount(0, 1, caseValues) == 2 && p.rowPairCounts[0][1] == pairs) {
+            std::vector<std::string> tGateOps;
+            tGateOperationSets.push_back({"T12x"});
+            optimalsFound = true;
+        }
+        if (optimalsFound) return true;
     }
-    rightTGateMultiply(1, 2);
-    return true;
+    return false;
 }
 
-bool patternMatrix::tGateAutoMultiplyCase2() {
-    // 2: The first two columns must be fully paired
+bool patternMatrix::optimalTGatesCase2() {
+    /* 2: IF the first two columns must be fully paired
     if (p.colPairCounts[0][1] != 6) {
         return false;
     }
-    rightTGateMultiply(1, 2);
+    */
+    tGateOperationSets.push_back({"xT12"});
     return true;
 }
 
-bool patternMatrix::tGateAutoMultiplyCase3() {
+bool patternMatrix::optimalTGatesCase3() {
+    return false; // check for symmetric patterns, if they are, then xT12 == T12x
+    bool optimalsFound = false;
     std::vector<int> caseValues = {2,3};
     // We need to prefer case pairings over overall pairs
     for (int cpairs = 4; cpairs > 0; cpairs = cpairs-2) {
         // The maximum overall pairings can only be +2 from the case pairings
         for (int pairs= cpairs + 2; pairs >= cpairs; pairs = pairs - 2) {
-            // 
             if ((p.getColPairValuesCount(0, 1, caseValues) == cpairs || p.getColPairValuesCount(2, 3, caseValues) == cpairs) &&
                 (p.colPairCounts[0][1] == pairs || p.colPairCounts[2][3] == pairs)) {
-                rightTGateMultiply(1, 2);
-                rightTGateMultiply(3, 4);
-                return true;
+                std::vector<std::string> tGateOps;
+                tGateOps.push_back("xT12");
+                tGateOps.push_back("xT34");
+                tGateOperationSets.push_back(tGateOps);
+                optimalsFound = true;
             }
             if ((p.getColPairValuesCount(0, 2, caseValues) == cpairs || p.getColPairValuesCount(1, 3, caseValues) == cpairs) &&
                 (p.colPairCounts[0][2] == pairs || p.colPairCounts[1][3] == pairs)) {
-                rightTGateMultiply(1, 3);
-                rightTGateMultiply(2, 4);
-                return true;
+                std::vector<std::string> tGateOps;
+                tGateOps.push_back("xT13");
+                tGateOps.push_back("xT24");
+                tGateOperationSets.push_back(tGateOps);
+                optimalsFound = true;
             }
             if ((p.getColPairValuesCount(0, 3, caseValues) == cpairs || p.getColPairValuesCount(1, 2, caseValues) == cpairs) &&
                 (p.colPairCounts[0][3] == pairs || p.colPairCounts[1][2] == pairs)) {
-                rightTGateMultiply(1, 4);
-                rightTGateMultiply(2, 3);
-                return true;
+                std::vector<std::string> tGateOps;
+                tGateOps.push_back("xT14");
+                tGateOps.push_back("xT23");
+                tGateOperationSets.push_back(tGateOps);
+                optimalsFound = true;
             }
             // Next check for fully paired rows
             if ((p.getRowPairValuesCount(0, 1, caseValues) == cpairs || p.getRowPairValuesCount(2, 3, caseValues) == cpairs) &&
                 (p.rowPairCounts[0][1] == pairs || p.rowPairCounts[2][3] == pairs)) {
-                leftTGateMultiply(1, 2);
-                leftTGateMultiply(3, 4);
-                return true;
+                std::vector<std::string> tGateOps;
+                tGateOps.push_back("T12x");
+                tGateOps.push_back("T34x");
+                tGateOperationSets.push_back(tGateOps);
+                optimalsFound = true;
             }
             if ((p.getRowPairValuesCount(0, 2, caseValues) == cpairs || p.getRowPairValuesCount(1, 3, caseValues) == cpairs) &&
                 (p.rowPairCounts[0][2] == pairs || p.rowPairCounts[1][3] == pairs)) {
-                leftTGateMultiply(1, 3);
-                leftTGateMultiply(2, 4);
-                return true;
+                std::vector<std::string> tGateOps;
+                tGateOps.push_back("T13x");
+                tGateOps.push_back("T24x");
+                tGateOperationSets.push_back(tGateOps);
             }
             if ((p.getRowPairValuesCount(0, 3, caseValues) == cpairs || p.getRowPairValuesCount(1, 2, caseValues) == cpairs) &&
                 (p.rowPairCounts[0][3] == pairs || p.rowPairCounts[2][3] == pairs)) {
-                leftTGateMultiply(1, 4);
-                leftTGateMultiply(2, 3);
-                return true;
+                std::vector<std::string> tGateOps;
+                tGateOps.push_back("T14x");
+                tGateOps.push_back("T23x");
+                tGateOperationSets.push_back(tGateOps);
+                optimalsFound = true;
             }
+            if (optimalsFound) return true;
         }
     }
-    /*
-    // Possible options - 3a, 3b, 3c -> basically find the highest pair counts and use those for the t-gate multiplicatons
-    for (int count = 6; count > 0; count = count-2) {
-        // Prefer to use the columns first
-        std::cout << "Cur Count: " << count << std::endl;
-        if (colPairCounts[0][1] == count || colPairCounts[2][3] == count) {
-            std::cout << "Count: " << count << std::endl;
-            rightTGateMultiply(1, 2);
-            rightTGateMultiply(3, 4);
-            return true;
-        }
-        if (colPairCounts[0][2] == count || colPairCounts[1][3] == count) {
-            std::cout << "Count: " << count << std::endl;
-            rightTGateMultiply(1, 3);
-            rightTGateMultiply(2, 4);
-            return true;
-        }
-        if (colPairCounts[0][3] == count || colPairCounts[1][2] == count) {
-            std::cout << "Count: " << count << std::endl;
-            rightTGateMultiply(1, 4);
-            rightTGateMultiply(2, 3);
-            return true;
-        }
-        // If we can't use the columns, then use the rows
-        if (rowPairCounts[0][1] == count || rowPairCounts[2][3] == count) {
-            std::cout << "Count: " << count << std::endl;
-            leftTGateMultiply(1, 2);
-            leftTGateMultiply(3, 4);
-            return true;
-        }
-        if (rowPairCounts[0][2] == count || rowPairCounts[1][3] == count) {
-            std::cout << "Count: " << count << std::endl;
-            leftTGateMultiply(1, 3);
-            leftTGateMultiply(2, 4);
-            return true;
-        }
-        if (rowPairCounts[0][3] == count || rowPairCounts[1][2] == count) {
-            std::cout << "Count: " << count << std::endl;
-            leftTGateMultiply(1, 4);
-            leftTGateMultiply(2, 3);
-            return true;
-        }
-    }
-    */
     return false;
 }
 
 // This is similar to case 1
-bool patternMatrix::tGateAutoMultiplyCase4() {
+bool patternMatrix::optimalTGatesCase4() {
+    return false; // check for symmetric patterns, if they are, then xT12 == T12x
+    std::vector<std::string> tGateOps;
     std::vector<int> caseValues = {2,3};
     if (p.getRowPairValuesCount(0, 1, caseValues) > p.getColPairValuesCount(0, 1, caseValues)) {
-        leftTGateMultiply(1, 2);
-        return true;
+        tGateOps.push_back("T12x");
+    } else {
+        tGateOps.push_back("xT12");
     }
-    rightTGateMultiply(1, 2);
+    tGateOperationSets.push_back(tGateOps);
     return true;
 }
 
 // This is similar to case 1 but with another option for the middle block
-bool patternMatrix::tGateAutoMultiplyCase5() {
+bool patternMatrix::optimalTGatesCase5() {
+    return false; // check for symmetric patterns, if they are, then xT12 == T12x
+    return false; // When this is fixed, remove this line
+    bool optimalsFound = false;
     std::vector<int> caseValues = {2,3};
-    int rc1 = 0;
-    int rc2 = 1;
-    //UPDATE ALL OF THESE TO USE p.getColPairCounts() and p.getRowPairCounts() and specify the values wanted
-    if (p.colPairCounts[2][3] > p.colPairCounts[0][1] || p.rowPairCounts[2][3] > p.rowPairCounts[0][1]) {
-        rc1 = 2;
-        rc2 = 3;
+    // There are 2 blocks of case values, one in the upper left and one in the middle
+    //   We want to find the combinations with the most pairs
+    //    block1: r1, r2 and/or c1, c2
+    //    block2: r3, r4 and/or c3, c4
+    // cpairs is either 2 or 0; I'm not sure if 0 is really possible but I'll leave it for now
+    for (int cpairs = 2; cpairs >= 0; cpairs = cpairs-2) {
+        // The maximum overall pairings can only be +4 from the case pairings
+        for (int pairs= cpairs + 4; pairs >= cpairs; pairs = pairs - 2) {
+            if (p.getColPairValuesCount(0, 1, caseValues) == cpairs && p.colPairCounts[0][1] == pairs) {
+                std::vector<std::string> tGateOps;
+                tGateOps.push_back("xT12");
+                tGateOperationSets.push_back(tGateOps);
+                optimalsFound = true;
+            }
+            if (p.getColPairValuesCount(2, 3, caseValues) == cpairs && p.colPairCounts[2][3] == pairs) {
+                std::vector<std::string> tGateOps;
+                tGateOps.push_back("xT34");
+                tGateOperationSets.push_back(tGateOps);
+                optimalsFound = true;
+            }
+            if (p.getRowPairValuesCount(0, 1, caseValues) == cpairs && p.rowPairCounts[0][1] == pairs) {
+                std::vector<std::string> tGateOps;
+                tGateOps.push_back("T12x");
+                tGateOperationSets.push_back(tGateOps);
+                optimalsFound = true;
+            }
+            if (p.getRowPairValuesCount(2, 3, caseValues) == cpairs && p.rowPairCounts[2][3] == pairs) {
+                std::vector<std::string> tGateOps;
+                tGateOps.push_back("T34x");
+                tGateOperationSets.push_back(tGateOps);
+                optimalsFound = true;
+            }
+            if (optimalsFound) return true;
+        }
     }
-    if (p.colPairCounts[rc1][rc2] > p.rowPairCounts[rc1][rc2]) {
-        rightTGateMultiply(rc1+1, rc2+1);
-        return true;
-    }
-    leftTGateMultiply(rc1+1, rc2+1);
-    return true;
 }
 
-bool patternMatrix::tGateAutoMultiplyCase6() {
+bool patternMatrix::optimalTGatesCase6() {
+    return false; // check for symmetric patterns, if they are, then xT12 == T12x
+    return false; // When this is fixed, remove this line
+    // UPDATE THIS
+    // Either column 1,2
+    //  or rows 1,2 / 3,4
     std::vector<int> caseValues = {2,3};
     // From the original paper, this is a left T(3,4)
     leftTGateMultiply(3, 4);
@@ -949,7 +968,9 @@ bool patternMatrix::tGateAutoMultiplyCase6() {
 }
 
 // This is similar to case 5 with an another option for a bottom left block
-bool patternMatrix::tGateAutoMultiplyCase7() {
+bool patternMatrix::optimalTGatesCase7() {
+    return false; // check for symmetric patterns, if they are, then xT12 == T12x
+    return false; // When this is fixed, remove this line
     std::vector<int> caseValues = {2,3};
     int rc1 = 0;
     int rc2 = 1;
@@ -969,7 +990,9 @@ bool patternMatrix::tGateAutoMultiplyCase7() {
     return true;
 }
 
-bool patternMatrix::tGateAutoMultiplyCase8() {
+bool patternMatrix::optimalTGatesCase8() {
+    return false; // check for symmetric patterns, if they are, then xT12 == T12x
+    return false; // When this is fixed, remove this line
     std::vector<int> caseValues = {2,3};
     // 8: V11, V12 have the same parity -> right T(1,2) T(3,4) T(5,6)
     if (p.z[0][0] % 2 == p.z[0][1] % 2) {
@@ -986,6 +1009,153 @@ bool patternMatrix::tGateAutoMultiplyCase8() {
     // 8: V11, V12 have different parity and V11, V21 have different parity
     //   We don't have a path forward at this time
     return false;
+}
+
+
+bool patternMatrix::findAllTGateOptions() {
+    // If we haven't rearranged the matrix to match the case, then we need to do that first
+    if (!rearrangedToMatchCase) {
+        bool oldSCR = singleCaseRearrangement;
+        singleCaseRearrangement = true;
+        if(!rearrangeMatrix()) return false;  // If we can't rearrange the matrix, then the t-gates selected won't be correct
+        loadFromString(getFirstCaseRearrangement());
+        rearrangedToMatchCase = true;
+        singleCaseRearrangement = oldSCR;
+        determineSubCase();  // This should be useful later
+    }
+    tGateOperationSets.clear();
+    switch (caseMatch)
+    {
+    case 1:
+        return allTGatesCase1();
+        break;
+    case 2:
+        return allTGatesCase2();
+        break;
+    case 3:
+        return allTGatesCase3();
+        break;
+    case 4:
+        return allTGatesCase4();
+        break;
+    case 5:
+        return allTGatesCase5();
+        break;
+    case 6:
+        return allTGatesCase6();
+        break;
+    case 7:
+        return allTGatesCase7();
+        break;
+    case 8:
+        return allTGatesCase8();
+        break;
+    default:
+        break;
+    }
+    return false;
+}
+
+bool patternMatrix::allTGatesCase1() {
+    return false; // check for symmetric patterns, if they are, then xT12 == T12x
+    // Columns
+    tGateOperationSets.push_back({"xT12"});
+    // Rows
+    tGateOperationSets.push_back({"T12x"});
+    return true;
+}
+
+bool patternMatrix::allTGatesCase2() {
+    return false; // check for symmetric patterns, if they are, then xT12 == T12x
+    // Columns
+    tGateOperationSets.push_back({"xT12"});
+    return true;
+}
+
+bool patternMatrix::allTGatesCase3() {
+    return false; // check for symmetric patterns, if they are, then xT12 == T12x
+    // Columns
+    tGateOperationSets.push_back({"xT12", "xT34"});
+    tGateOperationSets.push_back({"xT13", "xT24"});
+    tGateOperationSets.push_back({"xT14", "xT23"});
+    tGateOperationSets.push_back({"xT12"});
+    tGateOperationSets.push_back({"xT13"});
+    tGateOperationSets.push_back({"xT14"});
+    tGateOperationSets.push_back({"xT23"});
+    tGateOperationSets.push_back({"xT24"});
+    tGateOperationSets.push_back({"xT34"});
+    // Rows
+    tGateOperationSets.push_back({"T12x", "T34x"});
+    tGateOperationSets.push_back({"T13x", "T24x"});
+    tGateOperationSets.push_back({"T14x", "T23x"});
+    tGateOperationSets.push_back({"T12x"});
+    tGateOperationSets.push_back({"T13x"});
+    tGateOperationSets.push_back({"T14x"});
+    tGateOperationSets.push_back({"T23x"});
+    tGateOperationSets.push_back({"T24x"});
+    tGateOperationSets.push_back({"T34x"});
+    // TODO - Maybe add in mixes of row / column operations
+    return true;
+}
+
+bool patternMatrix::allTGatesCase4() {
+    return false; // check for symmetric patterns, if they are, then xT12 == T12x
+    // Columns
+    tGateOperationSets.push_back({"xT12"});
+    // Rows
+    tGateOperationSets.push_back({"T12x"});
+    return true;
+}
+
+bool patternMatrix::allTGatesCase5() {
+    return false; // check for symmetric patterns, if they are, then xT12 == T12x
+    // Columns
+    tGateOperationSets.push_back({"xT12"});
+    tGateOperationSets.push_back({"xT34"});
+    // Rows
+    tGateOperationSets.push_back({"T12x"});
+    tGateOperationSets.push_back({"T34x"});
+    return true;
+}
+
+bool patternMatrix::allTGatesCase6() {
+    return false; // check for symmetric patterns, if they are, then xT12 == T12x
+    // Rows
+    tGateOperationSets.push_back({"T12x", "T34x"});  // In the event this will clear everything
+    tGateOperationSets.push_back({"T12x"});
+    tGateOperationSets.push_back({"T34x"});
+    // Columns
+    tGateOperationSets.push_back({"xT12"});
+}
+
+bool patternMatrix::allTGatesCase7() {
+    return false; // check for symmetric patterns, if they are, then xT12 == T12x
+    // Only going to include sets of 1x operation as these will lead to other cases
+    // Columns
+    tGateOperationSets.push_back({"xT12"});
+    tGateOperationSets.push_back({"xT34"});
+    tGateOperationSets.push_back({"xT56"});
+    // Rows
+    tGateOperationSets.push_back({"T12x"});
+    tGateOperationSets.push_back({"T34x"});
+    tGateOperationSets.push_back({"T56x"});
+    return true;
+}
+
+bool patternMatrix::allTGatesCase8() {
+    return false; // check for symmetric patterns, if they are, then xT12 == T12x
+    bool optionsFound = false;
+    // 8: V11, V12 have the same parity -> right T(1,2) T(3,4) T(5,6)
+    if (p.z[0][0] % 2 == p.z[0][1] % 2) {
+        tGateOperationSets.push_back({"xT12", "xT34", "xT56"});
+        optionsFound = true;
+    }
+    // 8: V11, V21 have the same parity -> left T(1,2) T(3,4) T(5,6)
+    if (p.z[0][0] % 2 != p.z[1][0] % 2) {
+        tGateOperationSets.push_back({"T12x", "T34x", "T56x"});
+        optionsFound = true;
+    }
+    return optionsFound;
 }
 
 // LDE Reduction
