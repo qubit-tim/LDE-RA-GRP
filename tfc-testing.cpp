@@ -502,7 +502,7 @@ void flowTesting() {
     //std::cout << "Before T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
     //std::cout << test << std::endl;
 
-    test.tGateAutoMultiply();
+    //test.tGateAutoMultiply();
     test2.rightTGateMultiply(1,4);
     test2.rightTGateMultiply(2,3);
 
@@ -523,10 +523,88 @@ void flowTesting() {
     std::cout << test2.getMaxOfPossibleValues() << std::endl;
 }
 
+void subcaseMatchFiles() {
+    std::filesystem::create_directory("matched-subcases");
+    std::vector<std::vector<std::ofstream>> matchedCasesFiles;
+    std::vector<std::vector<std::ofstream>> matchedCasesFilesHumanReadable;
+    // Since cases are numbered starting at 1, it's safe to put the no-matches file at index 0 which then aligns the index with the case numbers
+    matchedCasesFiles.resize(9);
+    matchedCasesFiles[0].push_back(std::ofstream("matched-subcases/no-matches.txt"));
+    matchedCasesFilesHumanReadable.resize(9);
+    matchedCasesFilesHumanReadable[0].push_back(std::ofstream("matched-subcases/no-matches-human-readable.txt"));
+    for (int i = 1; i <= 8; i++) {
+        // Set up the no-matches file
+        if (caseSubcases[i].size() > 1) {
+            std::string filename = "matched-subcases/case" + std::to_string(i) + "-no-subcase-matches.txt";
+            std::string filenameHumanReadable = "matched-subcases/case" + std::to_string(i) + "-no-subcase-matches-human-readable.txt";
+            matchedCasesFiles[i].push_back(std::ofstream(filename));
+            if (!matchedCasesFiles[i][0].is_open()) {
+                std::cerr << "Error opening file:" << filename << std::endl;
+            }
+            matchedCasesFiles[i][0] << "# Using the new encoding: 2y + x" << std::endl;
+
+            matchedCasesFilesHumanReadable[i].push_back(std::ofstream(filenameHumanReadable));
+            if (!matchedCasesFilesHumanReadable[i][0].is_open()) {
+                std::cerr << "Error opening file:" << filenameHumanReadable << std::endl;
+            }
+            matchedCasesFilesHumanReadable[i][0] << "# Using the new encoding: 2y + x" << std::endl;
+        }
+        // setup the subcase match files
+        for(int j = 0; j < caseSubcases[i].size(); j++) {
+            std::cout << "Case: " << i << " Subcase: " << caseSubcases[i][j] << std::endl;
+            std::string filename = "matched-subcases/case" + std::to_string(i) + "-matches.txt";
+            std::string filenameHumanReadable = "matched-subcases/case" + std::to_string(i) + "-matches-human-readable.txt";
+            if (caseSubcases[i][j] != '-') {
+                filename = "matched-subcases/case" + std::to_string(i) + caseSubcases[i][j] + "-matches.txt";
+                filenameHumanReadable = "matched-subcases/case" + std::to_string(i) + caseSubcases[i][j] + "-matches-human-readable.txt";
+            }
+            matchedCasesFiles[i].push_back(std::ofstream(filename));
+            if (!matchedCasesFiles[i][matchedCasesFiles[i].size()-1].is_open()) {
+                std::cerr << "Error opening file:" << filename << std::endl;
+            }
+            matchedCasesFiles[i][matchedCasesFiles[i].size()-1] << "# Using the new encoding: 2y + x" << std::endl;
+
+            matchedCasesFilesHumanReadable[i].push_back(std::ofstream(filenameHumanReadable));
+            if (!matchedCasesFilesHumanReadable[i][matchedCasesFilesHumanReadable[i].size()-1].is_open()) {
+                std::cerr << "Error opening file:" << filenameHumanReadable << std::endl;
+            }
+            matchedCasesFilesHumanReadable[i][matchedCasesFilesHumanReadable[i].size()-1] << "# Using the new encoding: 2y + x" << std::endl;
+        }
+    }
+    for (int i=1; i <= 928; i++) {
+        //if (i == 240) continue;
+        std::cout << "Pattern " << i << std::endl;
+        patternMatrix pm = patternMatrix(i);
+        pm.printID = true;
+        pm.determineSubCase();
+        int subCaseIndex = pm.subCaseMatch - 'a' + 1;
+        if (pm.subCaseMatch == '-') {
+            subCaseIndex = 0;
+        }
+        int caseNumber = pm.caseMatch;
+        if (caseNumber < 0) caseNumber = 0;
+        matchedCasesFiles[caseNumber][subCaseIndex] << pm << std::endl;
+        pm.multilineOutput = true;
+        matchedCasesFilesHumanReadable[caseNumber][subCaseIndex] << pm << std::endl;
+    }
+    for (int i = 1; i <= 8; i++) {
+        for(int j = 0; j < matchedCasesFiles[i].size(); j++) {
+            matchedCasesFiles[i][j].close();
+            matchedCasesFilesHumanReadable[i][j].close();
+        }
+    }
+}
+
 int main(int argc, char **argv) {
     // NEXT UP -> Need to take any pattern, apply the T-Gates, and then dedupe it to form the overall map
     //dedupeP352();
-    flowTesting();
+
+    //flowTesting();
+    //case3b testing w/ optimal selection() -> case 2;
+    //update the subcase listings in matched-subcases;
+    
+    subcaseMatchFiles();
+    
     /*
     // argv version for a per case run
     if (argc < 2) {

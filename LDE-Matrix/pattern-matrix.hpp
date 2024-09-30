@@ -68,6 +68,10 @@ class patternMatrix {
         std::vector<std::vector<int>> entryLDEs;
         // This will track the T-Gate operations applied to the pattern
         std::vector<std::string> tGateOperations;
+        // This will hold the sets of T-Gate operations depending on the case and whether it's optimal or all
+        //  The string will be formatted "Tpqx" for Rows or "xTpq" for columns where p (int) and q (int) are the rows or columns to multiply
+        //  This will follow the format of the T-Gate operations and what is listed in the papers
+        std::vector<std::vector<std::string>> tGateOperationSets;
 
         void loadFromString(std::string m);
         void updatePairCounts();
@@ -115,15 +119,24 @@ class patternMatrix {
         void leftTGateMultiply(int p, int q);
         void rightTGateMultiply(int p, int q);
         int patternElementAddition(int a, int b);
-        bool tGateAutoMultiply();
-        bool tGateAutoMultiplyCase1();
-        bool tGateAutoMultiplyCase2();
-        bool tGateAutoMultiplyCase3();
-        bool tGateAutoMultiplyCase4();
-        bool tGateAutoMultiplyCase5();
-        bool tGateAutoMultiplyCase6();
-        bool tGateAutoMultiplyCase7();
-        bool tGateAutoMultiplyCase8();
+        bool findOptimalTGateOperations();
+        bool optimalTGatesCase1();
+        bool optimalTGatesCase2();
+        bool optimalTGatesCase3();
+        bool optimalTGatesCase4();
+        bool optimalTGatesCase5();
+        bool optimalTGatesCase6();
+        bool optimalTGatesCase7();
+        bool optimalTGatesCase8();
+        bool findAllTGateOptions();
+        bool allTGatesCase1();
+        bool allTGatesCase2();
+        bool allTGatesCase3();
+        bool allTGatesCase4();
+        bool allTGatesCase5();
+        bool allTGatesCase6();
+        bool allTGatesCase7();
+        bool allTGatesCase8();
         // LDE Reduction Functions
         void ldeReductionOnEntry(int row, int col, int ldeReduction);
         void ldeReductionOnPattern(int ldeValue);
