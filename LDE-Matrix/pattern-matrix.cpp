@@ -755,6 +755,7 @@ void patternMatrix::rightTGateMultiply(int pCol, int qCol) {
     }
 }
 
+
 // This will attempt to find optimal t-gate multiplication sets for the pattern matrix.
 //   The pattern should be rearranged to match the case prior to this being called but, if not,
 //    the code will attempt to rearrange it to match the case.
@@ -1009,6 +1010,7 @@ bool patternMatrix::optimalTGatesCase8() {
     //   We don't have a path forward at this time
     return false;
 }
+
 
 bool patternMatrix::findAllTGateOptions() {
     // If we haven't rearranged the matrix to match the case, then we need to do that first
