@@ -16,7 +16,7 @@
 #include "LDE-Matrix/data/patterns928.hpp"
 #include "LDE-Matrix/pattern-deduper.hpp"
 
-std::string TFC_OUT_DIR = "tfc-output";
+std::string TFC_OUT_DIR = "user-output";
 
 std::map<int, std::vector<char>> caseSubcases = {
     {1, {'-'}},
@@ -105,46 +105,63 @@ std::vector<patternMatrix> loadPatternsExtraBrackets(std::string filename) {
     return patterns;
 }
 
-void case352AllPossible() {
+void case352AllPossible(std::string fileSuffix, bool optimized) {
+    std::string tfcOutFile = TFC_OUT_DIR + "/tfc-output" + fileSuffix + ".txt";
+    std::string tfcUniquesFile = TFC_OUT_DIR + "/tfc-uniques" + fileSuffix + ".txt";
     std::filesystem::create_directory(TFC_OUT_DIR);
-    std::ofstream tfcout = std::ofstream(TFC_OUT_DIR + "/tfc-output.txt");
-    std::ofstream tfcUniques = std::ofstream(TFC_OUT_DIR + "/tfc-uniques.txt");
+    std::ofstream tfcout = std::ofstream(tfcOutFile);
+    std::ofstream tfcUniques = std::ofstream(tfcUniquesFile);
 
     if (!tfcout.is_open()) {
-        std::cerr << "Error opening file:" << TFC_OUT_DIR + "/tfc-output.txt" << std::endl;
+        std::cerr << "Error opening file:" << tfcOutFile << std::endl;
         return;
     }
 
     if (!tfcUniques.is_open()) {
-        std::cerr << "Error opening file:" << TFC_OUT_DIR + "/tfc-uniques.txt" << std::endl;
+        std::cerr << "Error opening file:" << tfcUniquesFile << std::endl;
         return;
     }
 
-    patternMatrix test = patternMatrix(352);
+    // do this on 702 xT12
+    patternMatrix test = patternMatrix(702);
     test.multilineOutput = true;
     test.printDebugInfo = true;
 
+    std::cout << test.id << std::endl;
     std::cout << "Before T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
     std::cout << test << std::endl;
 
-    test.rightTGateMultiply(1,4);
-    test.rightTGateMultiply(2,3);
+    // p352 gates
+    //test.rightTGateMultiply(1,4);
+    //test.rightTGateMultiply(2,3);
+    // p702 gate
+    test.rightTGateMultiply(1,2);
 
     std::cout << "After T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
     std::cout << test << std::endl;
 
     // If you want to reduce and see the LDEs then see possible values, uncomment this block
     test.ldeReductionOnPattern(1);
+    // p702 extra reduction
+    test.ldeReductionOnPattern(0);
     std::cout << "LDEs:" << std::endl;
     test.printLDEs(std::cout);
     std::cout << "Possible values:" << std::endl;
     test.printPossibleValues(std::cout);
     std::cout << "Max of possible values: " << test.getMaxOfPossibleValues() << std::endl;
     
+    std::chrono::seconds dura(5);
+    std::this_thread::sleep_for(dura);
+
     std::cout << "Starting to generate all possible patterns" << std::endl;
     auto start_time = std::chrono::high_resolution_clock::now();
     // This generates all possible value patterns and stores them in the old encoding scheme
-    test.generateAllPossibleValuePatterns();
+    if (optimized) {
+        std::cout << "doing the optimized version" << std::endl;
+        test.optimizedGenerateAllPossibleValuePatterns();
+    } else {
+        test.generateAllPossibleValuePatterns();
+    }
     auto end_time = std::chrono::high_resolution_clock::now();
     std::cout << "Time to generate all possible patterns: " << std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count() << " milliseconds" << std::endl;
     std::cout << "Time to generate 1 possible pattern: " << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() / test.allPossibleValuePatterns.size() << " microseconds" << std::endl;
@@ -602,8 +619,27 @@ int main(int argc, char **argv) {
     //flowTesting();
     //case3b testing w/ optimal selection() -> case 2;
     //update the subcase listings in matched-subcases;
+
+    case352AllPossible("-702-optimized-03-ortho-debug", true);
+
+    /*
+    std::vector<std::future<void>> futures;
+    auto res1 = std::async(std::launch::async, case352AllPossible, "-352-optimized-O3", true);
+    futures.push_back(std::move(res1));
+    std::chrono::seconds dura(15);
+    std::this_thread::sleep_for(dura);
+    auto res2 = std::async(std::launch::async, case352AllPossible, "-746-standard-O3", false);
+    futures.push_back(std::move(res2));
+    for (auto &f : futures) {
+        f.wait();
+    }
+    */
+
+    // if a multi-threaded version doesn't work
+    //case352AllPossible("-352-optimized", true);
+    //case352AllPossible("-352-standard", false);
     
-    subcaseMatchFiles();
+    // subcaseMatchFiles();
     
     /*
     // argv version for a per case run

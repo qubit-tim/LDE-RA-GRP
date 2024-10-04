@@ -114,7 +114,9 @@ class patternMatrix {
         // Get the possible values
         std::string getMaxOfPossibleValues();
         void generateAllPossibleValuePatterns();
+        void optimizedGenerateAllPossibleValuePatterns();
         void recursiveAllPossibleValueSet(int position, zmatrix z);
+        void optimizedAllPossibleValuePatterns(int position, zmatrix z);
         // T-Gate Multiplication Functions
         void leftTGateMultiply(int p, int q);
         void rightTGateMultiply(int p, int q);
@@ -148,6 +150,10 @@ class patternMatrix {
         // TODO: Add a csv output for the pattern matrix
         bool isNormalized();
         bool isOrthogonal();
+        bool isRowNormalized(int row, zmatrix z);
+        bool isColNormalized(int col, zmatrix z);
+        bool areRowsOrthogonal(int row1, int row2, zmatrix z);
+        bool areColsOrthogonal(int col1, int col2, zmatrix z);
 
         // Friends
         friend std::ostream& operator<<(std::ostream&,const patternMatrix &);
