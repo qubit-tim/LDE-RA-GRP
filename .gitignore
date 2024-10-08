@@ -87,3 +87,6 @@ MODULE.bazel.lock
 
 # Ignore local temp directory
 /temp/
+
+# Ignore user output
+user-output/
