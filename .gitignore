@@ -90,3 +90,5 @@ MODULE.bazel.lock
 
 # Ignore user output
 user-output/
+tfc-output/
+ming-output/
