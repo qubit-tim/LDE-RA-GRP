@@ -123,9 +123,9 @@ void case352AllPossible(std::string fileSuffix, bool optimized) {
     }
 
     // do this on 702 xT12
-    patternMatrix test = patternMatrix(702);
+    patternMatrix test = patternMatrix(3);
     test.multilineOutput = true;
-    test.printDebugInfo = true;
+    test.printDebugInfo = false;
 
     std::cout << test.id << std::endl;
     std::cout << "Before T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
@@ -171,7 +171,7 @@ void case352AllPossible(std::string fileSuffix, bool optimized) {
     tfcout << "Number of possible value patterns: " << test.allPossibleValuePatterns.size() << std::endl;
     tfcout << "Deduping:" << std::endl;
     patternDeduper pd = patternDeduper();
-    int newPatternID = 352000000;
+    int newPatternID = 3000000;
     std::map<int, int> dupCount;
     for (auto pm : test.allPossibleValuePatterns) {
         int duplicateID = -1;
@@ -620,7 +620,7 @@ int main(int argc, char **argv) {
     //case3b testing w/ optimal selection() -> case 2;
     //update the subcase listings in matched-subcases;
 
-    case352AllPossible("-702-optimized-03-ortho-debug", true);
+    case352AllPossible("-3-optimized-02-ortho", true);
 
     /*
     std::vector<std::future<void>> futures;
