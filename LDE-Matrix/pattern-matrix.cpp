@@ -1151,7 +1151,6 @@ bool patternMatrix::allTGatesCase3() {
     tGateOperationSets.push_back({"T23x"});
     tGateOperationSets.push_back({"T24x"});
     tGateOperationSets.push_back({"T34x"});
-    // TODO - Maybe add in mixes of row / column operations
     return true;
 }
 

@@ -123,7 +123,7 @@ void case352AllPossible(std::string fileSuffix, bool optimized) {
     }
 
     // do this on 702 xT12
-    patternMatrix test = patternMatrix(3);
+    patternMatrix test = patternMatrix(699);
     test.multilineOutput = true;
     test.printDebugInfo = false;
 
@@ -150,7 +150,7 @@ void case352AllPossible(std::string fileSuffix, bool optimized) {
     test.printPossibleValues(std::cout);
     std::cout << "Max of possible values: " << test.getMaxOfPossibleValues() << std::endl;
     
-    std::chrono::seconds dura(5);
+    std::chrono::seconds dura(15);
     std::this_thread::sleep_for(dura);
 
     std::cout << "Starting to generate all possible patterns" << std::endl;
@@ -613,6 +613,8 @@ void subcaseMatchFiles() {
 }
 
 int main(int argc, char **argv) {
+    //if LDEs == -1 and 0; then do LDEs = 0; then all LDEs should -1;
+    
     // NEXT UP -> Need to take any pattern, apply the T-Gates, and then dedupe it to form the overall map
     //dedupeP352();
 
@@ -620,7 +622,7 @@ int main(int argc, char **argv) {
     //case3b testing w/ optimal selection() -> case 2;
     //update the subcase listings in matched-subcases;
 
-    case352AllPossible("-3-optimized-02-ortho", true);
+    case352AllPossible("-699-optimized-O2-ortho", true);
 
     /*
     std::vector<std::future<void>> futures;
