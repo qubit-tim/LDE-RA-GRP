@@ -623,9 +623,9 @@ int main(int argc, char **argv) {
     //if LDEs == -1 and 0; then do LDEs = 0; then all LDEs should -1;
 
     //690xT12
-    int patternID = 690;
+    //int patternID = 690;
     //allGateRunWithDebug(patternID);
-    standardAllGateRun(patternID);
+    //standardAllGateRun(patternID);
 
     std::vector<std::future<void>> futures;
      for (int i = 1; i <= 8; i++) {

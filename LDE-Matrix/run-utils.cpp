@@ -218,24 +218,7 @@ void fullDebugRun(int pNum, std::vector<std::string> tGateOps) {
     runWithOptions(pNum, tGateOps, true, true, true, true);
 }
 
-void standardAllGateRun(int pNum) {
-    patternMatrix test = patternMatrix(pNum);
-    if (test.findAllTGateOptions()) {
-        std::cout << "Found T-Gate options for pattern " << pNum << std::endl;
-        for (auto tGateOps : test.tGateOperationSets) {
-            std::cout << "Running " << pNum << " with T-Gate options: ";
-            for (auto tGateOp : tGateOps) {
-                std::cout << tGateOp << " ";
-            }
-            std::cout << std::endl << std::endl;
-            runWithOptions(pNum, tGateOps, true, false, true, true);
-        }
-    } else {
-        std::cout << "No T-Gate options found for pattern " << pNum << std::endl;
-    }
-}
-
-void allGateRunWithDebug(int pNum) {
+void allGateRunWithOptions(int pNum, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate) {
     patternMatrix test = patternMatrix(pNum);
     if (test.findAllTGateOptions()) {
         std::cout << "Found T-Gate options for pattern " << pNum << std::endl;
@@ -248,6 +231,32 @@ void allGateRunWithDebug(int pNum) {
             runWithOptions(pNum, tGateOps, true, true, true, true);
         }
     } else {
+        std::string fileNameBase = "/p" + std::to_string(pNum) + "-" + "no-t-gate-options-";
+        std::string logFileName = USER_OUT_DIR + fileNameBase + "log.txt";
+        std::string uniquesFileName = USER_OUT_DIR + fileNameBase + "uniques.txt";
+        std::filesystem::create_directory(USER_OUT_DIR);
+        std::ofstream logOutput = std::ofstream(logFileName);
+        std::ofstream uniquesOutput = std::ofstream(uniquesFileName);
+        if (!logOutput.is_open()) {
+            std::cerr << "Error opening file:" << logFileName << std::endl;
+            return;
+        }
+        if (!uniquesOutput.is_open()) {
+            std::cerr << "Error opening file:" << uniquesFileName << std::endl;
+            return;
+        }
         std::cout << "No T-Gate options found for pattern " << pNum << std::endl;
+        logOutput << "No T-Gate options found for pattern " << pNum << std::endl;
+        uniquesOutput << "No T-Gate options found for pattern " << pNum << std::endl;
+        logOutput.close();
+        uniquesOutput.close();
     }
+}
+
+void standardAllGateRun(int pNum) {
+    allGateRunWithOptions(pNum, true, false, true, true);
+}
+
+void allGateRunWithDebug(int pNum) {
+    allGateRunWithOptions(pNum, true, true, true, true);
 }
