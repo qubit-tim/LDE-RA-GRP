@@ -613,6 +613,12 @@ void subcaseMatchFiles() {
     }
 }
 
+void bulkAllGateRun(int startPattern, int step) {
+    for (int i = startPattern; i <= 928; i+=step) {
+        allGateRunWithDebug(i);
+    }
+}
+
 int main(int argc, char **argv) {
     //if LDEs == -1 and 0; then do LDEs = 0; then all LDEs should -1;
 
@@ -620,6 +626,16 @@ int main(int argc, char **argv) {
     int patternID = 690;
     //allGateRunWithDebug(patternID);
     standardAllGateRun(patternID);
+
+    std::vector<std::future<void>> futures;
+     for (int i = 1; i <= 8; i++) {
+        auto res = std::async(std::launch::async, bulkAllGateRun, i, 8);
+        futures.push_back(std::move(res));
+    }
+    for (auto &f : futures) {
+        f.wait();
+    }
+
     /*
     std::vector<std::string> tGates;
     tGates.push_back("xT12");
