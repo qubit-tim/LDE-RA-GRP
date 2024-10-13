@@ -142,12 +142,14 @@ class patternMatrix {
         // LDE Reduction Functions
         void ldeReductionOnEntry(int row, int col, int ldeReduction);
         void ldeReductionOnPattern(int ldeValue);
+        bool canFullyReduceLDE();  // This will check if the LDE can be fully reduced for the whole pattern
         // These could be private but are public for testing
         bool rearrangeMatrix();
         void rearrangeColumns(zmatrix patternVersion, zmatrix caseVersion, int currentColumn);
         void rearrangeRows(zmatrix patternVersion, zmatrix caseVersion, int currentRow);
         std::string toString();
         // TODO: Add a csv output for the pattern matrix
+        bool isSymmetric();
         bool isNormalized();
         bool isOrthogonal();
         bool isRowNormalized(int row, zmatrix z);

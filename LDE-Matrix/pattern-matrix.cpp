@@ -1114,87 +1114,94 @@ bool patternMatrix::findAllTGateOptions() {
 }
 
 bool patternMatrix::allTGatesCase1() {
-    return false; // check for symmetric patterns, if they are, then xT12 == T12x
-    // Columns
+    // Column operations
     tGateOperationSets.push_back({"xT12"});
-    // Rows
-    tGateOperationSets.push_back({"T12x"});
+    // Row operations
+    if (!isSymmetric()) {
+        tGateOperationSets.push_back({"T12x"});
+    }
     return true;
 }
 
 bool patternMatrix::allTGatesCase2() {
-    return false; // check for symmetric patterns, if they are, then xT12 == T12x
     // Columns
     tGateOperationSets.push_back({"xT12"});
     return true;
 }
 
 bool patternMatrix::allTGatesCase3() {
-    return false; // check for symmetric patterns, if they are, then xT12 == T12x
     // Columns
     tGateOperationSets.push_back({"xT12", "xT34"});
     tGateOperationSets.push_back({"xT13", "xT24"});
     tGateOperationSets.push_back({"xT14", "xT23"});
-    tGateOperationSets.push_back({"xT12"});
-    tGateOperationSets.push_back({"xT13"});
-    tGateOperationSets.push_back({"xT14"});
-    tGateOperationSets.push_back({"xT23"});
-    tGateOperationSets.push_back({"xT24"});
-    tGateOperationSets.push_back({"xT34"});
+    // Additional sets if we want to include single operations
+    //tGateOperationSets.push_back({"xT12"});
+    //tGateOperationSets.push_back({"xT13"});
+    //tGateOperationSets.push_back({"xT14"});
+    //tGateOperationSets.push_back({"xT23"});
+    //tGateOperationSets.push_back({"xT24"});
+    //tGateOperationSets.push_back({"xT34"});
+    
     // Rows
-    tGateOperationSets.push_back({"T12x", "T34x"});
-    tGateOperationSets.push_back({"T13x", "T24x"});
-    tGateOperationSets.push_back({"T14x", "T23x"});
-    tGateOperationSets.push_back({"T12x"});
-    tGateOperationSets.push_back({"T13x"});
-    tGateOperationSets.push_back({"T14x"});
-    tGateOperationSets.push_back({"T23x"});
-    tGateOperationSets.push_back({"T24x"});
-    tGateOperationSets.push_back({"T34x"});
+    if (!isSymmetric()) {
+        tGateOperationSets.push_back({"T12x", "T34x"});
+        tGateOperationSets.push_back({"T13x", "T24x"});
+        tGateOperationSets.push_back({"T14x", "T23x"});
+        // Additional sets if we want to include single operations
+        //tGateOperationSets.push_back({"T12x"});
+        //tGateOperationSets.push_back({"T13x"});
+        //tGateOperationSets.push_back({"T14x"});
+        //tGateOperationSets.push_back({"T23x"});
+        //tGateOperationSets.push_back({"T24x"});
+        //tGateOperationSets.push_back({"T34x"});
+    }
     return true;
 }
 
 bool patternMatrix::allTGatesCase4() {
-    return false; // check for symmetric patterns, if they are, then xT12 == T12x
     // Columns
     tGateOperationSets.push_back({"xT12"});
     // Rows
-    tGateOperationSets.push_back({"T12x"});
+    if (!isSymmetric()) {
+        tGateOperationSets.push_back({"T12x"});
+    }
     return true;
 }
 
 bool patternMatrix::allTGatesCase5() {
-    return false; // check for symmetric patterns, if they are, then xT12 == T12x
     // Columns
     tGateOperationSets.push_back({"xT12"});
     tGateOperationSets.push_back({"xT34"});
     // Rows
-    tGateOperationSets.push_back({"T12x"});
-    tGateOperationSets.push_back({"T34x"});
+    if (!isSymmetric()) {
+        tGateOperationSets.push_back({"T12x"});
+        tGateOperationSets.push_back({"T34x"});
+    }
     return true;
 }
 
 bool patternMatrix::allTGatesCase6() {
-    return false; // check for symmetric patterns, if they are, then xT12 == T12x
     // Rows
-    tGateOperationSets.push_back({"T12x", "T34x"});  // In the event this will clear everything
+    //tGateOperationSets.push_back({"T12x", "T34x"});  // In the event this will clear everything
     tGateOperationSets.push_back({"T12x"});
     tGateOperationSets.push_back({"T34x"});
     // Columns
     tGateOperationSets.push_back({"xT12"});
+    return true;
 }
 
 bool patternMatrix::allTGatesCase7() {
-    return false; // check for symmetric patterns, if they are, then xT12 == T12x
     // Only going to include sets of 1x operation as these will lead to other cases
     // Columns
     tGateOperationSets.push_back({"xT12"});
     tGateOperationSets.push_back({"xT34"});
     tGateOperationSets.push_back({"xT56"});
     // Rows
-    tGateOperationSets.push_back({"T12x"});
-    tGateOperationSets.push_back({"T34x"});
-    tGateOperationSets.push_back({"T56x"});
+    if (!isSymmetric()) {
+        tGateOperationSets.push_back({"T12x"});
+        tGateOperationSets.push_back({"T34x"});
+        tGateOperationSets.push_back({"T56x"});
+    }
     return true;
 }
 
@@ -1207,11 +1214,20 @@ bool patternMatrix::allTGatesCase8() {
         optionsFound = true;
     }
     // 8: V11, V21 have the same parity -> left T(1,2) T(3,4) T(5,6)
-    if (p.z[0][0] % 2 != p.z[1][0] % 2) {
-        tGateOperationSets.push_back({"T12x", "T34x", "T56x"});
-        optionsFound = true;
+    if (!isSymmetric()) {
+        if (p.z[0][0] % 2 != p.z[1][0] % 2) {
+            tGateOperationSets.push_back({"T12x", "T34x", "T56x"});
+            optionsFound = true;
+        }
     }
-    return optionsFound;
+    // 8: V11, V12 have different parity and V11, V21 have different parity
+    if (!optionsFound) {
+        // We don't have a concrete set of operations for this yet, but I think it might be xT13, xT24
+        //  Still going to return false until this is verified
+        // tGateOperationSets.push_back({"xT13", "xT24"});
+        return false;
+    }
+    return true;
 }
 
 // LDE Reduction
@@ -1302,6 +1318,22 @@ void patternMatrix::ldeReductionOnPattern(int ldeValue) {
     }
 }
 
+// Returns true if the current LDEs are a combination of 0 and -1
+//  There must be a -1 though, otherwise, it cannot be fully reduced
+// This is designed to be run after an LDE reduction on 1 values
+bool patternMatrix::canFullyReduceLDE() {
+    bool foundNegativeOne = false;
+    for(int i = 0; i < rows; i++){
+        for(int j = 0; j < cols; j++){
+            if (entryLDEs[i][j] == -1) {
+                foundNegativeOne = true;
+            } else if (entryLDEs[i][j] != 0) {
+                return false;
+            }
+        }
+    }
+    return foundNegativeOne;
+}
 
 // ====== MULTIPLICATION BY T-GATES ======
 
@@ -1476,6 +1508,10 @@ void patternMatrix::rearrangeRows(zmatrix patternVersion, zmatrix caseVersion, i
     iii. ri · rj = 0 (mod2) when i  ̸= j
     iv. the count of (1, 2), (1, 3), and (2, 3) pairs in  ri and  rj should be even
 */
+
+bool patternMatrix::isSymmetric() {
+    return p == pT;
+}
 
 bool patternMatrix::isNormalized() {
     bool isNormal = true;

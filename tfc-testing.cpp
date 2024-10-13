@@ -15,6 +15,7 @@
 #include "LDE-Matrix/zmatrix.hpp"
 #include "LDE-Matrix/data/patterns928.hpp"
 #include "LDE-Matrix/pattern-deduper.hpp"
+#include "LDE-Matrix/run-utils.hpp"
 
 std::string TFC_OUT_DIR = "user-output";
 
@@ -614,15 +615,30 @@ void subcaseMatchFiles() {
 
 int main(int argc, char **argv) {
     //if LDEs == -1 and 0; then do LDEs = 0; then all LDEs should -1;
+
+    //690xT12
+    int patternID = 690;
+    //allGateRunWithDebug(patternID);
+    standardAllGateRun(patternID);
+    /*
+    std::vector<std::string> tGates;
+    tGates.push_back("xT12");
+    //tGates.push_back("xT23");
     
-    // NEXT UP -> Need to take any pattern, apply the T-Gates, and then dedupe it to form the overall map
-    //dedupeP352();
-
-    //flowTesting();
-    //case3b testing w/ optimal selection() -> case 2;
-    //update the subcase listings in matched-subcases;
-
-    case352AllPossible("-699-optimized-O2-ortho", true);
+    patternMatrix test = patternMatrix(patternID);
+    if (test.findAllTGateOptions()) {
+        for (auto tGates : test.tGateOperationSets) {
+            for (auto tGate : tGates) {
+                std::cout << tGate;
+            }
+            std::cout << std::endl;
+        }
+    }
+    */
+    //standardRun(patternID,tGates);
+    //fullDebugRun(patternID,tGates);
+    // runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate)
+    // runWithOptions(patternID, tGates, true, true, true, true);
 
     /*
     std::vector<std::future<void>> futures;
@@ -637,12 +653,6 @@ int main(int argc, char **argv) {
     }
     */
 
-    // if a multi-threaded version doesn't work
-    //case352AllPossible("-352-optimized", true);
-    //case352AllPossible("-352-standard", false);
-    
-    // subcaseMatchFiles();
-    
     /*
     // argv version for a per case run
     if (argc < 2) {
