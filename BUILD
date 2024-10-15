@@ -15,10 +15,12 @@ cc_binary(
     deps = [
         "//LDE-Matrix:pattern-matrix",
         "//LDE-Matrix:pattern-deduper",
+        "//LDE-Matrix:lde-matrix-run-utils",
     ],
     data = [
         ":patterns",
         ":ming-output",
+        ":user-output",
     ],
 )
 
