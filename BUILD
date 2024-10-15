@@ -28,10 +28,12 @@ cc_binary(
     deps = [
         "//LDE-Matrix:pattern-matrix",
         "//LDE-Matrix:pattern-deduper",
+        "//LDE-Matrix:lde-matrix-run-utils",
     ],
     data = [
         ":patterns",
         ":tfc-output",
+        ":user-output",
     ],
 )
 
@@ -85,4 +87,9 @@ filegroup(
 filegroup(
         name = 'ming-output',
         srcs = glob(['ming-output/**'])
+)
+
+filegroup(
+        name = 'user-output',
+        srcs = glob(['user-output/**'])
 )

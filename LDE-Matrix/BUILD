@@ -110,3 +110,16 @@ cc_library(
     ],
     visibility = ["//visibility:public"],
 )
+
+cc_library(
+    name = "lde-matrix-run-utils",
+    srcs = ["run-utils.cpp"],
+    hdrs = ["run-utils.hpp"],
+    deps = [
+        ":zmatrix",
+        ":pattern-matrix",
+        ":case-matrix",
+        ":pattern-deduper",
+    ],
+    visibility = ["//visibility:public"],
+)
