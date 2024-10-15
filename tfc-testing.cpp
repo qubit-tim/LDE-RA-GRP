@@ -623,10 +623,14 @@ int main(int argc, char **argv) {
     //if LDEs == -1 and 0; then do LDEs = 0; then all LDEs should -1;
 
     //690xT12
-    //int patternID = 690;
+    int patternID = 690;
+    std::vector<std::string> tGates;
+    tGates.push_back("xT12");
+    fullDebugRun(patternID, tGates);
     //allGateRunWithDebug(patternID);
     //standardAllGateRun(patternID);
 
+    /*
     std::vector<std::future<void>> futures;
      for (int i = 1; i <= 8; i++) {
         auto res = std::async(std::launch::async, bulkAllGateRun, i, 8);
@@ -635,6 +639,7 @@ int main(int argc, char **argv) {
     for (auto &f : futures) {
         f.wait();
     }
+    */
 
     /*
     std::vector<std::string> tGates;

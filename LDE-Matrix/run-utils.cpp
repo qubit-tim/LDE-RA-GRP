@@ -84,8 +84,15 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
     patternMatrix test = patternMatrix(pNum);
     test.multilineOutput = true;
     test.printDebugInfo = patternDebug;
+    if(patternDebug) {
+        test.debugOutput = &logOutput;
+    }
 
+    logOutput << "Pattern Number: " << pNum << std::endl;
+    logOutput << "Before T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
+    logOutput << test << std::endl;
     if (printDebug) {
+        std::cout << "Pattern Number: " << pNum << std::endl;
         std::cout << "Before T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
         std::cout << test << std::endl;
     }
@@ -103,6 +110,8 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
         }
     }
 
+    logOutput << "After T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
+    logOutput << test << std::endl;
     if (printDebug) {
         std::cout << "After T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
         std::cout << test << std::endl;
@@ -113,6 +122,12 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
     if (fullReduction && test.canFullyReduceLDE()) {
         test.ldeReductionOnPattern(0);
     }
+
+    logOutput << "LDEs:" << std::endl;
+    test.printLDEs(logOutput);
+    logOutput << "Possible values:" << std::endl;
+    test.printPossibleValues(logOutput);
+    logOutput << "Max of possible values: " << test.getMaxOfPossibleValues() << std::endl;
     if (printDebug) {
         std::cout << "LDEs:" << std::endl;
         test.printLDEs(std::cout);
@@ -121,6 +136,7 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
         std::cout << "Max of possible values: " << test.getMaxOfPossibleValues() << std::endl;
     }
 
+    logOutput << "Starting to generate all possible patterns" << std::endl;
     if (printDebug) {
         std::cout << "Starting to generate all possible patterns" << std::endl;
     }
@@ -147,6 +163,9 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
     logOutput << "Time to generate 1 valid pattern: " << onePatternTime << " microseconds" << std::endl;
     logOutput << "Number of valid patterns: " << test.allPossibleValuePatterns.size() << std::endl;
     if (test.allPossibleValuePatterns.size() == 0) {
+        if (printDebug) {
+            std::cout << "No valid patterns to dedupe" << std::endl;
+        }
         logOutput << "No valid patterns to dedupe" << std::endl;
         logOutput << "Invalid pattern" << std::endl;
         uniquesOutput << "Invalid pattern" << std::endl;

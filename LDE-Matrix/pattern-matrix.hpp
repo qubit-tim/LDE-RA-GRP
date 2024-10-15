@@ -30,6 +30,7 @@ class patternMatrix {
         bool rearrangedToMatchCase = false;
         // These are the flags for the pattern matrix
         bool printDebugInfo = false;  // WIP: This is for printing debug information
+        std::ostream* debugOutput;  // WIP...does this work???
         bool singleCaseRearrangement = false;  // This is stop the case rearrangement code after a single solution is found
         // << operator flags
         bool printID = false;
