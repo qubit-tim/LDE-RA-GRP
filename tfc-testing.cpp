@@ -30,6 +30,50 @@ std::map<int, std::vector<char>> caseSubcases = {
     {8, {'a', 'b'}},
 };
 
+std::vector<std::vector<int>> case2Groups = {
+    {3,4,5,6},
+    {7,8,9,10,11,12},
+    {19,20,24,115,116,117},
+    {21,22,25,241,242,243},
+    {27,28,120,121},
+    {29,30,34,35,249,250,251,252},
+    {38,39,260,261},
+    {93,94,188,189},
+    {95,96,98,365,366,368},
+    {245,246,247,248},
+    {274,275,276,277,278,279},
+    {481,482,483,484,485,486},
+    {495,496,497,498},
+    {567,568,772,839},
+    {616,617,618,619,640,641},
+    {649,650,651,652,656,657,658,659},
+    {663,664,665,666},
+    {746,747,748,778,842,845},
+    {15,16,54,71},
+    {48,49,50,55,72,73},
+    {118,119,193,196},
+    {128,129,130,140,145,148},
+    {133,134,135,141,146,149},
+    {142,147,150,153,154,155},
+    {190,191,192,194,197,198},
+    {195,199,208,209},
+    {268,269,270,455,456,457},
+    {271,272,273,305,330,344},
+    {280,281,282,306,331,345},
+    {286,287,288,289,361,362,363,364},
+    {296,298,301,438,439,440},
+    {452,453,454,487,488,489},
+    {292,294,299,458,459,460},
+    {387,388,393,466,467,468},
+    {373,374,379,477,478,479},
+    {293,295,297,300,490,491,492,493},
+    {391,392,394,508,509,510},
+    {377,378,382,548,549,550},
+    {375,376,380,381,687,688,689,690},
+    {685,686,698,699},
+    {403,404,405,700,701,702},
+};
+
 std::string matchedCasesDirectory = "tfc-output";
 std::string matchedSubcasesDirectory = "tfc-output";
 bool useNewEncoding = false;
@@ -619,14 +663,41 @@ void bulkAllGateRun(int startPattern, int step) {
     }
 }
 
-int main(int argc, char **argv) {
-    //if LDEs == -1 and 0; then do LDEs = 0; then all LDEs should -1;
+void bulkRunOnList(std::vector<int> patternList) {
+    for (int i : patternList) {
+        standardAllGateRun(i);
+        //allGateRunWithDebug(i);
+    }
+}
 
+void case2Run(int position, int step) {
+    for (int i = position; i < case2Groups.size(); i+=step) {
+        standardAllGateRun(case2Groups[i][0]);
+    }
+}
+
+void case2RunFull(int position, int step) {
+    for (int i = position; i < case2Groups.size(); i+=step) {
+        for (int j = 0; j < case2Groups[i].size(); j++) {
+            standardAllGateRun(case2Groups[i][j]);
+        }
+    }
+}
+
+int main(int argc, char **argv) {
+    int startNumber = std::stoi(argv[1]);
+    int step = 8;
+    case2Run(startNumber, step);
+    case2RunFull(startNumber, step);
+    //bulkAllGateRun(startNumber, step);
+    //std::vector<int> patternList = {1,2,3,4,5,6,7,8};
+    //std::vector<int> patternList = {1,2,3,4,5,6,7,8};
+    
     //690xT12
-    int patternID = 690;
-    std::vector<std::string> tGates;
-    tGates.push_back("xT12");
-    fullDebugRun(patternID, tGates);
+    //int patternID = 690;
+    //std::vector<std::string> tGates;
+    //tGates.push_back("xT12");
+    //fullDebugRun(patternID, tGates);
     //allGateRunWithDebug(patternID);
     //standardAllGateRun(patternID);
 
