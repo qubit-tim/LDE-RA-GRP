@@ -71,18 +71,18 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
     }
 
     std::string fileNameBase = "/p" + std::to_string(pNum) + "-" + tGateOpsString;
-    std::string optimizedVersion = (o2Generate) ? "-opt2" : (optimizedGenerate) ? "-opt1" : "";
-    std::string logFileName = USER_OUT_DIR + fileNameBase + "log" + optimizedVersion + ".txt";
-    std::string uniquesFileName = USER_OUT_DIR + fileNameBase + "uniques" + optimizedVersion + ".txt";
+    std::string optimizedVersion = (o2Generate) ? "opt2" : (optimizedGenerate) ? "opt1" : "";
+    std::string logFileName = USER_OUT_DIR + fileNameBase + "log-" + optimizedVersion + ".txt";
+    std::string humanOutputFileName = USER_OUT_DIR + fileNameBase + optimizedVersion + ".txt";
     std::filesystem::create_directory(USER_OUT_DIR);
     std::ofstream logOutput = std::ofstream(logFileName);
-    std::ofstream uniquesOutput = std::ofstream(uniquesFileName);
+    std::ofstream humanOutput = std::ofstream(humanOutputFileName);
     if (!logOutput.is_open()) {
         std::cerr << "Error opening file:" << logFileName << std::endl;
         return;
     }
-    if (!uniquesOutput.is_open()) {
-        std::cerr << "Error opening file:" << uniquesFileName << std::endl;
+    if (!humanOutput.is_open()) {
+        std::cerr << "Error opening file:" << humanOutputFileName << std::endl;
         return;
     }
 
@@ -96,9 +96,9 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
     logOutput << "Pattern Number: " << pNum << std::endl;
     logOutput << "Before T-Gate multiplication:" << std::endl;
     logOutput << test << std::endl;
-    uniquesOutput << "Pattern Number: " << pNum << std::endl;
-    uniquesOutput << "Before T-Gate multiplication:" << std::endl;
-    uniquesOutput << test << std::endl;
+    humanOutput << "Pattern Number: " << pNum << std::endl;
+    humanOutput << "Before T-Gate multiplication:" << std::endl;
+    humanOutput << test << std::endl;
     if (printDebug) {
         std::cout << "Pattern Number: " << pNum << std::endl;
         std::cout << "Before T-Gate multiplication:" << std::endl;
@@ -120,8 +120,8 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
 
     logOutput << "After T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
     logOutput << test << std::endl;
-    uniquesOutput << "After T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
-    uniquesOutput << test << std::endl;
+    humanOutput << "After T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
+    humanOutput << test << std::endl;
     if (printDebug) {
         std::cout << "After T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
         std::cout << test << std::endl;
@@ -130,9 +130,9 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
     logOutput << "LDEs Before Reduction(s):" << std::endl;
     test.printLDEs(logOutput);
     logOutput << std::endl;
-    uniquesOutput << "LDEs Before Reduction(s):" << std::endl;
-    test.printLDEs(uniquesOutput);
-    uniquesOutput << std::endl;
+    humanOutput << "LDEs Before Reduction(s):" << std::endl;
+    test.printLDEs(humanOutput);
+    humanOutput << std::endl;
     if (printDebug) {
         std::cout << "LDEs Before Reduction(s):" << std::endl;
         test.printLDEs(std::cout);
@@ -166,11 +166,11 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
     logOutput << "Possible values:" << std::endl;
     test.printPossibleValues(logOutput);
     logOutput << "Max of possible values: " << test.getMaxOfPossibleValues() << std::endl;
-    uniquesOutput << "LDEs After Reduction(s):" << std::endl;
-    test.printLDEs(uniquesOutput);
-    uniquesOutput << "Possible values:" << std::endl;
-    test.printPossibleValues(uniquesOutput);
-    uniquesOutput << "Max of possible values: " << test.getMaxOfPossibleValues() << std::endl;
+    humanOutput << "LDEs After Reduction(s):" << std::endl;
+    test.printLDEs(humanOutput);
+    humanOutput << "Possible values:" << std::endl;
+    test.printPossibleValues(humanOutput);
+    humanOutput << "Max of possible values: " << test.getMaxOfPossibleValues() << std::endl;
     if (printDebug) {
         std::cout << "LDEs After Reduction(s):" << std::endl;
         test.printLDEs(std::cout);
@@ -207,18 +207,18 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
     logOutput << "Time to generate all possible patterns: " << allPatternsTime << " milliseconds" << std::endl;
     logOutput << "Time to generate 1 valid pattern: " << onePatternTime << " microseconds" << std::endl;
     logOutput << "Number of valid patterns: " << test.allPossibleValuePatterns.size() << std::endl;
-    uniquesOutput << "Time to generate all possible patterns: " << allPatternsTime << " milliseconds" << std::endl;
-    uniquesOutput << "Time to generate 1 valid pattern: " << onePatternTime << " microseconds" << std::endl;
-    uniquesOutput << "Number of valid patterns: " << test.allPossibleValuePatterns.size() << std::endl;
+    humanOutput << "Time to generate all possible patterns: " << allPatternsTime << " milliseconds" << std::endl;
+    humanOutput << "Time to generate 1 valid pattern: " << onePatternTime << " microseconds" << std::endl;
+    humanOutput << "Number of valid patterns: " << test.allPossibleValuePatterns.size() << std::endl;
     if (test.allPossibleValuePatterns.size() == 0) {
         if (printDebug) {
             std::cout << "No valid patterns to dedupe" << std::endl;
         }
         logOutput << "No valid patterns to dedupe" << std::endl;
         logOutput << "Invalid pattern" << std::endl;
-        uniquesOutput << "Invalid pattern" << std::endl;
+        humanOutput << "Invalid pattern" << std::endl;
         logOutput.close();
-        uniquesOutput.close();
+        humanOutput.close();
         return;
     }
     logOutput << "Deduping:" << std::endl;
@@ -240,19 +240,19 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
                 std::cout << pmCopy.id << " is unique" << std::endl;
             }
             logOutput << pmCopy.id << " is unique" << std::endl;
-            uniquesOutput << pmCopy << " is unique" << std::endl;
+            humanOutput << pmCopy << " is unique" << std::endl;
         }
     }
     if (printDebug) {
         std::cout << "Duplicate Counts:" << std::endl;
     }
     logOutput << "Duplicate Counts:" << std::endl;
-    uniquesOutput << "Duplicate Counts:" << std::endl;
+    humanOutput << "Duplicate Counts:" << std::endl;
     std::map<int, std::map<char, std::vector<int>>> dupCaseSubcase;
     for (auto const& [id, count] : dupCount) {
         std::cout << "Duplicate ID: " << id << " Count: " << count << std::endl;
         logOutput << "Duplicate ID: " << id << " Count: " << count << std::endl;
-        uniquesOutput << "Duplicate ID: " << id << " Count: " << count << std::endl;
+        humanOutput << "Duplicate ID: " << id << " Count: " << count << std::endl;
         patternMatrix temp = patternMatrix(id);
         temp.determineSubCase();
         dupCaseSubcase[temp.caseMatch][temp.subCaseMatch].push_back(id);
@@ -262,16 +262,16 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
         for (auto const& [subCase, ids] : subCaseMatch) {
             std::cout << "Case: " << caseNum << " SubCase: " << subCase << " Count: " << ids.size() << std::endl;
             logOutput << "Case: " << caseNum << " SubCase: " << subCase << " Count: " << ids.size() << std::endl;
-            uniquesOutput << "Case: " << caseNum << " SubCase: " << subCase << " Count: " << ids.size() << std::endl;
+            humanOutput << "Case: " << caseNum << " SubCase: " << subCase << " Count: " << ids.size() << std::endl;
             for (auto id : ids) {
                 std::cout << id << std::endl;
                 logOutput << id << std::endl;
-                uniquesOutput << id << std::endl;
+                humanOutput << id << std::endl;
             }
         }
     }
     logOutput.close();
-    uniquesOutput.close();
+    humanOutput.close();
     if (printDebug) {
         std::cout << "Done" << std::endl << std::endl;
     }
@@ -305,23 +305,23 @@ void allGateRunWithOptions(int pNum, bool printDebug, bool patternDebug, bool fu
     } else {
         std::string fileNameBase = "/p" + std::to_string(pNum) + "-" + "no-t-gate-options-";
         std::string logFileName = USER_OUT_DIR + fileNameBase + "log.txt";
-        std::string uniquesFileName = USER_OUT_DIR + fileNameBase + "uniques.txt";
+        std::string humanOutputFileName = USER_OUT_DIR + fileNameBase + "uniques.txt";
         std::filesystem::create_directory(USER_OUT_DIR);
         std::ofstream logOutput = std::ofstream(logFileName);
-        std::ofstream uniquesOutput = std::ofstream(uniquesFileName);
+        std::ofstream humanOutput = std::ofstream(humanOutputFileName);
         if (!logOutput.is_open()) {
             std::cerr << "Error opening file:" << logFileName << std::endl;
             return;
         }
-        if (!uniquesOutput.is_open()) {
-            std::cerr << "Error opening file:" << uniquesFileName << std::endl;
+        if (!humanOutput.is_open()) {
+            std::cerr << "Error opening file:" << humanOutputFileName << std::endl;
             return;
         }
         std::cout << "No T-Gate options found for pattern " << pNum << std::endl;
         logOutput << "No T-Gate options found for pattern " << pNum << std::endl;
-        uniquesOutput << "No T-Gate options found for pattern " << pNum << std::endl;
+        humanOutput << "No T-Gate options found for pattern " << pNum << std::endl;
         logOutput.close();
-        uniquesOutput.close();
+        humanOutput.close();
     }
     std::cout << "=============================================" << std::endl;
 }
