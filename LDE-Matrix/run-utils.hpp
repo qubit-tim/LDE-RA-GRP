@@ -4,7 +4,7 @@
 #include <vector>
 
 bool validTGateOps(std::vector<std::string> tGateOps);
-void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate);
+void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate, bool o2Generate);
 void standardRun(int pNum, std::vector<std::string> tGateOps);
 void fullDebugRun(int pNum, std::vector<std::string> tGateOps);
 void standardAllGateRun(int pNum);

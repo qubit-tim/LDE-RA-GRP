@@ -685,18 +685,67 @@ void case2RunFull(int position, int step) {
 }
 
 int main(int argc, char **argv) {
-    int startNumber = std::stoi(argv[1]);
-    int step = 8;
-    case2Run(startNumber, step);
-    case2RunFull(startNumber, step);
+    //int startNumber = std::stoi(argv[1]);
+    //int step = 8;
+    //case2Run(startNumber, step);
+    //case2RunFull(startNumber, step);
     //bulkAllGateRun(startNumber, step);
     //std::vector<int> patternList = {1,2,3,4,5,6,7,8};
     //std::vector<int> patternList = {1,2,3,4,5,6,7,8};
     
-    //690xT12
-    //int patternID = 690;
-    //std::vector<std::string> tGates;
-    //tGates.push_back("xT12");
+    int patternID = 882;
+    std::vector<std::string> tGates;
+    tGates.push_back("xT13");
+    tGates.push_back("xT24");
+    tGates.push_back("T35x");
+    tGates.push_back("T46x");
+    //runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate, bool o2Generate)
+    runWithOptions(patternID, tGates, true, true, true, true, true);
+    //standardRun(patternID, tGates);
+
+    /*
+    patternMatrix test = patternMatrix(3);
+    test.printDebugInfo = true;
+    test.debugOutput = &std::cout;
+    std::cout << "Pattern Number: " << test.id << std::endl;
+    std::cout << "Before T-Gate multiplication:" << std::endl;
+    std::cout << test << std::endl;
+    test.rightTGateMultiply(1,2);
+    test.ldeReductionOnPattern(1);
+    std::cout << "LDEs Before Reduction(s):" << std::endl;
+    test.printLDEs(std::cout);
+    std::cout << std::endl;
+    int maxLDE = test.getMaxLDEValue();
+    for (int i = maxLDE; i > 0; i--) {
+        std::cout << "Doing an LDE reduction on values of " << i << std::endl;
+        test.ldeReductionOnPattern(i);
+    }
+    //test.ldeReductionOnPattern(maxLDE);
+    if (test.canFullyReduceLDE()) {
+        std::cout << "Doing a full LDE reduction on the pattern." << std::endl;
+        test.ldeReductionOnPattern(0);
+    }
+    std::cout << std::endl;
+    std::cout << "LDEs After Reduction(s):" << std::endl;
+    test.printLDEs(std::cout);
+    std::cout << "Possible values:" << std::endl;
+    test.printPossibleValues(std::cout);
+    std::cout << "Max of possible values: " << test.getMaxOfPossibleValues() << std::endl;
+    std::cout << "Starting to generate all possible patterns" << std::endl;
+    auto start_time = std::chrono::high_resolution_clock::now();
+    test.opt2GenerateAllPossibleValuePatterns();
+    auto end_time = std::chrono::high_resolution_clock::now();
+    auto allPatternsTime = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+    auto onePatternTime = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
+    if (test.allPossibleValuePatterns.size() > 0) {
+        onePatternTime = onePatternTime / test.allPossibleValuePatterns.size();
+    }
+    std::cout << "Time to generate all possible patterns: " << allPatternsTime  << " milliseconds" << std::endl;
+    std::cout << "Time to generate 1 valid pattern: " << onePatternTime  << " microseconds" << std::endl;
+    std::cout << "Number of possible value patterns: " << test.allPossibleValuePatterns.size() << std::endl;
+    std::cout << "Deduping:" << std::endl;
+    /*
+    //xT13 xT24 followed by T35x T46x.
     //fullDebugRun(patternID, tGates);
     //allGateRunWithDebug(patternID);
     //standardAllGateRun(patternID);

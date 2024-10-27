@@ -2,6 +2,7 @@
 #define PATTERN_DEDUPER_HPP
 
 #include <map>
+#include <unordered_map>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -23,7 +24,7 @@ class patternDeduper {
         // Case number -> Pattern Sum -> ID* -> Pattern
         //  * This ID is unique to the map and does not correspond to the pattern ID
         //      this is because pattern IDs might not be unique across sets
-        std::map <int, std::map <int, std::map <int, patternMatrix>>> caseSumPatternMap;
+        std::unordered_map <int, std::unordered_map <int, std::unordered_map <int, patternMatrix>>> caseSumPatternMap;
         int nextID = 0;
 };
 

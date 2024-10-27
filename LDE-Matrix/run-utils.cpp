@@ -8,6 +8,7 @@
 #include <sstream>
 #include <filesystem>
 #include <map>
+#include <unordered_map>
 #include <regex>
 #include <future>
 
@@ -45,12 +46,15 @@ bool validTGateOps(std::vector<std::string> tGateOps) {
     return true;
 }
 
-void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate) {
-    if (tGateOps.size() < 0 || tGateOps.size() > 3) {
+void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate, bool o2Generate) {
+    // I need to check if and what limits we want to put on the number of T-Gate operations done at once
+    /*
+    if (tGateOps.size() < 0 || tGateOps.size() > 4) {
         std::cerr << "Invalid number of T-Gate operations provided:" << std::endl;
-        std::cerr << "Got: " << std::to_string(tGateOps.size()) << " Wanted: 1 <= x <= 3"  << std::endl;
+        std::cerr << "Got: " << std::to_string(tGateOps.size()) << " Wanted: 1 <= x <= 4"  << std::endl;
         return;
     }
+    */
     if (pNum < 1 || pNum > 928) {
         std::cerr << "Invalid pattern number" << std::endl;
         std::cerr << "Got: " << std::to_string(pNum) << " Wanted: 1 <= x <= 928"  << std::endl;
@@ -89,11 +93,11 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
     }
 
     logOutput << "Pattern Number: " << pNum << std::endl;
-    logOutput << "Before T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
+    logOutput << "Before T-Gate multiplication:" << std::endl;
     logOutput << test << std::endl;
     if (printDebug) {
         std::cout << "Pattern Number: " << pNum << std::endl;
-        std::cout << "Before T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
+        std::cout << "Before T-Gate multiplication:" << std::endl;
         std::cout << test << std::endl;
     }
 
@@ -117,19 +121,44 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
         std::cout << test << std::endl;
     }
 
-    // need to check for all -1 and 0 LDE values to see if we can further reduce
-    test.ldeReductionOnPattern(1);
+    logOutput << "LDEs Before Reduction(s):" << std::endl;
+    test.printLDEs(logOutput);
+    logOutput << std::endl;
+    if (printDebug) {
+        std::cout << "LDEs Before Reduction(s):" << std::endl;
+        test.printLDEs(std::cout);
+        std::cout << std::endl;
+    }
+
+    int maxLDE = test.getMaxLDEValue();
+    for (int i = maxLDE; i > 0; i--) {
+        logOutput << "Doing an LDE reduction on values of " << i << std::endl;
+        if (printDebug) {
+            std::cout << "Doing an LDE reduction on values of " << i << std::endl;
+        }
+        test.ldeReductionOnPattern(i);
+    }
+    //test.ldeReductionOnPattern(maxLDE);
     if (fullReduction && test.canFullyReduceLDE()) {
+        logOutput << "Doing a full LDE reduction on the pattern." << std::endl;
+        if (printDebug) {
+            std::cout << "Doing a full LDE reduction on the pattern." << std::endl;
+        }
         test.ldeReductionOnPattern(0);
     }
 
-    logOutput << "LDEs:" << std::endl;
+    logOutput << std::endl;
+    if (printDebug) {
+        std::cout << std::endl;
+    }
+    
+    logOutput << "LDEs After Reduction(s):" << std::endl;
     test.printLDEs(logOutput);
     logOutput << "Possible values:" << std::endl;
     test.printPossibleValues(logOutput);
     logOutput << "Max of possible values: " << test.getMaxOfPossibleValues() << std::endl;
     if (printDebug) {
-        std::cout << "LDEs:" << std::endl;
+        std::cout << "LDEs After Reduction(s):" << std::endl;
         test.printLDEs(std::cout);
         std::cout << "Possible values:" << std::endl;
         test.printPossibleValues(std::cout);
@@ -142,7 +171,9 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
     }
     auto start_time = std::chrono::high_resolution_clock::now();
     // This generates all possible value patterns and stores them in the old encoding scheme
-    if (optimizedGenerate) {
+    if (o2Generate) {
+        test.opt2GenerateAllPossibleValuePatterns();
+    } else if (optimizedGenerate) {
         test.optimizedGenerateAllPossibleValuePatterns();
     } else {
         test.generateAllPossibleValuePatterns();
@@ -175,7 +206,7 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
     }
     logOutput << "Deduping:" << std::endl;
     patternDeduper pd = patternDeduper();
-    int newPatternID = 100000000 * pNum;
+    int newPatternID = 1000000 * pNum;
     std::map<int, int> dupCount;
     for (auto pm : test.allPossibleValuePatterns) {
         int duplicateID = -1;
@@ -230,15 +261,15 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
 }
 
 void silentRun(int pNum, std::vector<std::string> tGateOps) {
-    runWithOptions(pNum, tGateOps, false, false, true, true);
+    runWithOptions(pNum, tGateOps, false, false, true, true, false);
 }
 
 void standardRun(int pNum, std::vector<std::string> tGateOps) {
-    runWithOptions(pNum, tGateOps, true, false, true, true);
+    runWithOptions(pNum, tGateOps, true, false, true, true, false);
 }
 
 void fullDebugRun(int pNum, std::vector<std::string> tGateOps) {
-    runWithOptions(pNum, tGateOps, true, true, true, true);
+    runWithOptions(pNum, tGateOps, true, true, true, true, false);
 }
 
 void allGateRunWithOptions(int pNum, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate) {
@@ -252,7 +283,7 @@ void allGateRunWithOptions(int pNum, bool printDebug, bool patternDebug, bool fu
                 std::cout << tGateOp << " ";
             }
             std::cout << std::endl << std::endl;
-            runWithOptions(pNum, tGateOps, printDebug, patternDebug, fullReduction, optimizedGenerate);
+            runWithOptions(pNum, tGateOps, printDebug, patternDebug, fullReduction, optimizedGenerate, false);
         }
     } else {
         std::string fileNameBase = "/p" + std::to_string(pNum) + "-" + "no-t-gate-options-";
