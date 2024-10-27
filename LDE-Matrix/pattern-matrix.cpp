@@ -38,6 +38,7 @@ void patternMatrix::init() {
     for (int i = 0; i < rows; i++) {
         possibleValues[i].resize(cols);
     }
+    rowToRowSet.resize(rows);
     loadCases();
 }
 
@@ -709,7 +710,7 @@ void patternMatrix::optimizedAllPossibleValuePatterns(int position, zmatrix z) {
             pm.matchOnCases();
             if (pm.caseMatch > 0 && pm.isOrthogonal() && pm.isNormalized()) {
                 if (printDebugInfo) {
-                    *debugOutput << "Optimized Version - Case: " << pm.caseMatch << " Valid Pattern:" << pm << " Count: " << allPossibleValuePatterns.size()+1 << std::endl;
+                    *debugOutput << "Optimized Version - Case: " << pm.caseMatch << " Valid Pattern: " << pm << " Count: " << allPossibleValuePatterns.size()+1 << std::endl;
                 }
                 allPossibleValuePatterns[pm.toString()] = true;
             } else {
@@ -747,6 +748,7 @@ void patternMatrix::generateRowSet(int pvRow, int rsPos, std::vector<int> newRow
 
 // This version will create sets of rows that are normalized, check orthogonality, and then generate patterns
 void patternMatrix::opt2GenerateAllPossibleValuePatterns() {
+    allPossibleValuePatterns.clear();
     if (printDebugInfo) {
         *debugOutput << "Normalized Rows:" << std::endl;
     }
@@ -760,7 +762,8 @@ void patternMatrix::opt2GenerateAllPossibleValuePatterns() {
             // Now, we need to create rows and check normality
             generateRowSet(i, setNum, std::vector<int>(6), 0);
             setNum++;
-        }
+        } 
+        rowToRowSet[i] = rowSetStringToIntID[key];
     }
     if (printDebugInfo) {
         *debugOutput << "Total Row Sets: " << possiblePatternRowSets.size() << std::endl;
@@ -775,12 +778,19 @@ void patternMatrix::opt2GenerateAllPossibleValuePatterns() {
             for (int ri = 0; ri < possiblePatternRowSets[rsi].size(); ri++) {
                 for (int rj = 0; rj < possiblePatternRowSets[rsj].size(); rj++) {
                     // skip if the comparison has already been done
-                    if (rsj <= rsi && rj <= ri) continue;
+                    if (rsj < rsi && rj < ri) continue;
                     std::string lhs = std::to_string(rsi) + "-" + std::to_string(ri);
                     std::string rhs = std::to_string(rsj) + "-" + std::to_string(rj);
-                    std::string orthoKey = lhs + ":" + rhs;
+                    std::string orthoKey1 = lhs + ":" + rhs;
+                    std::string orthoKey2 = rhs + ":" + lhs;
+                    // This will make look ups easier in the future
+                    if (lhs == rhs) {
+                        rowSetOrthogonality[orthoKey1] = true;
+                        continue;
+                    }
                     bool isOrthogonal = areRowsOrthogonal(possiblePatternRowSets[rsi][ri], possiblePatternRowSets[rsj][rj]);
-                    rowSetOrthogonality[orthoKey] = isOrthogonal;
+                    rowSetOrthogonality[orthoKey1] = isOrthogonal;
+                    rowSetOrthogonality[orthoKey2] = isOrthogonal;
                     if (printDebugInfo) {
                         *debugOutput << "Row Set: " << rsi << " Row: " << ri << " [";
                         for (int i = 0; i < possiblePatternRowSets[rsi][ri].size(); i++) {
@@ -802,6 +812,59 @@ void patternMatrix::opt2GenerateAllPossibleValuePatterns() {
     }
     // Finally, generate the patterns by iterating through the row sets and trying different combinations
     //  This will be similar to the recursive function but will use the row sets instead of the rows
+    if (printDebugInfo) {
+        *debugOutput << "Generating Patterns:" << std::endl;
+    }
+    recursiveRowSetPatternGeneration(0, std::vector<std::string>(6));
+}
+
+void patternMatrix::recursiveRowSetPatternGeneration(int curRow, std::vector<std::string> rowSelections) {
+    if (curRow == rows) return;
+    for (int i = 0; i < possiblePatternRowSets[rowToRowSet[curRow]].size(); i++) {
+        rowSelections[curRow] = std::to_string(rowToRowSet[curRow]) + "-" + std::to_string(i);
+        // Check orthogonality of the current row selection
+        bool validRowSelection = true;
+        for (int j = 0; j < curRow; j++) {
+            if (!rowSetOrthogonality[rowSelections[curRow] + ":" + rowSelections[j]]) {
+                validRowSelection = false;
+                break;
+            }
+        }
+        if (!validRowSelection) continue;
+        if (curRow == rows - 1) {
+            // We have a valid set of rows, now we need to generate the pattern
+            std::ostringstream os;
+            zmatrix z = zmatrix(rows, cols, maxValue);
+            for (int j = 0; j < rowSelections.size(); j++) {
+                std::string rs = rowSelections[j];
+                int rowSet = std::stoi(rs.substr(0, rs.find("-")));
+                int rowSelection = std::stoi(rs.substr(rs.find("-")+1));
+                for (int k = 0; k < possiblePatternRowSets[rowSet][rowSelection].size(); k++) {
+                    z.z[j][k] = possiblePatternRowSets[rowSet][rowSelection][k];
+                }
+            }
+            os << z;
+            patternMatrix pm = patternMatrix(1, os.str());
+            pm.matchOnCases();
+            int cM = pm.caseMatch;
+            bool isOrtho = pm.isOrthogonal();
+            bool isNorm = pm.isNormalized();
+            if (cM > 0 && isOrtho && isNorm) {
+                if (printDebugInfo) {
+                    *debugOutput << "Valid Pattern: " << pm << " Case Match: " << cM << " Count: " << allPossibleValuePatterns.size()+1 << " [Opt2]" << std::endl;
+                }
+                allPossibleValuePatterns[pm.toString()] = true;
+            } else {
+                if (printDebugInfo) {
+                    *debugOutput << "Invalid Pattern: " << pm << " Case Match: " << cM;
+                    *debugOutput << " Is " << (isOrtho ? "Orthogonal" : "Not Orthogonal");
+                    *debugOutput << " Is " << (isNorm ? "Normalized" : "Not Normalized");
+                    *debugOutput << " [Opt2]" << std::endl;
+                }
+            }
+        }
+        recursiveRowSetPatternGeneration(curRow + 1, rowSelections);
+    }
 }
 
 // TODO - Add a note on which pattern encoding is being used

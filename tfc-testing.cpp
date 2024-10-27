@@ -693,6 +693,14 @@ int main(int argc, char **argv) {
     //std::vector<int> patternList = {1,2,3,4,5,6,7,8};
     //std::vector<int> patternList = {1,2,3,4,5,6,7,8};
     
+
+    int patternID = 3;
+    std::vector<std::string> tGates;
+    tGates.push_back("xT12");
+    //runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate, bool o2Generate)
+    runWithOptions(patternID, tGates, true, true, true, true, true);
+
+    /*
     int patternID = 882;
     std::vector<std::string> tGates;
     tGates.push_back("xT13");
@@ -702,6 +710,7 @@ int main(int argc, char **argv) {
     //runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate, bool o2Generate)
     runWithOptions(patternID, tGates, true, true, true, true, true);
     //standardRun(patternID, tGates);
+    */
 
     /*
     patternMatrix test = patternMatrix(3);

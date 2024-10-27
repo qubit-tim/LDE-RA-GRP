@@ -71,8 +71,9 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
     }
 
     std::string fileNameBase = "/p" + std::to_string(pNum) + "-" + tGateOpsString;
-    std::string logFileName = USER_OUT_DIR + fileNameBase + "log.txt";
-    std::string uniquesFileName = USER_OUT_DIR + fileNameBase + "uniques.txt";
+    std::string optimizedVersion = (o2Generate) ? "-opt2" : (optimizedGenerate) ? "-opt1" : "";
+    std::string logFileName = USER_OUT_DIR + fileNameBase + "log" + optimizedVersion + ".txt";
+    std::string uniquesFileName = USER_OUT_DIR + fileNameBase + "uniques" + optimizedVersion + ".txt";
     std::filesystem::create_directory(USER_OUT_DIR);
     std::ofstream logOutput = std::ofstream(logFileName);
     std::ofstream uniquesOutput = std::ofstream(uniquesFileName);
@@ -95,6 +96,9 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
     logOutput << "Pattern Number: " << pNum << std::endl;
     logOutput << "Before T-Gate multiplication:" << std::endl;
     logOutput << test << std::endl;
+    uniquesOutput << "Pattern Number: " << pNum << std::endl;
+    uniquesOutput << "Before T-Gate multiplication:" << std::endl;
+    uniquesOutput << test << std::endl;
     if (printDebug) {
         std::cout << "Pattern Number: " << pNum << std::endl;
         std::cout << "Before T-Gate multiplication:" << std::endl;
@@ -116,6 +120,8 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
 
     logOutput << "After T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
     logOutput << test << std::endl;
+    uniquesOutput << "After T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
+    uniquesOutput << test << std::endl;
     if (printDebug) {
         std::cout << "After T-Gate multiplication " << test.printTGateOperations() << ":" << std::endl;
         std::cout << test << std::endl;
@@ -124,6 +130,9 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
     logOutput << "LDEs Before Reduction(s):" << std::endl;
     test.printLDEs(logOutput);
     logOutput << std::endl;
+    uniquesOutput << "LDEs Before Reduction(s):" << std::endl;
+    test.printLDEs(uniquesOutput);
+    uniquesOutput << std::endl;
     if (printDebug) {
         std::cout << "LDEs Before Reduction(s):" << std::endl;
         test.printLDEs(std::cout);
@@ -157,6 +166,11 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
     logOutput << "Possible values:" << std::endl;
     test.printPossibleValues(logOutput);
     logOutput << "Max of possible values: " << test.getMaxOfPossibleValues() << std::endl;
+    uniquesOutput << "LDEs After Reduction(s):" << std::endl;
+    test.printLDEs(uniquesOutput);
+    uniquesOutput << "Possible values:" << std::endl;
+    test.printPossibleValues(uniquesOutput);
+    uniquesOutput << "Max of possible values: " << test.getMaxOfPossibleValues() << std::endl;
     if (printDebug) {
         std::cout << "LDEs After Reduction(s):" << std::endl;
         test.printLDEs(std::cout);
@@ -193,6 +207,9 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
     logOutput << "Time to generate all possible patterns: " << allPatternsTime << " milliseconds" << std::endl;
     logOutput << "Time to generate 1 valid pattern: " << onePatternTime << " microseconds" << std::endl;
     logOutput << "Number of valid patterns: " << test.allPossibleValuePatterns.size() << std::endl;
+    uniquesOutput << "Time to generate all possible patterns: " << allPatternsTime << " milliseconds" << std::endl;
+    uniquesOutput << "Time to generate 1 valid pattern: " << onePatternTime << " microseconds" << std::endl;
+    uniquesOutput << "Number of valid patterns: " << test.allPossibleValuePatterns.size() << std::endl;
     if (test.allPossibleValuePatterns.size() == 0) {
         if (printDebug) {
             std::cout << "No valid patterns to dedupe" << std::endl;
@@ -223,7 +240,7 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
                 std::cout << pmCopy.id << " is unique" << std::endl;
             }
             logOutput << pmCopy.id << " is unique" << std::endl;
-            uniquesOutput << pmCopy << std::endl;
+            uniquesOutput << pmCopy << " is unique" << std::endl;
         }
     }
     if (printDebug) {

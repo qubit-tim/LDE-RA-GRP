@@ -53,7 +53,7 @@ class patternMatrix {
         std::vector<std::vector<std::vector<int>>> possiblePatternRowSets;  // This holds sets of normalized possible rows for a new pattern
         std::unordered_map<std::string, int> rowSetStringToIntID;  // This maps the row set string to an integer ID
         std::unordered_map<std::string, bool> rowSetOrthogonality;  // This maps a row set combination string to a boolean value for orthogonality
-
+        std::vector<int> rowToRowSet;  // This maps a row to a row set
         // TODO: Add a A, B set of matrices for the pattern where: A+Bsqrt(2) = pattern
         //   and use these for normality and orthogonality checking
         //   Essentially, this is keeping the original form of the patterns when they are in binary form 'A B' of (0 0, 0 1, 1 0, 1 1)
@@ -124,6 +124,7 @@ class patternMatrix {
         void optimizedGenerateAllPossibleValuePatterns();
         void generateRowSet(int pvRow, int rsPos, std::vector<int> newRow, int pos);
         void opt2GenerateAllPossibleValuePatterns();
+        void recursiveRowSetPatternGeneration(int curRow, std::vector<std::string> rowSelections);
         void recursiveAllPossibleValueSet(int position, zmatrix z);
         void optimizedAllPossibleValuePatterns(int position, zmatrix z);
         // T-Gate Multiplication Functions
