@@ -685,22 +685,19 @@ void case2RunFull(int position, int step) {
 }
 
 int main(int argc, char **argv) {
-    //int startNumber = std::stoi(argv[1]);
-    //int step = 8;
-    //case2Run(startNumber, step);
-    //case2RunFull(startNumber, step);
-    //bulkAllGateRun(startNumber, step);
+    int startNumber = std::stoi(argv[1]);
+    int step = 8;
+    bulkAllGateRun(startNumber, step);
     //std::vector<int> patternList = {1,2,3,4,5,6,7,8};
     //std::vector<int> patternList = {1,2,3,4,5,6,7,8};
     
 
+    /*
     int patternID = 3;
     std::vector<std::string> tGates;
     tGates.push_back("xT12");
     //runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate, bool o2Generate)
     runWithOptions(patternID, tGates, true, true, true, true, true);
-
-    /*
     int patternID = 882;
     std::vector<std::string> tGates;
     tGates.push_back("xT13");

@@ -289,7 +289,7 @@ void fullDebugRun(int pNum, std::vector<std::string> tGateOps) {
     runWithOptions(pNum, tGateOps, true, true, true, true, false);
 }
 
-void allGateRunWithOptions(int pNum, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate) {
+void allGateRunWithOptions(int pNum, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate, bool o2Generate) {
     patternMatrix test = patternMatrix(pNum);
     std::cout << std::endl << "=============================================" << std::endl;
     if (test.findAllTGateOptions()) {
@@ -300,7 +300,7 @@ void allGateRunWithOptions(int pNum, bool printDebug, bool patternDebug, bool fu
                 std::cout << tGateOp << " ";
             }
             std::cout << std::endl << std::endl;
-            runWithOptions(pNum, tGateOps, printDebug, patternDebug, fullReduction, optimizedGenerate, false);
+            runWithOptions(pNum, tGateOps, printDebug, patternDebug, fullReduction, optimizedGenerate, o2Generate);
         }
     } else {
         std::string fileNameBase = "/p" + std::to_string(pNum) + "-" + "no-t-gate-options-";
@@ -327,13 +327,13 @@ void allGateRunWithOptions(int pNum, bool printDebug, bool patternDebug, bool fu
 }
 
 void silentAllGateRun(int pNum) {
-    allGateRunWithOptions(pNum, false, false, true, true);
+    allGateRunWithOptions(pNum, false, false, true, true, true);
 }
 
 void standardAllGateRun(int pNum) {
-    allGateRunWithOptions(pNum, true, false, true, true);
+    allGateRunWithOptions(pNum, true, false, true, true, true);
 }
 
 void allGateRunWithDebug(int pNum) {
-    allGateRunWithOptions(pNum, true, true, true, true);
+    allGateRunWithOptions(pNum, true, true, true, true, true);
 }
