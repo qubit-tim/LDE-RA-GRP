@@ -659,7 +659,8 @@ void subcaseMatchFiles() {
 
 void bulkAllGateRun(int startPattern, int step) {
     for (int i = startPattern; i <= 928; i+=step) {
-        allGateRunWithDebug(i);
+        //allGateRunWithDebug(i);
+        standardAllGateRun(i);
     }
 }
 
