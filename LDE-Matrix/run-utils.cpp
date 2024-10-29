@@ -277,15 +277,15 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
 }
 
 void silentRun(int pNum, std::vector<std::string> tGateOps) {
-    runWithOptions(pNum, tGateOps, false, false, true, true, false);
+    runWithOptions(pNum, tGateOps, false, false, true, true, true);
 }
 
 void standardRun(int pNum, std::vector<std::string> tGateOps) {
-    runWithOptions(pNum, tGateOps, true, false, true, true, false);
+    runWithOptions(pNum, tGateOps, true, false, true, true, true);
 }
 
 void fullDebugRun(int pNum, std::vector<std::string> tGateOps) {
-    runWithOptions(pNum, tGateOps, true, true, true, true, false);
+    runWithOptions(pNum, tGateOps, true, true, true, true, true);
 }
 
 void allGateRunWithOptions(int pNum, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate, bool o2Generate) {
