@@ -2,6 +2,7 @@
 #define PATTERN_MATRIX_HPP
 
 #include <map>
+#include <unordered_map>
 #include <string>
 #include <format>
 #include <iostream>
@@ -49,14 +50,18 @@ class patternMatrix {
         zmatrix cVT;  // This is the transposed pattern matrix changed to match the case style, 0s for 0,1 and 1s for 2,3
         zmatrix pGroupings;  // This is the pattern matrix with the groupings applied
         std::vector<std::vector<std::vector<int>>> possibleValues;  // After LDE reduction, these are the possible values for the pattern
+        std::vector<std::vector<std::vector<int>>> possiblePatternRowSets;  // This holds sets of normalized possible rows for a new pattern
+        std::unordered_map<std::string, int> rowSetStringToIntID;  // This maps the row set string to an integer ID
+        std::unordered_map<std::string, bool> rowSetOrthogonality;  // This maps a row set combination string to a boolean value for orthogonality
+        std::vector<int> rowToRowSet;  // This maps a row to a row set
         // TODO: Add a A, B set of matrices for the pattern where: A+Bsqrt(2) = pattern
         //   and use these for normality and orthogonality checking
         //   Essentially, this is keeping the original form of the patterns when they are in binary form 'A B' of (0 0, 0 1, 1 0, 1 1)
         // TODO: Use this to check all the rules that Ming shared such as normality, orthogonality, 3 pair counts, 2/1 pair counts, etc.
         //    See line 160 in the Latex document
         std::string originalMatrix; // This is the original matrix string
-        std::map<std::string, bool> caseRearrangements; // This is a map of all the possible case rearrangements
-        std::map<std::string, bool> allPossibleValuePatterns; // This is a map of all the possible case rearrangements
+        std::unordered_map<std::string, bool> caseRearrangements; // This is a map of all the possible case rearrangements
+        std::unordered_map<std::string, bool> allPossibleValuePatterns; // This is a map of all the possible case rearrangements
         std::vector<std::vector<int>> rowPairCounts;  // This is the row pair counts for the pattern
         std::vector<std::vector<int>> colPairCounts;  // This is the col pair counts for the pattern
         // The following totals are counts of the pair counts
@@ -101,6 +106,7 @@ class patternMatrix {
         // Extra Printing Functions
         void printDebug(std::ostream& os);
         void printLDEs(std::ostream& os);
+        std::string rowPossibleValueToString(int row);
         void printPossibleValues(std::ostream& os);
         void printPairCounts(std::ostream& os);
         void printRowPairCounts(std::ostream& os);
@@ -116,6 +122,9 @@ class patternMatrix {
         std::string getMaxOfPossibleValues();
         void generateAllPossibleValuePatterns();
         void optimizedGenerateAllPossibleValuePatterns();
+        void generateRowSet(int pvRow, int rsPos, std::vector<int> newRow, int pos);
+        void opt2GenerateAllPossibleValuePatterns();
+        void recursiveRowSetPatternGeneration(int curRow, std::vector<std::string> rowSelections);
         void recursiveAllPossibleValueSet(int position, zmatrix z);
         void optimizedAllPossibleValuePatterns(int position, zmatrix z);
         // T-Gate Multiplication Functions
@@ -144,6 +153,7 @@ class patternMatrix {
         void ldeReductionOnEntry(int row, int col, int ldeReduction);
         void ldeReductionOnPattern(int ldeValue);
         bool canFullyReduceLDE();  // This will check if the LDE can be fully reduced for the whole pattern
+        int getMaxLDEValue();
         // These could be private but are public for testing
         bool rearrangeMatrix();
         void rearrangeColumns(zmatrix patternVersion, zmatrix caseVersion, int currentColumn);
@@ -154,9 +164,11 @@ class patternMatrix {
         bool isNormalized();
         bool isOrthogonal();
         bool isRowNormalized(int row, zmatrix z);
-        bool isColNormalized(int col, zmatrix z);
+        bool isRowNormalized(std::vector<int> row);
         bool areRowsOrthogonal(int row1, int row2, zmatrix z);
-        bool areColsOrthogonal(int col1, int col2, zmatrix z);
+        bool areRowsOrthogonal(std::vector<int> row1, std::vector<int> row2);
+        // bool isColNormalized(int col, zmatrix z); // Removed until it's needed
+        // bool areColsOrthogonal(int col1, int col2, zmatrix z); // Removed until it's needed
 
         // Friends
         friend std::ostream& operator<<(std::ostream&,const patternMatrix &);

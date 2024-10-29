@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <map>
+#include <unordered_map>
 
 #include "case-matrix.hpp"
 #include "pattern-matrix.hpp"
@@ -36,6 +38,7 @@ void patternMatrix::init() {
     for (int i = 0; i < rows; i++) {
         possibleValues[i].resize(cols);
     }
+    rowToRowSet.resize(rows);
     loadCases();
 }
 
@@ -504,6 +507,22 @@ void patternMatrix::printLDEs(std::ostream& os){
     }
 }
 
+std::string patternMatrix::rowPossibleValueToString(int row) {
+    std::ostringstream os;
+    os << "[";
+    for (int i = 0; i < cols; i++) {
+        os << "{";
+        for (int j = 0; j < possibleValues[row][i].size(); j++) {
+            os << possibleValues[row][i][j];
+            if (j != possibleValues[row][i].size()-1) os << ",";
+        }
+        os << "}";
+        if (i != cols-1) os << ",";
+    }
+    os << "]";
+    return os.str();
+}
+
 void patternMatrix::printPossibleValues(std::ostream& os) {
     for (int i = 0; i < rows; i++) {
         os << "[";
@@ -691,7 +710,7 @@ void patternMatrix::optimizedAllPossibleValuePatterns(int position, zmatrix z) {
             pm.matchOnCases();
             if (pm.caseMatch > 0 && pm.isOrthogonal() && pm.isNormalized()) {
                 if (printDebugInfo) {
-                    *debugOutput << "Optimized Version - Case: " << pm.caseMatch << " Valid Pattern:" << pm << " Count: " << allPossibleValuePatterns.size()+1 << std::endl;
+                    *debugOutput << "Optimized Version - Case: " << pm.caseMatch << " Valid Pattern: " << pm << " Count: " << allPossibleValuePatterns.size()+1 << std::endl;
                 }
                 allPossibleValuePatterns[pm.toString()] = true;
             } else {
@@ -701,6 +720,150 @@ void patternMatrix::optimizedAllPossibleValuePatterns(int position, zmatrix z) {
             }
         }
         optimizedAllPossibleValuePatterns(position + 1, z);
+    }
+}
+
+void patternMatrix::generateRowSet(int pvRow, int rsPos, std::vector<int> newRow, int pos) {
+    if (pos == 6) {
+        // Check if the row is normalized
+        if (isRowNormalized(newRow)) {
+            possiblePatternRowSets[rsPos].push_back(newRow);
+            if (printDebugInfo) {
+                *debugOutput << "Row Set: " << rsPos << " Row: " << possiblePatternRowSets[rsPos].size() << " [";
+                for (int i = 0; i < newRow.size(); i++) {
+                    *debugOutput << newRow[i];
+                    if (i != newRow.size()-1) *debugOutput << ",";
+                }
+                *debugOutput << "]" << std::endl;
+            }
+            
+        }
+        return;
+    }
+    for (int i = 0; i < possibleValues[pvRow][pos].size(); i++) {
+        newRow[pos] = possibleValues[pvRow][pos][i];
+        generateRowSet(pvRow, rsPos, newRow, pos + 1);
+    }
+}
+
+// This version will create sets of rows that are normalized, check orthogonality, and then generate patterns
+void patternMatrix::opt2GenerateAllPossibleValuePatterns() {
+    allPossibleValuePatterns.clear();
+    if (printDebugInfo) {
+        *debugOutput << "Normalized Rows:" << std::endl;
+    }
+    // First, create the sets of normalized rows
+    int setNum = 0;
+    for (int i = 0; i < rows; i++) {
+        std::string key = rowPossibleValueToString(i);
+        if (rowSetStringToIntID.find(key) == rowSetStringToIntID.end()) {
+            rowSetStringToIntID[key] = setNum;
+            possiblePatternRowSets.push_back(std::vector<std::vector<int>>());
+            // Now, we need to create rows and check normality
+            generateRowSet(i, setNum, std::vector<int>(6), 0);
+            setNum++;
+        } 
+        rowToRowSet[i] = rowSetStringToIntID[key];
+    }
+    if (printDebugInfo) {
+        *debugOutput << "Total Row Sets: " << possiblePatternRowSets.size() << std::endl;
+    }
+
+    if (printDebugInfo) {
+        *debugOutput << "Orthogonality of Row Sets:" << std::endl;
+    }
+    // To try to add some clarity, rsi = row set i, rsj = row set j, ri = row i from rsi, rj = row j from rsj
+    for (int rsi = 0; rsi < possiblePatternRowSets.size(); rsi++) {
+        for (int rsj = rsi; rsj < possiblePatternRowSets.size(); rsj++) {
+            for (int ri = 0; ri < possiblePatternRowSets[rsi].size(); ri++) {
+                for (int rj = 0; rj < possiblePatternRowSets[rsj].size(); rj++) {
+                    // skip if the comparison has already been done
+                    if (rsj < rsi && rj < ri) continue;
+                    std::string lhs = std::to_string(rsi) + "-" + std::to_string(ri);
+                    std::string rhs = std::to_string(rsj) + "-" + std::to_string(rj);
+                    std::string orthoKey1 = lhs + ":" + rhs;
+                    std::string orthoKey2 = rhs + ":" + lhs;
+                    // This will make look ups easier in the future
+                    if (lhs == rhs) {
+                        rowSetOrthogonality[orthoKey1] = true;
+                        continue;
+                    }
+                    bool isOrthogonal = areRowsOrthogonal(possiblePatternRowSets[rsi][ri], possiblePatternRowSets[rsj][rj]);
+                    rowSetOrthogonality[orthoKey1] = isOrthogonal;
+                    rowSetOrthogonality[orthoKey2] = isOrthogonal;
+                    if (printDebugInfo) {
+                        *debugOutput << "Row Set: " << rsi << " Row: " << ri << " [";
+                        for (int i = 0; i < possiblePatternRowSets[rsi][ri].size(); i++) {
+                            *debugOutput << possiblePatternRowSets[rsi][ri][i];
+                            if (i != possiblePatternRowSets[rsi][ri].size()-1) *debugOutput << ",";
+                        }
+                        *debugOutput << "] is ";
+                        *debugOutput << " " << (isOrthogonal ? "Orthogonal" : "Not Orthogonal") << " to ";
+                        *debugOutput << "Row Set: " << rsj << " Row: " << rj << " [";
+                        for (int j = 0; j < possiblePatternRowSets[rsj][rj].size(); j++) {
+                            *debugOutput << possiblePatternRowSets[rsj][rj][j];
+                            if (j != possiblePatternRowSets[rsj][rj].size()-1) *debugOutput << ",";
+                        }
+                        *debugOutput << "]" << std::endl;
+                    }
+                }
+            }
+        }
+    }
+    // Finally, generate the patterns by iterating through the row sets and trying different combinations
+    //  This will be similar to the recursive function but will use the row sets instead of the rows
+    if (printDebugInfo) {
+        *debugOutput << "Generating Patterns:" << std::endl;
+    }
+    recursiveRowSetPatternGeneration(0, std::vector<std::string>(6));
+}
+
+void patternMatrix::recursiveRowSetPatternGeneration(int curRow, std::vector<std::string> rowSelections) {
+    if (curRow == rows) return;
+    for (int i = 0; i < possiblePatternRowSets[rowToRowSet[curRow]].size(); i++) {
+        rowSelections[curRow] = std::to_string(rowToRowSet[curRow]) + "-" + std::to_string(i);
+        // Check orthogonality of the current row selection
+        bool validRowSelection = true;
+        for (int j = 0; j < curRow; j++) {
+            if (!rowSetOrthogonality[rowSelections[curRow] + ":" + rowSelections[j]]) {
+                validRowSelection = false;
+                break;
+            }
+        }
+        if (!validRowSelection) continue;
+        if (curRow == rows - 1) {
+            // We have a valid set of rows, now we need to generate the pattern
+            std::ostringstream os;
+            zmatrix z = zmatrix(rows, cols, maxValue);
+            for (int j = 0; j < rowSelections.size(); j++) {
+                std::string rs = rowSelections[j];
+                int rowSet = std::stoi(rs.substr(0, rs.find("-")));
+                int rowSelection = std::stoi(rs.substr(rs.find("-")+1));
+                for (int k = 0; k < possiblePatternRowSets[rowSet][rowSelection].size(); k++) {
+                    z.z[j][k] = possiblePatternRowSets[rowSet][rowSelection][k];
+                }
+            }
+            os << z;
+            patternMatrix pm = patternMatrix(1, os.str());
+            pm.matchOnCases();
+            int cM = pm.caseMatch;
+            bool isOrtho = pm.isOrthogonal();
+            bool isNorm = pm.isNormalized();
+            if (cM > 0 && isOrtho && isNorm) {
+                if (printDebugInfo) {
+                    *debugOutput << "Valid Pattern: " << pm << " Case Match: " << cM << " Count: " << allPossibleValuePatterns.size()+1 << " [Opt2]" << std::endl;
+                }
+                allPossibleValuePatterns[pm.toString()] = true;
+            } else {
+                if (printDebugInfo) {
+                    *debugOutput << "Invalid Pattern: " << pm << " Case Match: " << cM;
+                    *debugOutput << " Is " << (isOrtho ? "Orthogonal" : "Not Orthogonal");
+                    *debugOutput << " Is " << (isNorm ? "Normalized" : "Not Normalized");
+                    *debugOutput << " [Opt2]" << std::endl;
+                }
+            }
+        }
+        recursiveRowSetPatternGeneration(curRow + 1, rowSelections);
     }
 }
 
@@ -1308,6 +1471,7 @@ void patternMatrix::ldeReductionOnPattern(int ldeValue) {
             }
         }
     }
+    // This should return an error
     if (ldeDecrease == 0) return;
     for(int i = 0; i < rows; i++){
         for(int j = 0; j < cols; j++){
@@ -1334,6 +1498,18 @@ bool patternMatrix::canFullyReduceLDE() {
         }
     }
     return foundNegativeOne;
+}
+
+int patternMatrix::getMaxLDEValue() {
+    int maxLDE = -1;
+    for(int i = 0; i < rows; i++){
+        for(int j = 0; j < cols; j++){
+            if (entryLDEs[i][j] > maxLDE) {
+                maxLDE = entryLDEs[i][j];
+            }
+        }
+    }
+    return maxLDE;
 }
 
 // ====== MULTIPLICATION BY T-GATES ======
@@ -1606,6 +1782,8 @@ bool patternMatrix::isOrthogonal() {
 }
 
 bool patternMatrix::isRowNormalized(int row, zmatrix z) {
+    // This should probably just call isRowNormalized(std::vector<int> row) and pass in z.z[row]
+    // but this might not be used once we get the new sets optimization in place for possible values
     bool isNormal = true;
     int m4Row = 0;
     int m2Row = 0;
@@ -1640,12 +1818,42 @@ bool patternMatrix::isRowNormalized(int row, zmatrix z) {
     return isNormal;
 }
 
-bool patternMatrix::isColNormalized(int col, zmatrix z) {
-    return true;
+bool patternMatrix::isRowNormalized(std::vector<int> row) {
+    bool isNormal = true;
+    int m4Row = 0;
+    int m2Row = 0;
+    for (int j = 0; j < row.size(); j++) {
+        if (row[j] > 3) {
+            std::ostringstream os;
+            os << "Invalid value in isRowNormalized check: " << row[j];
+            throw std::runtime_error(os.str());
+        
+        }
+        int mij = row[j] / 2 + 2 * (row[j] % 2);  //mij = Nij + 2*Mij (row)
+        // Rule i. ∑ mij = 0 (mod4); row check
+        m4Row += mij;
+        // Rule ii. mij = 3 has to be paired if exists (row check)
+        if (mij == 3) m2Row++;
+    }
+    if (m4Row % 4 != 0 || m2Row % 2 != 0) {
+        if (printDebugInfo) {
+            *debugOutput << "Row is not normalized: [";
+            for (int j = 0; j < row.size(); j++) {
+                int v = row[j];
+                v = (v == 1) ? 2 : (v == 2) ? 1 : v;
+                *debugOutput << v;
+                if (j < row.size() - 1) *debugOutput << ",";
+            }
+            *debugOutput << "]" << std::endl;
+            //std::cout << "  Rule i. ∑ mij = " << m4Row << "; mod4: " << m4Row % 4 << std::endl;
+            //std::cout << "  Rule ii. mij = 3 has to be paired if exists; count: " << m2Row << "; mod2: " << m2Row % 2 << std::endl;
+        }
+        isNormal = false;
+    }
+    return isNormal;
 }
 
 bool patternMatrix::areRowsOrthogonal(int row1, int row2, zmatrix z) {
-    //return true;
     bool isOrthogonal = true;
     int m2RowDotProd = 0;
     int m2RowPairs = 0;
@@ -1685,6 +1893,23 @@ bool patternMatrix::areRowsOrthogonal(int row1, int row2, zmatrix z) {
     return isOrthogonal;
 }
 
-bool patternMatrix::areColsOrthogonal(int col1, int col2, zmatrix z) {
-    return true;
+bool patternMatrix::areRowsOrthogonal(std::vector<int> row1, std::vector<int> row2) {
+    bool isOrthogonal = true;
+    int m2RowDotProd = 0;
+    int m2RowPairs = 0;
+    for (int k = 0; k < row1.size(); k++) {
+        /*
+        */
+        int mik = row1[k] / 2 + 2 * (row1[k] % 2);  //mij = Nij + 2*Mij (row A)
+        int mjk = row2[k] / 2 + 2 * (row2[k] % 2);  //mkj = Nkj + 2*Mkj (row B)
+        // iii. ri · rj = 0 (mod2) when i  ̸= k
+        // row A * row B
+        m2RowDotProd += mik * mjk;
+        // iv. the count of (1, 2), (1, 3), and (2, 3) pairs in  ri and rj should be even
+        if (mik != 0 && mjk != 0 && mik != mjk) m2RowPairs++;
+    }
+    if (m2RowDotProd % 2 != 0 || m2RowPairs % 2 != 0 ) {
+        isOrthogonal = false;
+    }
+    return isOrthogonal;
 }
