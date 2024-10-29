@@ -47,7 +47,7 @@ bool validTGateOps(std::vector<std::string> tGateOps) {
 }
 
 void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate, bool o2Generate) {
-    // I need to check if and what limits we want to put on the number of T-Gate operations done at once
+    // Limit this to 3 T Gate Ops per side (3x left and 3x right but not more)
     /*
     if (tGateOps.size() < 0 || tGateOps.size() > 4) {
         std::cerr << "Invalid number of T-Gate operations provided:" << std::endl;
@@ -147,7 +147,6 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
         }
         test.ldeReductionOnPattern(i);
     }
-    //test.ldeReductionOnPattern(maxLDE);
     if (fullReduction && test.canFullyReduceLDE()) {
         logOutput << "Doing a full LDE reduction on the pattern." << std::endl;
         if (printDebug) {
