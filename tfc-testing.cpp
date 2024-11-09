@@ -686,27 +686,34 @@ void case2RunFull(int position, int step) {
 }
 
 int main(int argc, char **argv) {
+
+    // Use graphviz to output the final case / pattern map
+
+    
     int startNumber = std::stoi(argv[1]);
-    int step = 8;
+    int step = 10;
     bulkAllGateRun(startNumber, step);
     std::vector<int> patternList = {1,2,3,4,5,6,7,8};
-    std::vector<int> patternList = {1,2,3,4,5,6,7,8};
     
-
     /*
-    //int patternID = 3;
-    //std::vector<std::string> tGates;
-    //tGates.push_back("xT12");
+    //======================
+    //  Do some map testing here (group by possible value matrix)
+    //======================
+    int patternIDA = 93;
+    std::vector<std::string> tGatesA;
+    tGatesA.push_back("xT12");
+    //tGatesA.push_back("xT34");
     //runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate, bool o2Generate)
-    //runWithOptions(patternID, tGates, true, true, true, true, true);
-    int patternID = 882;
+    runWithOptions(patternIDA, tGatesA, true, true, true, true, true);
+    int patternID = 880;
     std::vector<std::string> tGates;
     tGates.push_back("xT13");
     tGates.push_back("xT24");
     tGates.push_back("T35x");
     tGates.push_back("T46x");
     //runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate, bool o2Generate)
-    runWithOptions(patternID, tGates, true, true, true, true, true);
+    //runWithOptions(patternID, tGates, true, true, true, true, true);
+    runWithOptions(patternID, tGates, true, true, false, true, true);
     //standardRun(patternID, tGates);
     */
 

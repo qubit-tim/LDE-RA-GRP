@@ -120,6 +120,7 @@ class patternMatrix {
         std::string printTGateOperations();
         // Get the possible values
         std::string getMaxOfPossibleValues();
+        bool possibleValuesLeadToAllPatterns();
         void generateAllPossibleValuePatterns();
         void optimizedGenerateAllPossibleValuePatterns();
         void generateRowSet(int pvRow, int rsPos, std::vector<int> newRow, int pos);
@@ -151,9 +152,11 @@ class patternMatrix {
         bool allTGatesCase8();
         // LDE Reduction Functions
         void ldeReductionOnEntry(int row, int col, int ldeReduction);
+        void ldeReductionOnEntryToTarget(int row, int col, int ldeReduction, int target);
         void ldeReductionOnPattern(int ldeValue);
         bool canFullyReduceLDE();  // This will check if the LDE can be fully reduced for the whole pattern
         int getMaxLDEValue();
+        void doLDEReduction();
         // These could be private but are public for testing
         bool rearrangeMatrix();
         void rearrangeColumns(zmatrix patternVersion, zmatrix caseVersion, int currentColumn);

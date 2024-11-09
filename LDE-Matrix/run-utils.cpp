@@ -139,7 +139,9 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
         std::cout << std::endl;
     }
 
-    int maxLDE = test.getMaxLDEValue();
+    // TODO - fix this so that it doesn't need to take a value but, instead, go through and attempt a reduction on any values
+    //  greater than 0;  Then, the full reduction logic should still be right.
+    /*int maxLDE = test.getMaxLDEValue();
     for (int i = maxLDE; i > 0; i--) {
         logOutput << "Doing an LDE reduction on values of " << i << std::endl;
         if (printDebug) {
@@ -154,6 +156,8 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
         }
         test.ldeReductionOnPattern(0);
     }
+    */
+   test.doLDEReduction();
 
     logOutput << std::endl;
     if (printDebug) {
@@ -184,6 +188,10 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
     }
     auto start_time = std::chrono::high_resolution_clock::now();
     // This generates all possible value patterns and stores them in the old encoding scheme
+    
+    // These need to STOP if it attempts to generate ALL patterns
+    // Also, find a way to check a possible pattern signature to see if it's already been done, like the case 2 groupings
+    
     if (o2Generate) {
         test.opt2GenerateAllPossibleValuePatterns();
     } else if (optimizedGenerate) {
