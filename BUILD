@@ -83,15 +83,15 @@ filegroup(
 
 filegroup(
         name = 'tfc-output',
-        srcs = glob(['tfc-output/**'])
+        srcs = glob(['tfc-output/**'], allow_empty=True)
 )
 
 filegroup(
         name = 'ming-output',
-        srcs = glob(['ming-output/**'])
+        srcs = glob(['ming-output/**'], allow_empty=True)
 )
 
 filegroup(
         name = 'user-output',
-        srcs = glob(['user-output/**'])
+        srcs = glob(['user-output/**'], allow_empty=True)
 )

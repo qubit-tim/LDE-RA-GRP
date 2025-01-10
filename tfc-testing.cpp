@@ -690,21 +690,23 @@ int main(int argc, char **argv) {
     // Use graphviz to output the final case / pattern map
 
     
+    /*
     int startNumber = std::stoi(argv[1]);
     int step = 10;
     bulkAllGateRun(startNumber, step);
     std::vector<int> patternList = {1,2,3,4,5,6,7,8};
+    */
     
-    /*
     //======================
     //  Do some map testing here (group by possible value matrix)
     //======================
-    int patternIDA = 93;
+    int patternIDA = 40;
     std::vector<std::string> tGatesA;
     tGatesA.push_back("xT12");
     //tGatesA.push_back("xT34");
     //runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate, bool o2Generate)
     runWithOptions(patternIDA, tGatesA, true, true, true, true, true);
+    /*
     int patternID = 880;
     std::vector<std::string> tGates;
     tGates.push_back("xT13");

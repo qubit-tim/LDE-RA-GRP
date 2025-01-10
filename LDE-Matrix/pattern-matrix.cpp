@@ -1369,10 +1369,12 @@ bool patternMatrix::allTGatesCase5() {
     // Columns
     tGateOperationSets.push_back({"xT12"});
     tGateOperationSets.push_back({"xT34"});
+    tGateOperationSets.push_back({"xT12", "xT34"});
     // Rows
     if (!isSymmetric()) {
         tGateOperationSets.push_back({"T12x"});
         tGateOperationSets.push_back({"T34x"});
+        tGateOperationSets.push_back({"T12x", "T34x"});
     }
     return true;
 }
@@ -1557,9 +1559,6 @@ void patternMatrix::doLDEReduction() {
     int targetLDE = getMaxLDEValue() - 2;
     for(int i = 0; i < rows; i++){
         for(int j = 0; j < cols; j++){
-            if(entryLDEs[i][j] == 0) {
-                continue;
-            }
             int ldeDecrease = -2;  // Assume we can reduce the LDEs by 2
             // Entry values vs possible LDE reductions
             // 0 -> {0,1} and k-1
@@ -1569,33 +1568,16 @@ void patternMatrix::doLDEReduction() {
                 ldeDecrease = -1;
             } else if (p.z[i][j] >= 2) {
                 ldeDecrease = 0;
-                return;  // LDE cannot be reduced
             }
             if (entryLDEs[i][j] + ldeDecrease > targetLDE) {
                 targetLDE = entryLDEs[i][j] + ldeDecrease;
             }
         }
     }
-    bool canFullyReduce = true;
     for(int i = 0; i < rows; i++){
         for(int j = 0; j < cols; j++){
-            if(entryLDEs[i][j] > 0) {
-                int reduction = targetLDE - entryLDEs[i][j];
-                ldeReductionOnEntry(i, j, reduction);
-                if (entryLDEs[i][j] != -1) {
-                    canFullyReduce = false;
-                }
-            }
-        }
-    }
-    if (canFullyReduce) {
-        for(int i = 0; i < rows; i++){
-            for(int j = 0; j < cols; j++){
-                if(entryLDEs[i][j] == 0) {
-                    int reduction = targetLDE - entryLDEs[i][j];
-                    ldeReductionOnEntry(i, j, reduction);
-                }
-            }
+            int reduction = targetLDE - entryLDEs[i][j];
+            ldeReductionOnEntry(i, j, reduction);
         }
     }
 }
