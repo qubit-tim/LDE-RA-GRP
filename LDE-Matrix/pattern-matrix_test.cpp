@@ -643,3 +643,7 @@ TEST(PatternMatrixTest,PatternMatrixIsOrthonormal) {
 TEST(PatternMatrixTest,PatternMatrixGenerateAllPossibleValuePatterns) {
     GTEST_SKIP() << "Not finished";
 }
+
+TEST(PatternMatrixTest,PatternMatrixDoLDEReduction) {
+    GTEST_SKIP() << "Not finished";
+}

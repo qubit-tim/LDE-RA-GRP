@@ -639,7 +639,24 @@ std::string patternMatrix::getMaxOfPossibleValues() {
     return maxValues;
 }
 
+bool patternMatrix::possibleValuesLeadToAllPatterns(){
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            if (possibleValues[i][j].size() != 4) return false;
+        }
+    }
+    return true;
+}
+
 void patternMatrix::generateAllPossibleValuePatterns() {
+    if (possibleValuesLeadToAllPatterns()) {
+        *debugOutput << "All possible values lead to all patterns" << std::endl;
+        for (int i = 1; i <= 928; i++) {
+            // Load all of the patterns into the allPossibleValuePatterns map
+            allPossibleValuePatterns[patternMatrix(i).toString()] = true;
+        }
+        return;
+    }
     // Need to iterate through all possible values and generate a unique pattern for each combination
     //  This pattern will be stored in allPossibleValuePatterns
     // This will be very similar to generating all possible patterns, so we can use that as a base
@@ -669,6 +686,14 @@ void patternMatrix::recursiveAllPossibleValueSet(int position, zmatrix z) {
 }
 
 void patternMatrix::optimizedGenerateAllPossibleValuePatterns() {
+    if (possibleValuesLeadToAllPatterns()) {
+        *debugOutput << "All possible values lead to all patterns" << std::endl;
+        for (int i = 1; i <= 928; i++) {
+            // Load all of the patterns into the allPossibleValuePatterns map
+            allPossibleValuePatterns[patternMatrix(i).toString()] = true;
+        }
+        return;
+    }
     // Need to iterate through all possible values and generate a unique pattern for each combination
     //  This pattern will be stored in allPossibleValuePatterns
     // This will be very similar to generating all possible patterns, so we can use that as a base
@@ -748,6 +773,14 @@ void patternMatrix::generateRowSet(int pvRow, int rsPos, std::vector<int> newRow
 
 // This version will create sets of rows that are normalized, check orthogonality, and then generate patterns
 void patternMatrix::opt2GenerateAllPossibleValuePatterns() {
+    if (possibleValuesLeadToAllPatterns()) {
+        *debugOutput << "All possible values lead to all patterns" << std::endl;
+        for (int i = 1; i <= 928; i++) {
+            // Load all of the patterns into the allPossibleValuePatterns map
+            allPossibleValuePatterns[patternMatrix(i).toString()] = true;
+        }
+        return;
+    }
     allPossibleValuePatterns.clear();
     if (printDebugInfo) {
         *debugOutput << "Normalized Rows:" << std::endl;
@@ -1336,10 +1369,12 @@ bool patternMatrix::allTGatesCase5() {
     // Columns
     tGateOperationSets.push_back({"xT12"});
     tGateOperationSets.push_back({"xT34"});
+    tGateOperationSets.push_back({"xT12", "xT34"});
     // Rows
     if (!isSymmetric()) {
         tGateOperationSets.push_back({"T12x"});
         tGateOperationSets.push_back({"T34x"});
+        tGateOperationSets.push_back({"T12x", "T34x"});
     }
     return true;
 }
@@ -1389,6 +1424,9 @@ bool patternMatrix::allTGatesCase8() {
         // We don't have a concrete set of operations for this yet, but I think it might be xT13, xT24
         //  Still going to return false until this is verified
         // tGateOperationSets.push_back({"xT13", "xT24"});
+        //============
+        //INSERT CODE HERE
+        //============
         return false;
     }
     return true;
@@ -1453,6 +1491,10 @@ void patternMatrix::ldeReductionOnEntry(int row, int col,  int ldeReduction) {
 // If ldeValue is negative, then we are reducing all LDEs
 //  Otherwise, we are only reducing the LDEs that match ldeValue
 void patternMatrix::ldeReductionOnPattern(int ldeValue) {
+    // This needs to be updated to take into account getting everyone to a common LDE after reduction
+    //  Example: if we can only reduce by 1 down to 0, then 0 -> {0,1} and 1 -> {2,3}
+    //  Gonna need to think on this becuase it should also include a full reduction
+    
     int ldeDecrease = -2;  // Assume we can reduce the LDEs by 2
     for(int i = 0; i < rows; i++){
         for(int j = 0; j < cols; j++){
@@ -1487,6 +1529,7 @@ void patternMatrix::ldeReductionOnPattern(int ldeValue) {
 //  There must be a -1 though, otherwise, it cannot be fully reduced
 // This is designed to be run after an LDE reduction on 1 values
 bool patternMatrix::canFullyReduceLDE() {
+    //FIX ME - This needs to take into account things that might be LDE 2 -> 0 and cannot be reduced anymore
     bool foundNegativeOne = false;
     for(int i = 0; i < rows; i++){
         for(int j = 0; j < cols; j++){
@@ -1510,6 +1553,33 @@ int patternMatrix::getMaxLDEValue() {
         }
     }
     return maxLDE;
+}
+
+void patternMatrix::doLDEReduction() {
+    int targetLDE = getMaxLDEValue() - 2;
+    for(int i = 0; i < rows; i++){
+        for(int j = 0; j < cols; j++){
+            int ldeDecrease = -2;  // Assume we can reduce the LDEs by 2
+            // Entry values vs possible LDE reductions
+            // 0 -> {0,1} and k-1
+            // 0 -> {0,1,2,3} and k-2
+            // 1 -> {2,3} and k
+            if (p.z[i][j] == 1) {
+                ldeDecrease = -1;
+            } else if (p.z[i][j] >= 2) {
+                ldeDecrease = 0;
+            }
+            if (entryLDEs[i][j] + ldeDecrease > targetLDE) {
+                targetLDE = entryLDEs[i][j] + ldeDecrease;
+            }
+        }
+    }
+    for(int i = 0; i < rows; i++){
+        for(int j = 0; j < cols; j++){
+            int reduction = targetLDE - entryLDEs[i][j];
+            ldeReductionOnEntry(i, j, reduction);
+        }
+    }
 }
 
 // ====== MULTIPLICATION BY T-GATES ======
