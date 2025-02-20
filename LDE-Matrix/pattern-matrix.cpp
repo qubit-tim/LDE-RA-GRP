@@ -1405,32 +1405,46 @@ bool patternMatrix::allTGatesCase7() {
 }
 
 bool patternMatrix::allTGatesCase8() {
-    return false; // check for symmetric patterns, if they are, then xT12 == T12x
-    bool optionsFound = false;
-    // M881 : xT13, xT24 followed by T35x, T46x.
-    // M885 : xT13, xT24 followed by T36X, T45X.
-    // M926 : xT13, xT24 followed by T35x, T46x.
-    // 8: V11, V12 have the same parity -> right T(1,2) T(3,4) T(5,6)
-    if (p.z[0][0] % 2 == p.z[0][1] % 2) {
-        tGateOperationSets.push_back({"xT12", "xT34", "xT56"});
-        optionsFound = true;
-    }
-    // 8: V11, V21 have the same parity -> left T(1,2) T(3,4) T(5,6)
-    if (!isSymmetric()) {
-        if (p.z[0][0] % 2 != p.z[1][0] % 2) {
-            tGateOperationSets.push_back({"T12x", "T34x", "T56x"});
-            optionsFound = true;
-        }
-    }
-    // 8: V11, V12 have different parity and V11, V21 have different parity
-    if (!optionsFound) {
-        // We don't have a concrete set of operations for this yet, but I think it might be xT13, xT24
-        //  Still going to return false until this is verified
-        // tGateOperationSets.push_back({"xT13", "xT24"});
-        //============
-        //INSERT CODE HERE
-        //============
-        return false;
+    // Using the id to determine what to do with individual case 8b's
+    //   and assume that anything left over is case 8a
+    switch (id)
+    {
+        case 880: // M880 : xT13, xT24 followed by T35x, T46x.
+            tGateOperationSets.push_back({"xT13", "xT24", "T35x", "T46x"});
+            break;
+        case 881: // M881 : xT13, xT24 followed by T35x, T46x.
+            tGateOperationSets.push_back({"xT13", "xT24", "T35x", "T46x"});
+            break;
+        case 882: // M882 : xT13, xT24 followed by T35x, T46x.
+            tGateOperationSets.push_back({"xT13", "xT24", "T35x", "T46x"});
+            break;
+        case 883: // M883 : xT13, xT24 followed by T35x, T46x.
+            tGateOperationSets.push_back({"xT13", "xT24", "T35x", "T46x"});
+            break;
+        case 884: // M884 : xT13, xT24 followed by T36x, T45x.
+            tGateOperationSets.push_back({"xT13", "xT24", "T36x", "T45x"});
+            break;
+        case 885: // M885 : xT13, xT24 followed by T36X, T45X.
+            tGateOperationSets.push_back({"xT13", "xT24", "T36x", "T45x"});
+            break;
+        case 926: // M926 : xT13, xT24 followed by T35x, T46x.
+            tGateOperationSets.push_back({"xT13", "xT24", "T35x", "T46x"});
+            break;
+        case 927: // M927 : xT13, xT24 followed by T35x, T46x.
+            tGateOperationSets.push_back({"xT13", "xT24", "T35x", "T46x"});
+            break;
+        default:  // Assuming that we only have case 8a left
+            // 8: V11, V12 have the same parity -> right T(1,2) T(3,4) T(5,6)
+            if (p.z[0][0] % 2 == p.z[0][1] % 2) {
+                tGateOperationSets.push_back({"xT12", "xT34", "xT56"});
+            }
+            // 8: V11, V21 have the same parity -> left T(1,2) T(3,4) T(5,6)
+            if (!isSymmetric()) {
+                if (p.z[0][0] % 2 != p.z[1][0] % 2) {
+                    tGateOperationSets.push_back({"T12x", "T34x", "T56x"});
+                }
+            }
+            break;
     }
     return true;
 }

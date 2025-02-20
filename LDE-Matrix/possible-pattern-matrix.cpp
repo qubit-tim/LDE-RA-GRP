@@ -17,9 +17,14 @@ possiblePatternMatrix::possiblePatternMatrix() {
 possiblePatternMatrix::possiblePatternMatrix(int idNum, std::string matrix, bool newEncoding) {
     init();
     id = idNum;
-    // Ok, going to stick with the old encoding for now to match the pattern matrix implementation
-    if (newEncoding) {
-        for(int i = 0; i < matrix.size(); i++) {
+    bool replaceComma = true;
+    originalMatrix = matrix; // This is the original matrix string
+    for(int i = 0; i < matrix.size(); i++) {
+        if (matrix[i] == '{') replaceComma = false;
+        if (matrix[i] == '}') replaceComma = true;
+        if (replaceComma && matrix[i] == ',') matrix[i] = ';';
+        // Ok, going to stick with the old encoding for now to match the pattern matrix implementation
+        if (newEncoding) {
             if (matrix[i] == '0') matrix[i] = '0';
             else if (matrix[i] == '1') matrix[i] = '2';
             else if (matrix[i] == '2') matrix[i] = '1';
@@ -48,16 +53,16 @@ void possiblePatternMatrix::loadFromString(std::string m) {
         std::string v;
         int mv;
         int col = 0;
-        while(std::getline(rs, v, ',')) {
+        while(std::getline(rs, v, ';')) {
             if(col == cols) throw std::runtime_error("Too many columns in pattern string");
             if(v[0] == '[') v.erase(0,1);
             
             // NOTE - I'm sticking with the OLD encoding for storage to mirror the pattern matrix
             //    The difference would be that the new encoding would swap 1 and 2
-            if(v == "0") mv = 0;
-            else if (v == "1") mv = 1;
-            else if (v == "2") mv = 2;
-            else if (v == "3") mv = 3;
+            if(v == "{0}") mv = 0;
+            else if (v == "{1}") mv = 1;
+            else if (v == "{2}") mv = 2;
+            else if (v == "{3}") mv = 3;
             // These would be the new encoding: {0,2}, {1,3}, {0,2,1,3}
             // This is the old encoding which is what we are using for now: {0,1}, {2,3}, {0,1,2,3}
             else if (v == "{0,1}") mv = 4;
@@ -129,6 +134,39 @@ void possiblePatternMatrix::updatePairCounts() {
             colPairCountsTotals[colPairCounts[i][j]]++;
         }
     }
+}
+
+std::vector<std::vector<std::vector<int>>> possiblePatternMatrix::getPossibleValues() {
+    std::vector<std::vector<std::vector<int>>> possibleValues;
+    for (int i = 0; i < rows; i++) {
+        std::vector<std::vector<int>> rowValues;
+        for (int j = 0; j < cols; j++) {
+            std::vector<int> values;
+            if (pp.z[i][j] == 0) {
+                values.push_back(0);
+            } else if (pp.z[i][j] == 1) {
+                values.push_back(1);
+            } else if (pp.z[i][j] == 2) {
+                values.push_back(2);
+            } else if (pp.z[i][j] == 3) {
+                values.push_back(3);
+            } else if (pp.z[i][j] == 4) {
+                values.push_back(0);
+                values.push_back(1);
+            } else if (pp.z[i][j] == 5) {
+                values.push_back(2);
+                values.push_back(3);
+            } else if (pp.z[i][j] == 6) {
+                values.push_back(0);
+                values.push_back(1);
+                values.push_back(2);
+                values.push_back(3);
+            }
+            rowValues.push_back(values);
+        }
+        possibleValues.push_back(rowValues);
+    }
+    return possibleValues;
 }
 
 bool possiblePatternMatrix::isDuplicate(possiblePatternMatrix other) {
@@ -225,25 +263,52 @@ void possiblePatternMatrix::printDebug(std::ostream& os) {
 std::ostream& operator<<(std::ostream &os,const possiblePatternMatrix &ppm) {
     if (ppm.printID) {
         os << ppm.id;
+        if (ppm.multilineOutput) os << std::endl;
+        else os << " ";
     }
-    if (ppm.multilineOutput) {
-        if (ppm.printID) os << std::endl;
-        if (ppm.printOldEncoding) {
-            zmatrix temp = ppm.pp;
-            temp.multilineOutput = true;
-            os << temp;
-        } else {
-            zmatrix temp = ppm.ppNewEncoding;
-            temp.multilineOutput = true;
-            os << temp;
+    for (int i = 0; i < ppm.rows; i++) {
+        os << "[";
+        for (int j = 0; j < ppm.cols; j++) {
+            int val = ppm.pp.z[i][j];
+            if (ppm.printOldEncoding) {
+                if (val == 0) os << "{0}";
+                else if (val == 1) os << "{1}";
+                else if (val == 2) os << "{2}";
+                else if (val == 3) os << "{3}";
+                else if (val == 4) os << "{0,1}";
+                else if (val == 5) os << "{2,3}";
+                else if (val == 6) os << "{0,1,2,3}";
+            } else {
+                if (val == 0) os << "{0}";
+                else if (val == 1) os << "{2}";
+                else if (val == 2) os << "{1}";
+                else if (val == 3) os << "{3}";
+                else if (val == 4) os << "{0,2}";
+                else if (val == 5) os << "{1,3}";
+                else if (val == 6) os << "{0,2,1,3}";
+            }            
+            if (j != ppm.cols-1) os << ",";
         }
-    } else {
-        if (ppm.printID) os << " ";
-        if (ppm.printOldEncoding) {
-            os << ppm.pp;
-        } else {
-            os << ppm.ppNewEncoding;
+        os << "]";
+        if (ppm.multilineOutput) os << std::endl;
+    }
+    if (ppm.printOrigins && ppm.origins.size() > 0) {
+        os << " Origins: ";
+        for (int i = 0; i < ppm.origins.size(); i++) {
+            os << ppm.origins[i];
+            if (i != ppm.origins.size()-1) os << ", ";
         }
+        if (ppm.multilineOutput) os << std::endl;
+        else os << " ";
+    }
+    if (ppm.printLeadsToPatternIDs && ppm.leadsToPatternIDs.size() > 0) {
+        os << " Leads to Pattern IDs: ";
+        for (int i = 0; i < ppm.leadsToPatternIDs.size(); i++) {
+            os << ppm.leadsToPatternIDs[i];
+            if (i != ppm.leadsToPatternIDs.size()-1) os << ", ";
+        }
+        if (ppm.multilineOutput) os << std::endl;
+        else os << " ";
     }
     return os;
 }

@@ -45,6 +45,8 @@ cc_binary(
     deps = [
         "//LDE-Matrix:pattern-matrix",
         "//LDE-Matrix:pattern-deduper",
+        "//LDE-Matrix:possible-pattern-matrix",
+        "//LDE-Matrix:possible-pattern-deduper",
         "//LDE-Matrix:lde-matrix-run-utils",
     ],
     data = [

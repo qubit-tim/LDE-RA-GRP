@@ -15,7 +15,8 @@ class possiblePatternDeduper {
     public:
         possiblePatternDeduper();
         bool isDuplicate(possiblePatternMatrix, int &, bool);
-        int getUniqueCaseCount(int);
+        std::vector<possiblePatternMatrix> getUniquePossiblePatterns();
+        void printUniquePossiblePatterns(std::ostream& os);
 
     private:
         void loadPossiblePatterns();
