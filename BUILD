@@ -40,6 +40,21 @@ cc_binary(
 )
 
 cc_binary(
+    name = "lde-tfc-single-testing",
+    srcs = ["tfc-single-testing.cpp"],
+    deps = [
+        "//LDE-Matrix:pattern-matrix",
+        "//LDE-Matrix:pattern-deduper",
+        "//LDE-Matrix:lde-matrix-run-utils",
+    ],
+    data = [
+        ":patterns",
+        ":tfc-output",
+        ":user-output",
+    ],
+)
+
+cc_binary(
     name = "lde-pattern-generator",
     srcs = ["pattern-generator.cpp"],
     deps = [

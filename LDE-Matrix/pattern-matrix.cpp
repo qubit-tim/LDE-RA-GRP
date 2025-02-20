@@ -481,17 +481,17 @@ bool patternMatrix::is23SwapT(patternMatrix other) {
 }
 
 void patternMatrix::printDebug(std::ostream& os) {
-    std::cout << "Pattern Number: " << id << std::endl;
-    std::cout << "Matched Case Number: " << caseMatch << std::endl;
-    std::cout << "Pattern Matrix Debug:" << std::endl;
+    os << "Pattern Number: " << id << std::endl;
+    os << "Matched Case Number: " << caseMatch << std::endl;
+    os << "Pattern Matrix Debug:" << std::endl;
     p.printDebug(os);
-    std::cout << "Transposed Pattern Matrix Debug:" << std::endl;
+    os << "Transposed Pattern Matrix Debug:" << std::endl;
     pT.printDebug(os);
-    std::cout << "Swapped 2s and 3s Pattern Matrix Debug:" << std::endl;
+    os << "Swapped 2s and 3s Pattern Matrix Debug:" << std::endl;
     swap23.printDebug(os);
-    std::cout << "Case Style Pattern Matrix Debug:" << std::endl;
+    os << "Case Style Pattern Matrix Debug:" << std::endl;
     cV.printDebug(os);
-    std::cout << "Transposed Case Style Pattern Matrix Debug:" << std::endl;
+    os << "Transposed Case Style Pattern Matrix Debug:" << std::endl;
     cVT.printDebug(os);
 }
 
@@ -1407,6 +1407,9 @@ bool patternMatrix::allTGatesCase7() {
 bool patternMatrix::allTGatesCase8() {
     return false; // check for symmetric patterns, if they are, then xT12 == T12x
     bool optionsFound = false;
+    // M881 : xT13, xT24 followed by T35x, T46x.
+    // M885 : xT13, xT24 followed by T36X, T45X.
+    // M926 : xT13, xT24 followed by T35x, T46x.
     // 8: V11, V12 have the same parity -> right T(1,2) T(3,4) T(5,6)
     if (p.z[0][0] % 2 == p.z[0][1] % 2) {
         tGateOperationSets.push_back({"xT12", "xT34", "xT56"});

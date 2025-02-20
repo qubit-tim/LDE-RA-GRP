@@ -46,7 +46,7 @@ bool validTGateOps(std::vector<std::string> tGateOps) {
     return true;
 }
 
-void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate, bool o2Generate) {
+void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate, bool o2Generate, bool onlyPossiblePatterns) {
     // Limit this to 3 T Gate Ops per side (3x left and 3x right but not more)
     /*
     if (tGateOps.size() < 0 || tGateOps.size() > 4) {
@@ -182,6 +182,15 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
         std::cout << "Max of possible values: " << test.getMaxOfPossibleValues() << std::endl;
     }
 
+    if (onlyPossiblePatterns) {
+        logOutput.close();
+        humanOutput.close();
+        if (printDebug) {
+            std::cout << "Done" << std::endl << std::endl;
+        }
+        return;
+    }
+
     logOutput << "Starting to generate all possible patterns" << std::endl;
     if (printDebug) {
         std::cout << "Starting to generate all possible patterns" << std::endl;
@@ -285,18 +294,30 @@ void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug
 }
 
 void silentRun(int pNum, std::vector<std::string> tGateOps) {
-    runWithOptions(pNum, tGateOps, false, false, true, true, true);
+    runWithOptions(pNum, tGateOps, false, false, true, true, true, false);
 }
 
 void standardRun(int pNum, std::vector<std::string> tGateOps) {
-    runWithOptions(pNum, tGateOps, true, false, true, true, true);
+    runWithOptions(pNum, tGateOps, true, false, true, true, true, false);
 }
 
 void fullDebugRun(int pNum, std::vector<std::string> tGateOps) {
-    runWithOptions(pNum, tGateOps, true, true, true, true, true);
+    runWithOptions(pNum, tGateOps, true, true, true, true, true, false);
 }
 
-void allGateRunWithOptions(int pNum, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate, bool o2Generate) {
+void silentPossiblePatternRun(int pNum, std::vector<std::string> tGateOps) {
+    runWithOptions(pNum, tGateOps, false, false, true, true, true, true);
+}
+
+void standardPossiblePatternRun(int pNum, std::vector<std::string> tGateOps) {
+    runWithOptions(pNum, tGateOps, true, false, true, true, true, true);
+}
+
+void fullDebugPossiblePatternRun(int pNum, std::vector<std::string> tGateOps) {
+    runWithOptions(pNum, tGateOps, true, true, true, true, true, true);
+}
+
+void allGateRunWithOptions(int pNum, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate, bool o2Generate, bool onlyPossiblePatterns) {
     patternMatrix test = patternMatrix(pNum);
     std::cout << std::endl << "=============================================" << std::endl;
     if (test.findAllTGateOptions()) {
@@ -307,7 +328,7 @@ void allGateRunWithOptions(int pNum, bool printDebug, bool patternDebug, bool fu
                 std::cout << tGateOp << " ";
             }
             std::cout << std::endl << std::endl;
-            runWithOptions(pNum, tGateOps, printDebug, patternDebug, fullReduction, optimizedGenerate, o2Generate);
+            runWithOptions(pNum, tGateOps, printDebug, patternDebug, fullReduction, optimizedGenerate, o2Generate, onlyPossiblePatterns);
         }
     } else {
         std::string fileNameBase = "/p" + std::to_string(pNum) + "-" + "no-t-gate-options-";
@@ -334,13 +355,25 @@ void allGateRunWithOptions(int pNum, bool printDebug, bool patternDebug, bool fu
 }
 
 void silentAllGateRun(int pNum) {
-    allGateRunWithOptions(pNum, false, false, true, true, true);
+    allGateRunWithOptions(pNum, false, false, true, true, true, false);
 }
 
 void standardAllGateRun(int pNum) {
-    allGateRunWithOptions(pNum, true, false, true, true, true);
+    allGateRunWithOptions(pNum, true, false, true, true, true, false);
 }
 
 void allGateRunWithDebug(int pNum) {
-    allGateRunWithOptions(pNum, true, true, true, true, true);
+    allGateRunWithOptions(pNum, true, true, true, true, true, false);
+}
+
+void silentPossiblePatternAllGateRun(int pNum) {
+    allGateRunWithOptions(pNum, false, false, true, true, true, true);
+}
+
+void standardPossiblePatternAllGateRun(int pNum) {
+    allGateRunWithOptions(pNum, true, false, true, true, true, true);
+}
+
+void debugPossiblePatternAllGateRun(int pNum) {
+    allGateRunWithOptions(pNum, true, true, true, true, true, true);
 }
