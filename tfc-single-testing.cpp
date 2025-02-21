@@ -165,7 +165,7 @@ void dedupPossiblePatternAllGatesRun() {
             std::cout << ppm << " leads to all patterns" << std::endl;
             ppLogOutput << ppm << " leads to all patterns" << std::endl;
             for (int i = 1; i <= 928; i++) {
-                ppm.leadsToPatternIDs.push_back(i);
+                ppm.leadsToPatternIDs[i] = true;
             }
             continue;   
         }
@@ -174,7 +174,7 @@ void dedupPossiblePatternAllGatesRun() {
         if (pm.allPossibleValuePatterns.size() == 0) {
             std::cout << ppm.id << " leads to no valid patterns" << std::endl;
             ppLogOutput << ppm.id << " leads to no valid patterns" << std::endl;
-            ppm.leadsToPatternIDs.push_back(-1);
+            ppm.leadsToPatternIDs[-1] = true;
             continue;
         }
         for (auto pm : pm.allPossibleValuePatterns) {
@@ -184,7 +184,7 @@ void dedupPossiblePatternAllGatesRun() {
             if (pd.isDuplicate(pmCopy, duplicateID, true)) {
                 std::cout << pmCopy.id << " is a duplicate of " << duplicateID << std::endl;
                 ppLogOutput << pmCopy.id << " is a duplicate of " << duplicateID << std::endl;
-                ppm.leadsToPatternIDs.push_back(duplicateID);
+                ppm.leadsToPatternIDs[duplicateID] = true;
             } else { // This shouldn't happen and if it does, we need to stop
                 std::cout << pmCopy.id << " is a unique pattern, aborting!" << std::endl;
                 ppLogOutput << pmCopy.id << " is a unique pattern, aborting!" << std::endl;
@@ -192,7 +192,7 @@ void dedupPossiblePatternAllGatesRun() {
                 return;
             }
         }
-        std::cout << ppm << std::endl;
+        std::cout << "Done with " << ppm << std::endl << std::endl;
     }
     std::cout << "Printing out all unique possible patterns." << std::endl;
     std::cout << "Unique possible patterns count: " << uniquePossiblePatterns.size() << std::endl;

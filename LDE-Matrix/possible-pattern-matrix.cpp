@@ -303,10 +303,20 @@ std::ostream& operator<<(std::ostream &os,const possiblePatternMatrix &ppm) {
     }
     if (ppm.printLeadsToPatternIDs && ppm.leadsToPatternIDs.size() > 0) {
         os << " Leads to Pattern IDs: ";
-        for (int i = 0; i < ppm.leadsToPatternIDs.size(); i++) {
-            os << ppm.leadsToPatternIDs[i];
-            if (i != ppm.leadsToPatternIDs.size()-1) os << ", ";
+        std::string leadsToString = "";
+        std::map<int, bool> sortedLeadsTo;
+        for (auto const& [id, leadsTo] : ppm.leadsToPatternIDs) {
+            sortedLeadsTo[id] = leadsTo;   
         }
+        for (auto const& [id, leadsTo] : sortedLeadsTo) {
+            if (leadsTo) {
+                leadsToString += std::to_string(id) + ",";
+            }
+        }
+        if (leadsToString.size() > 0) {
+            leadsToString.pop_back();
+        }
+        os << leadsToString;
         if (ppm.multilineOutput) os << std::endl;
         else os << " ";
     }
