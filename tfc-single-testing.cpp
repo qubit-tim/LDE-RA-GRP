@@ -143,7 +143,7 @@ void dedupPossiblePatternAllGatesRun() {
                 int duplicateID = -1;
                 std::cout << "Checking for possible pattern duplicates on " << ppmTest << std::endl;
                 ppd.isDuplicate(ppmTest,duplicateID,true);
-                if (duplicateID != -1) {
+                if (duplicateID != 0) {
                     ppLogOutput << "Duplicate possible pattern found.  Original ID: " << duplicateID << "; Duplicate: " << ppmTest << std::endl;
                 } else {
                     ppLogOutput << "New possible pattern found: " << ppmTest << std::endl;
@@ -153,6 +153,19 @@ void dedupPossiblePatternAllGatesRun() {
         }
     }
     std::cout << "Done with all patterns and tGate combinations." << std::endl;
+    std::cout << "Printing out all unique possible patterns." << std::endl;
+    std::cout << "Unique possible patterns count: " << ppd.getUniquePossiblePatterns().size() << std::endl;
+    ppLogOutput << "Unique possible patterns count: " << ppd.getUniquePossiblePatterns().size() << std::endl;
+    ppHumanOutput << "Unique possible patterns count: " << ppd.getUniquePossiblePatterns().size() << std::endl;
+    std::cout << "Unique possible patterns: " << std::endl;
+    ppLogOutput << "Unique possible patterns: " << std::endl;
+    ppHumanOutput << "Unique possible patterns: " << std::endl;
+    for (auto & ppm : ppd.getUniquePossiblePatterns()) {
+        ppm.printID = true;
+        std::cout << ppm << std::endl;
+        ppLogOutput << ppm << std::endl;
+        ppHumanOutput << ppm << std::endl;
+    }
     std::cout << "Attempting to generate all possible patterns." << std::endl;
     std::vector<possiblePatternMatrix> uniquePossiblePatterns = ppd.getUniquePossiblePatterns();
     patternDeduper pd = patternDeduper();
