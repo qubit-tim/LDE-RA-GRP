@@ -686,7 +686,7 @@ void case2RunFull(int position, int step) {
 }
 
 int main(int argc, char **argv) {
-
+    
     // Use graphviz to output the final case / pattern map
 
     
@@ -700,12 +700,12 @@ int main(int argc, char **argv) {
     //======================
     //  Do some map testing here (group by possible value matrix)
     //======================
-    int patternIDA = 40;
-    std::vector<std::string> tGatesA;
-    tGatesA.push_back("xT12");
+    //int patternIDA = 40;
+    //std::vector<std::string> tGatesA;
+    //tGatesA.push_back("xT12");
     //tGatesA.push_back("xT34");
     //void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate, bool o2Generate, bool onlyPossiblePatterns) {
-    runWithOptions(patternIDA, tGatesA, true, true, true, true, true, true);
+    //runWithOptions(patternIDA, tGatesA, true, true, true, true, true, true);
     //standardAllGateRun(patternIDA);
     /*
     int patternID = 880;

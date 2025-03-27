@@ -1661,7 +1661,8 @@ void patternMatrix::loadCases() {
 //  it might be betteer to have a function for toStringOldEncoding and toStringNewEncoding
 std::string patternMatrix::toString() {
     std::ostringstream os;
-    os << p;
+    if(printOldEncoding) os << p;
+    else os << pNewEncoding;
     return os.str();
 }
 

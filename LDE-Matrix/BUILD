@@ -36,6 +36,7 @@ cc_test(
     deps = [
         "@googletest//:gtest_main",
         ":case-matrix",
+        ":lde-matrix-test-utils",
     ],
 )
 
@@ -76,6 +77,18 @@ cc_test(
     deps = [
       "@googletest//:gtest_main",
       ":pattern-matrix",
+      ":lde-matrix-test-utils",
+    ],
+)
+
+cc_test(
+    name = "pattern-matrix_test-tgates",
+    size = "large",
+    srcs = ["pattern-matrix_test-tgates.cpp"],
+    deps = [
+      "@googletest//:gtest_main",
+      ":pattern-matrix",
+      ":lde-matrix-test-utils",
     ],
 )
 
