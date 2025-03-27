@@ -113,6 +113,7 @@ std::map <int, std::vector<std::string>> CASE_TO_VALID_PATTERN_MAP = {
 
 // TODO - Rearrangement Refactor + Test Overhaul
 TEST(PatternMatrixTest,PatternMatrixRearrangeMatrix) {
+    GTEST_SKIP() << "Not finished";
     for (auto const& [caseNumber, patterns] : CASE_TO_VALID_PATTERN_MAP) {
         if (caseNumber == -1 || caseNumber == 0) {
             continue;

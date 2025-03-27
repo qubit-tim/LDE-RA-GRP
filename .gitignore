@@ -88,6 +88,9 @@ MODULE.bazel.lock
 # Ignore local temp directory
 /temp/
 
+# Ignore coverage reports
+coverage/
+
 # Ignore user output
 user-output/
 tfc-output/

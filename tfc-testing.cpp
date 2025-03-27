@@ -3,7 +3,6 @@
 #include <chrono>
 #include <iostream>
 #include <fstream>
-#include <string>
 #include <vector>
 #include <sstream>
 #include <filesystem>
@@ -11,11 +10,12 @@
 #include <regex>
 #include <future>
 
+#include "LDE-Matrix/run-utils.hpp"
 #include "LDE-Matrix/pattern-matrix.hpp"
 #include "LDE-Matrix/zmatrix.hpp"
 #include "LDE-Matrix/data/patterns928.hpp"
 #include "LDE-Matrix/pattern-deduper.hpp"
-#include "LDE-Matrix/run-utils.hpp"
+
 
 std::string TFC_OUT_DIR = "user-output";
 
@@ -704,8 +704,9 @@ int main(int argc, char **argv) {
     std::vector<std::string> tGatesA;
     tGatesA.push_back("xT12");
     //tGatesA.push_back("xT34");
-    //runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate, bool o2Generate)
-    runWithOptions(patternIDA, tGatesA, true, true, true, true, true);
+    //void runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate, bool o2Generate, bool onlyPossiblePatterns) {
+    runWithOptions(patternIDA, tGatesA, true, true, true, true, true, true);
+    //standardAllGateRun(patternIDA);
     /*
     int patternID = 880;
     std::vector<std::string> tGates;
@@ -715,7 +716,7 @@ int main(int argc, char **argv) {
     tGates.push_back("T46x");
     //runWithOptions(int pNum, std::vector<std::string> tGateOps, bool printDebug, bool patternDebug, bool fullReduction, bool optimizedGenerate, bool o2Generate)
     //runWithOptions(patternID, tGates, true, true, true, true, true);
-    runWithOptions(patternID, tGates, true, true, false, true, true);
+    //runWithOptions(patternID, tGates, true, true, false, true, true);
     //standardRun(patternID, tGates);
     */
 

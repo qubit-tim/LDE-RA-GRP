@@ -1,3 +1,8 @@
+#include "pattern-matrix.hpp"
+#include "zmatrix.hpp"
+
+#include <gtest/gtest.h>
+
 /*  Here, we can take case 2, apply T gates, generate the possible value patterns, and see where they go.
   They should all into the following groups and will be useful for testing case transitions and LDE reductions
 group 1: (lead to entire case 2) 3, 4, 5, 6
@@ -8,3 +13,4 @@ group 6: (lead to entire case 6) 95,96,98,365,366,368
 group 7: (lead to entire case 6) 48,49,50,55,72,73
 group 8: (lead to entire case 8) 190,191,192,194,197,198
 */
+

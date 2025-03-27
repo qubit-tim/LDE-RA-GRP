@@ -647,3 +647,97 @@ TEST(PatternMatrixTest,PatternMatrixGenerateAllPossibleValuePatterns) {
 TEST(PatternMatrixTest,PatternMatrixDoLDEReduction) {
     GTEST_SKIP() << "Not finished";
 }
+
+/*
+Check these off based on test status
+void loadFromString(std::string m);
+void updatePairCounts();
+// Case Matching Functions
+void matchOnCases();
+bool matchesCase(int caseIndex);
+bool determineSubCase();
+bool case1SubCaseMatch();
+bool case2SubCaseMatch();
+bool case3SubCaseMatch();
+bool case3aSubCaseCheck();
+bool case3bSubCaseCheck();
+bool case3cSubCaseCheck();
+bool case4SubCaseMatch();
+bool case5SubCaseMatch();
+bool case6SubCaseMatch();
+bool case7SubCaseMatch();
+bool case8SubCaseMatch();
+std::string getFirstCaseRearrangement();
+
+// Duplicate Pattern Checks
+bool isDuplicate(patternMatrix other);
+bool isTranspose(patternMatrix other);
+bool is23Swap(patternMatrix other);
+bool is23SwapT(patternMatrix other);
+// Extra Printing Functions
+void printDebug(std::ostream& os);
+void printLDEs(std::ostream& os);
+std::string rowPossibleValueToString(int row);
+void printPossibleValues(std::ostream& os);
+void printPairCounts(std::ostream& os);
+void printRowPairCounts(std::ostream& os);
+void printColPairCounts(std::ostream& os);
+void printCounts(std::ostream& os);
+void printRowCounts(std::ostream& os);
+void printColCounts(std::ostream& os);
+void printCountRows(std::ostream& os);
+void printCountCols(std::ostream& os);
+// Get a list of T-Gate operations applied
+std::string printTGateOperations();
+std::string getMaxOfPossibleValues();
+bool possibleValuesLeadToAllPatterns();
+void generateAllPossibleValuePatterns();
+void optimizedGenerateAllPossibleValuePatterns();
+void generateRowSet(int pvRow, int rsPos, std::vector<int> newRow, int pos);
+void opt2GenerateAllPossibleValuePatterns();
+void recursiveRowSetPatternGeneration(int curRow, std::vector<std::string> rowSelections);
+void recursiveAllPossibleValueSet(int position, zmatrix z);
+void optimizedAllPossibleValuePatterns(int position, zmatrix z);
+// T-Gate Multiplication Functions
+void leftTGateMultiply(int p, int q);
+void rightTGateMultiply(int p, int q);
+int patternElementAddition(int a, int b);
+bool findOptimalTGateOperations();
+bool optimalTGatesCase1();
+bool optimalTGatesCase2();
+bool optimalTGatesCase3();
+bool optimalTGatesCase4();
+bool optimalTGatesCase5();
+bool optimalTGatesCase6();
+bool optimalTGatesCase7();
+bool optimalTGatesCase8();
+bool findAllTGateOptions();
+bool allTGatesCase1();
+bool allTGatesCase2();
+bool allTGatesCase3();
+bool allTGatesCase4();
+bool allTGatesCase5();
+bool allTGatesCase6();
+bool allTGatesCase7();
+bool allTGatesCase8();
+// LDE Reduction Functions
+void ldeReductionOnEntry(int row, int col, int ldeReduction);
+void ldeReductionOnEntryToTarget(int row, int col, int ldeReduction, int target);
+void ldeReductionOnPattern(int ldeValue);
+bool canFullyReduceLDE();  // This will check if the LDE can be fully reduced for the whole pattern
+int getMaxLDEValue();
+void doLDEReduction();
+// These could be private but are public for testing
+bool rearrangeMatrix();
+void rearrangeColumns(zmatrix patternVersion, zmatrix caseVersion, int currentColumn);
+void rearrangeRows(zmatrix patternVersion, zmatrix caseVersion, int currentRow);
+std::string toString();
+// TODO: Add a csv output for the pattern matrix
+bool isSymmetric();
+bool isNormalized();
+bool isOrthogonal();
+bool isRowNormalized(int row, zmatrix z);
+bool isRowNormalized(std::vector<int> row);
+bool areRowsOrthogonal(int row1, int row2, zmatrix z);
+bool areRowsOrthogonal(std::vector<int> row1, std::vector<int> row2);
+*/

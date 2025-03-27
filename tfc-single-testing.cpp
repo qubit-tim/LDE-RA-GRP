@@ -49,10 +49,11 @@ void dedupPossiblePatternAllGatesRun() {
     }
 
     for (int i = 1; i <= 928; i++) {
-        patternMatrix test = patternMatrix(i);
-        if (test.findAllTGateOptions()) {
+        patternMatrix getGates = patternMatrix(i);
+        if (getGates.findAllTGateOptions()) {
             std::cout << "Found T-Gate options for pattern " << i << std::endl;
-            for (auto tGateOps : test.tGateOperationSets) {
+            for (auto tGateOps : getGates.tGateOperationSets) {
+                patternMatrix test = patternMatrix(i);
                 std::cout << "Running pattern " << i << " with T-Gate options: ";
                 for (auto tGateOp : tGateOps) {
                     std::cout << tGateOp << " ";
