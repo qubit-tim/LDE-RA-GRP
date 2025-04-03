@@ -688,8 +688,6 @@ void case2RunFull(int position, int step) {
 int main(int argc, char **argv) {
     
     // Use graphviz to output the final case / pattern map
-
-    
     /*
     int startNumber = std::stoi(argv[1]);
     int step = 10;

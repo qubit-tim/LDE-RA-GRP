@@ -1,0 +1,1 @@
+genhtml --branch-coverage --output coverage/ /private/var/tmp/_bazel_tfc/586bd1fbe7df8855aee1ca7008eb21ed/execroot/_main/bazel-out/_coverage/_coverage_report.dat --ignore-errors inconsistent

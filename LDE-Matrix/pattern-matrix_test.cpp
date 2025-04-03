@@ -8,6 +8,7 @@ std::string TOO_FEW_ROWS = "[0 0,0 0,0 0,0 0,0 0,0 0]";
 std::string TOO_FEW_COLUMNS = "[0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0]";
 std::string VALID_BINARY_PATTERN = "[0 0,0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0,0 0][0 1,0 1,0 1,0 1,0 1,0 1][1 0,1 0,1 0,1 0,1 0,1 0][1 1,1 1,1 1,1 1,1 1,1 1]";
 std::string VALID_BINARY_PATTERN_IN_NUMERICAL_FORM = "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][1,1,1,1,1,1][2,2,2,2,2,2][3,3,3,3,3,3]";
+std::string VALID_BINARY_PATTERN_IN_NUMERICAL_FORM_NEW_ENCODING = "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][2,2,2,2,2,2][1,1,1,1,1,1][3,3,3,3,3,3]";
 std::string VALID_NUMERICAL_PATTERN = "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][1,1,1,1,1,1][2,2,2,2,2,2][3,3,3,3,3,3]";
 std::string ALL_ZEROS_PATTERN = "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]";
 
@@ -307,6 +308,7 @@ TEST(PatternMatrixTest, PatternMatrixLoadFromString) {
 //  I found that possible values wasn't but has been fixed so there might be more issues
 TEST(PatternMatrixTest, PatternMatrixLoadFrom928Pattern) {
     patternMatrix pm = patternMatrix(1);
+    pm.printOldEncoding = false;
     EXPECT_EQ(pm.id, 1);
     EXPECT_EQ(pm.id2704, 0);
     EXPECT_EQ(pm.id928, 1);
@@ -316,7 +318,7 @@ TEST(PatternMatrixTest, PatternMatrixLoadFrom928Pattern) {
     EXPECT_EQ(pm.printID, false);
     EXPECT_EQ(pm.printCaseMatch, false);
     EXPECT_EQ(pm.printAllIDs, false);
-    EXPECT_EQ(pm.originalMatrix, "[2,2,0,1,0,0][2,2,0,1,0,0][0,0,0,0,0,0][1,1,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]");
+    EXPECT_EQ(pm.originalMatrix, "[1,1,0,2,0,0][1,1,0,2,0,0][0,0,0,0,0,0][2,2,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]");
 }
 
 TEST(PatternMatrixTest,PatternMatrixStringConstructor) {
@@ -345,7 +347,7 @@ TEST(PatternMatrixTest,PatternMatrixStringConstructor) {
     EXPECT_TRUE(pm.cVT == cz);
     // Make sure that the originalMatrix is converted properly
     patternMatrix pm2 = patternMatrix(1, VALID_BINARY_PATTERN);
-    EXPECT_EQ(pm2.originalMatrix, VALID_BINARY_PATTERN_IN_NUMERICAL_FORM);
+    EXPECT_EQ(pm2.originalMatrix, VALID_BINARY_PATTERN_IN_NUMERICAL_FORM_NEW_ENCODING);
 }
 
 // TODO - Add a few more test cases
