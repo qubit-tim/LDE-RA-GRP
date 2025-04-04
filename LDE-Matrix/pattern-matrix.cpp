@@ -666,6 +666,10 @@ void patternMatrix::generateAllPossibleValuePatterns() {
 }
 
 void patternMatrix::recursiveAllPossibleValueSet(int position, zmatrix z) {
+    if (singleValidPattern && allPossibleValuePatterns.size() > 0) {
+        // If we have a single valid pattern, then we can skip this
+        return;
+    }
     if (position == rows*cols) return;
     for (int i = 0; i < possibleValues[position / cols][position % cols].size(); i++) {
         z.z[position / cols][position % cols] = possibleValues[position / cols][position % cols][i];
@@ -703,6 +707,11 @@ void patternMatrix::optimizedGenerateAllPossibleValuePatterns() {
 }
 
 void patternMatrix::optimizedAllPossibleValuePatterns(int position, zmatrix z) {
+    // If we only want to find a single valid pattern and exit, this handles that
+    if (singleValidPattern && allPossibleValuePatterns.size() > 0) {
+        // If we have a single valid pattern, then we can skip this
+        return;
+    }
     // pick rows / columns with fewest possible values (2 preferred)
     // check normality on a per row / row or column / column
     //check if row is normalized, if not, it's not a valid set
@@ -852,6 +861,11 @@ void patternMatrix::opt2GenerateAllPossibleValuePatterns() {
 }
 
 void patternMatrix::recursiveRowSetPatternGeneration(int curRow, std::vector<std::string> rowSelections) {
+    // If we only want to find a single valid pattern and exit, this handles that
+    if (singleValidPattern && allPossibleValuePatterns.size() > 0) {
+        // If we have a single valid pattern, then we can skip this
+        return;
+    }
     if (curRow == rows) return;
     for (int i = 0; i < possiblePatternRowSets[rowToRowSet[curRow]].size(); i++) {
         rowSelections[curRow] = std::to_string(rowToRowSet[curRow]) + "-" + std::to_string(i);
@@ -1660,8 +1674,9 @@ void patternMatrix::loadCases() {
 // TODO - Refactor this to output either the new or old encoding
 //  it might be betteer to have a function for toStringOldEncoding and toStringNewEncoding
 std::string patternMatrix::toString() {
+    // TODO - this needs to be split to old and new encoding as things use it and want the implied old encoding :(
     std::ostringstream os;
-    if(printOldEncoding) os << p;
+    if(toStringOldEncoding) os << p;
     else os << pNewEncoding;
     return os.str();
 }

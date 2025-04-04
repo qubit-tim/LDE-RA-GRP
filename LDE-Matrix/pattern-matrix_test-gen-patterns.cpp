@@ -1,0 +1,1 @@
+// Add tests for generating patterns based on possible pattern matrices

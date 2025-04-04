@@ -32,7 +32,7 @@ void bulkPossiblePatternAllGateRun(int startPattern, int step) {
     }
 }
 
-void dedupPossiblePatternAllGatesRun(bool possiblePatternOnly) {
+void dedupPossiblePatternAllGatesRun(bool possiblePatternOnly, bool onlyInvalids) {
     possiblePatternDeduper ppd;
     int pPatternCount = 0;
     std::filesystem::create_directory(OUT_DIR);
@@ -54,6 +54,7 @@ void dedupPossiblePatternAllGatesRun(bool possiblePatternOnly) {
             std::cout << "Found T-Gate options for pattern " << i << std::endl;
             for (auto tGateOps : getGates.tGateOperationSets) {
                 patternMatrix test = patternMatrix(i);
+                test.singleValidPattern = onlyInvalids;
                 std::cout << "Running pattern " << i << " with T-Gate options: ";
                 for (auto tGateOp : tGateOps) {
                     std::cout << tGateOp << " ";
@@ -175,6 +176,7 @@ void dedupPossiblePatternAllGatesRun(bool possiblePatternOnly) {
         for (auto & ppm : uniquePossiblePatterns) {
             std::cout << "Working on Unique Possible Pattern: " << ppm << std::endl;
             patternMatrix pm = patternMatrix();
+            pm.singleValidPattern = onlyInvalids;
             pm.possibleValues = ppm.getPossibleValues();
             if (pm.possibleValuesLeadToAllPatterns()) {
                 std::cout << ppm << " leads to all patterns" << std::endl;
@@ -187,8 +189,8 @@ void dedupPossiblePatternAllGatesRun(bool possiblePatternOnly) {
             std::cout << "Generating all possible value patterns for " << ppm << std::endl;
             pm.opt2GenerateAllPossibleValuePatterns();
             if (pm.allPossibleValuePatterns.size() == 0) {
-                std::cout << ppm.id << " leads to no valid patterns" << std::endl;
-                ppLogOutput << ppm.id << " leads to no valid patterns" << std::endl;
+                std::cout << ppm << " leads to no valid patterns" << std::endl;
+                ppLogOutput << ppm << " leads to no valid patterns" << std::endl;
                 ppm.leadsToPatternIDs[-1] = true;
                 continue;
             }
@@ -370,6 +372,50 @@ void dedupPossiblePatternAllGatesRunByCase(int caseNumber) {
         ppHumanOutput << ppm << std::endl;
     }
     std::vector<possiblePatternMatrix> uniquePossiblePatterns = ppd.getUniquePossiblePatterns();
+    std::cout << "Attempting to generate all possible patterns." << std::endl;
+    patternDeduper pd = patternDeduper();
+    int newPatternID = 1000;
+    for (auto & ppm : uniquePossiblePatterns) {
+        std::cout << "Working on Unique Possible Pattern: " << ppm << std::endl;
+        patternMatrix pm = patternMatrix();
+        pm.singleValidPattern = true;
+        pm.possibleValues = ppm.getPossibleValues();
+        if (pm.possibleValuesLeadToAllPatterns()) {
+            std::cout << ppm << " leads to all patterns" << std::endl;
+            ppLogOutput << ppm << " leads to all patterns" << std::endl;
+            for (int i = 1; i <= 928; i++) {
+                ppm.leadsToPatternIDs[i] = true;
+            }
+            continue;   
+        }
+        std::cout << "Generating all possible value patterns for " << ppm << std::endl;
+        pm.singleValidPattern = true;
+        pm.opt2GenerateAllPossibleValuePatterns();
+        if (pm.allPossibleValuePatterns.size() == 0) {
+            std::cout << ppm << " leads to no valid patterns" << std::endl;
+            ppLogOutput << ppm << " leads to no valid patterns" << std::endl;
+            ppm.leadsToPatternIDs[-1] = true;
+            continue;
+        }
+        for (auto pm : pm.allPossibleValuePatterns) {
+            int duplicateID = -1;
+            // By default, these are in the old encoding but this could change :(
+            patternMatrix pmCopy = patternMatrix(++newPatternID, pm.first);
+            if (pd.isDuplicate(pmCopy, duplicateID, true)) {
+                std::cout << pmCopy.id << " is a duplicate of " << duplicateID << std::endl;
+                ppLogOutput << pmCopy.id << " is a duplicate of " << duplicateID << std::endl;
+                ppm.leadsToPatternIDs[duplicateID] = true;
+            } else { // This shouldn't happen and if it does, we need to stop
+                std::cout << pmCopy.id << " is a unique pattern, aborting!" << std::endl;
+                ppLogOutput << pmCopy.id << " is a unique pattern, aborting!" << std::endl;
+                ppHumanOutput << pmCopy << " is a unique pattern, aborting!" << std::endl;
+                return;
+            }
+        }
+        std::cout << "Done with " << ppm << std::endl << std::endl;
+        ppm.printID = false;
+        ppHumanOutput << "Done with " << ppm << std::endl;
+    }
     std::cout << "Printing out all unique possible patterns." << std::endl;
     std::cout << "Unique possible patterns count: " << uniquePossiblePatterns.size() << std::endl;
     ppLogOutput << "Unique possible patterns count: " << uniquePossiblePatterns.size() << std::endl;
@@ -388,12 +434,23 @@ void dedupPossiblePatternAllGatesRunByCase(int caseNumber) {
 }
 
 int main(int argc, char **argv) {
+    std::vector<std::future<void>> futures;
+    for (int i = 1; i <= 8; i++) {
+        std::cout << "Running case " << i << std::endl;
+        auto res = std::async(std::launch::async, dedupPossiblePatternAllGatesRunByCase, i);
+        futures.push_back(std::move(res));
+    }
+    for (auto &f : futures) {
+        f.wait();
+    }
+    /*
     for (int i=1; i <= 8; i++) {
         std::string caseString = "Case: " + std::to_string(i);
         std::cout << caseString << std::endl;
         dedupPossiblePatternAllGatesRunByCase(i);
     }
-    //dedupPossiblePatternAllGatesRun(true);
+    */
+    dedupPossiblePatternAllGatesRun(false, true);
     // bulkPossiblePatternAllGateRun(1, 1);
     /*
     group 1: (lead to entire case 2) 3, 4, 5, 6

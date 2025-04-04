@@ -33,12 +33,14 @@ class patternMatrix {
         bool printDebugInfo = false;  // WIP: This is for printing debug information
         std::ostream* debugOutput;  // WIP...does this work???
         bool singleCaseRearrangement = false;  // This is stop the case rearrangement code after a single solution is found
+        bool singleValidPattern = false;  // This is to stop the pattern generation after a single valid pattern is found
         // << operator flags
         bool printID = false;
         bool printCaseMatch = false;
         bool printAllIDs = false;
         bool multilineOutput = false;
         bool printOldEncoding = false;
+        bool toStringOldEncoding = true;
         // TODO refactor to split new vs old encoding
         zmatrix pNewEncoding;  // This is the pattern matrix with the new encoding - 2y + x
         // These are the matrices that are used for comparison
