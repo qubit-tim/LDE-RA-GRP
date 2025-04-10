@@ -178,6 +178,7 @@ TEST_P(ParameterizedTGateTests, PatternTGateTests) {
   *debugOutput << pm << std::endl;
 
   // Check the post-T-Gate matrix
+  pm.toStringOldEncoding = false;
   EXPECT_EQ(pm.toString(), testCase.postTGateMatrix);
 
   *debugOutput << "LDEs Before Reduction(s):" << std::endl;
