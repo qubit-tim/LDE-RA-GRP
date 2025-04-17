@@ -769,7 +769,6 @@ void patternMatrix::generateRowSet(int pvRow, int rsPos, std::vector<int> newRow
                     int v = newRow[i];
                     if (!printOldEncoding) v = (v == 1) ? 2 : (v == 2) ? 1 : v;
                     *debugOutput << v;
-                    
                     if (i != newRow.size()-1) *debugOutput << ",";
                 }
                 *debugOutput << "]" << std::endl;
@@ -841,14 +840,18 @@ void patternMatrix::opt2GenerateAllPossibleValuePatterns() {
                     if (printDebugInfo) {
                         *debugOutput << "Row Set: " << rsi << " Row: " << ri << " [";
                         for (int i = 0; i < possiblePatternRowSets[rsi][ri].size(); i++) {
-                            *debugOutput << possiblePatternRowSets[rsi][ri][i];
+                            int v = possiblePatternRowSets[rsi][ri][i];
+                            if (!printOldEncoding) v = (v == 1) ? 2 : (v == 2) ? 1 : v;
+                            *debugOutput << v;
                             if (i != possiblePatternRowSets[rsi][ri].size()-1) *debugOutput << ",";
                         }
                         *debugOutput << "] is ";
                         *debugOutput << " " << (isOrthogonal ? "Orthogonal" : "Not Orthogonal") << " to ";
                         *debugOutput << "Row Set: " << rsj << " Row: " << rj << " [";
                         for (int j = 0; j < possiblePatternRowSets[rsj][rj].size(); j++) {
-                            *debugOutput << possiblePatternRowSets[rsj][rj][j];
+                            int v = possiblePatternRowSets[rsj][rj][j];
+                            if (!printOldEncoding) v = (v == 1) ? 2 : (v == 2) ? 1 : v;
+                            *debugOutput << v;
                             if (j != possiblePatternRowSets[rsj][rj].size()-1) *debugOutput << ",";
                         }
                         *debugOutput << "]" << std::endl;
