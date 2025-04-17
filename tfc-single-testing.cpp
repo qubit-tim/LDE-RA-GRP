@@ -434,6 +434,32 @@ void dedupPossiblePatternAllGatesRunByCase(int caseNumber) {
 }
 
 int main(int argc, char **argv) {
+    std::string logFileName = "p900-debug-log.txt";
+
+    std::ofstream ppLogOutput = std::ofstream(OUT_DIR + "/" + logFileName);
+    if (!ppLogOutput.is_open()) {
+        std::cerr << "Error opening file:" << OUT_DIR + "/" + logFileName << std::endl;
+        return 0;
+    }
+    patternMatrix pm = patternMatrix(900);
+    std::cout << pm << std::endl;
+    pm.printID = true;
+    pm.printDebugInfo = true;
+    pm.printOldEncoding = false;
+    pm.debugOutput = &ppLogOutput;
+    pm.rightTGateMultiply(1, 2);
+    pm.doLDEReduction();
+    pm.printPossibleValues(ppLogOutput);
+    pm.printPossibleValues(std::cout);
+    std::cout << pm << std::endl;
+    std::cout << pm.getMaxOfPossibleValues() << std::endl;
+    pm.printLDEs(std::cout);
+    std::cout << "generating all possible values" << std::endl;
+    pm.opt2GenerateAllPossibleValuePatterns();
+    std::cout << "done generating all possible values" << std::endl;
+    ppLogOutput.close();
+    return 0;
+
     std::vector<std::future<void>> futures;
     for (int i = 1; i <= 8; i++) {
         std::cout << "Running case " << i << std::endl;
@@ -450,7 +476,7 @@ int main(int argc, char **argv) {
         dedupPossiblePatternAllGatesRunByCase(i);
     }
     */
-    dedupPossiblePatternAllGatesRun(false, true);
+    //dedupPossiblePatternAllGatesRun(false, true);
     // bulkPossiblePatternAllGateRun(1, 1);
     /*
     group 1: (lead to entire case 2) 3, 4, 5, 6

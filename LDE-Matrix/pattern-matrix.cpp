@@ -763,9 +763,13 @@ void patternMatrix::generateRowSet(int pvRow, int rsPos, std::vector<int> newRow
         if (isRowNormalized(newRow)) {
             possiblePatternRowSets[rsPos].push_back(newRow);
             if (printDebugInfo) {
-                *debugOutput << "Row Set: " << rsPos << " Row: " << possiblePatternRowSets[rsPos].size() << " [";
+                // using size minus one to get the index of the last element for the row output
+                *debugOutput << "Row Set: " << rsPos << " Row: " << possiblePatternRowSets[rsPos].size() - 1 << " [";
                 for (int i = 0; i < newRow.size(); i++) {
-                    *debugOutput << newRow[i];
+                    int v = newRow[i];
+                    if (!printOldEncoding) v = (v == 1) ? 2 : (v == 2) ? 1 : v;
+                    *debugOutput << v;
+                    
                     if (i != newRow.size()-1) *debugOutput << ",";
                 }
                 *debugOutput << "]" << std::endl;
@@ -820,6 +824,7 @@ void patternMatrix::opt2GenerateAllPossibleValuePatterns() {
             for (int ri = 0; ri < possiblePatternRowSets[rsi].size(); ri++) {
                 for (int rj = 0; rj < possiblePatternRowSets[rsj].size(); rj++) {
                     // skip if the comparison has already been done
+                    // TODO: This isn't correct as it's still doing a comparison to all rows
                     if (rsj < rsi && rj < ri) continue;
                     std::string lhs = std::to_string(rsi) + "-" + std::to_string(ri);
                     std::string rhs = std::to_string(rsj) + "-" + std::to_string(rj);
@@ -1908,7 +1913,7 @@ bool patternMatrix::isRowNormalized(int row, zmatrix z) {
             *debugOutput << "Row " << row + 1 << " is not normalized: [";
             for (int j = 0; j < z.z[row].size(); j++) {
                 int v = z.z[row][j];
-                v = (v == 1) ? 2 : (v == 2) ? 1 : v;
+                if (!printOldEncoding) v = (v == 1) ? 2 : (v == 2) ? 1 : v;
                 *debugOutput << v;
                 if (j < z.z[row].size() - 1) *debugOutput << ",";
             }
@@ -1943,7 +1948,7 @@ bool patternMatrix::isRowNormalized(std::vector<int> row) {
             *debugOutput << "Row is not normalized: [";
             for (int j = 0; j < row.size(); j++) {
                 int v = row[j];
-                v = (v == 1) ? 2 : (v == 2) ? 1 : v;
+                if (!printOldEncoding) v = (v == 1) ? 2 : (v == 2) ? 1 : v;
                 *debugOutput << v;
                 if (j < row.size() - 1) *debugOutput << ",";
             }
@@ -1980,7 +1985,7 @@ bool patternMatrix::areRowsOrthogonal(int row1, int row2, zmatrix z) {
                 *debugOutput << "Row " << k+1 << ": [";
                 for (int n = 0; n < z.z[k].size(); n++) {
                     int v = z.z[k][n];
-                    v = (v == 1) ? 2 : (v == 2) ? 1 : v;
+                    if (!printOldEncoding) v = (v == 1) ? 2 : (v == 2) ? 1 : v;
                     *debugOutput << v;
                     //std::cout << z.z[k][n];
                     if (n < z.z[k].size() - 1) *debugOutput << ",";
