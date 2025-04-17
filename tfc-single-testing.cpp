@@ -434,20 +434,26 @@ void dedupPossiblePatternAllGatesRunByCase(int caseNumber) {
 }
 
 int main(int argc, char **argv) {
-    std::string logFileName = "p900-debug-log.txt";
+    // TODOs:
+    //  [{0,2,1,3},{0,2,1,3},{0,2,1,3},{0,2,1,3},{0,2},{0,2}][{0,2,1,3},{0,2,1,3},{0,2,1,3},{0,2,1,3},{0,2},{0,2}][{0,2,1,3},{0,2,1,3},{0,2,1,3},{0,2,1,3},{0,2},{0,2}][{0,2,1,3},{0,2,1,3},{0,2,1,3},{0,2,1,3},{0,2},{0,2}][{0,2,1,3},{0,2,1,3},{0,2,1,3},{0,2,1,3},{0,2},{1,3}][{0,2,1,3},{0,2,1,3},{0,2,1,3},{0,2,1,3},{1,3},{0,2}] Origins: p578-xT12-xT34  Leads to no valid patterns
+    //  [{0,2},{0,2},{0,2},{0,2},{0},{0}][{1,3},{1,3},{1,3},{1,3},{0},{0}][{0,2},{0,2},{0,2},{0,2},{2},{2}][{1,3},{1,3},{1,3},{1,3},{2},{2}][{0,2},{0,2},{0,2},{0,2},{0},{0}][{0,2},{0,2},{0,2},{0,2},{0},{0}] Origins: p63-xT13-xT24, p63-xT14-xT23, p64-xT13-xT24, p64-xT14-xT23, p65-xT13-xT24, p65-xT14-xT23, p81-xT12-xT34, p81-xT13-xT24, p82-xT12-xT34, p82-xT13-xT24, p83-xT12-xT34, p83-xT13-xT24, p314-xT12-xT34, p315-xT12-xT34, p316-xT12-xT34, p316-T12x-T34x, p317-xT12-xT34, p317-T12x-T34x, p334-xT12-xT34, p335-xT12-xT34, p410-T13x-T24x, p410-T14x-T23x, p413-T13x-T24x, p413-T14x-T23x, p415-T12x-T34x, p415-T13x-T24x, p416-T12x-T34x, p416-T13x-T24x, p418-T13x-T24x, p418-T14x-T23x, p420-T12x-T34x, p420-T13x-T24x  Leads to no valid patterns 
+    //  p564-T12x-T34x
+    std::string logFileName = "p593-debug-log.txt";
 
     std::ofstream ppLogOutput = std::ofstream(OUT_DIR + "/" + logFileName);
     if (!ppLogOutput.is_open()) {
         std::cerr << "Error opening file:" << OUT_DIR + "/" + logFileName << std::endl;
         return 0;
     }
-    patternMatrix pm = patternMatrix(900);
+    patternMatrix pm = patternMatrix(593);
     std::cout << pm << std::endl;
     pm.printID = true;
     pm.printDebugInfo = true;
     pm.printOldEncoding = false;
     pm.debugOutput = &ppLogOutput;
-    pm.rightTGateMultiply(1, 2);
+    //p593-T12x-T34x
+    pm.leftTGateMultiply(1, 2);
+    pm.leftTGateMultiply(3, 4);
     pm.doLDEReduction();
     pm.printPossibleValues(ppLogOutput);
     pm.printPossibleValues(std::cout);
