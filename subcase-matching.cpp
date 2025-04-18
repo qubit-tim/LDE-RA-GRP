@@ -7,6 +7,7 @@
 #include <map>
 
 #include "LDE-Matrix/pattern-matrix.hpp"
+#include "LDE-Matrix/data/patterns928.hpp"
 
 std::map<int, std::vector<char>> caseSubcases = {
     {1, {'-'}},
@@ -22,91 +23,83 @@ std::map<int, std::vector<char>> caseSubcases = {
 std::string matchedCasesDirectory = "matched-cases";
 std::string matchedSubcasesDirectory = "matched-subcases";
 
-std::vector<patternMatrix> loadPatterns(std::string filename)
-{
-    std::ifstream file(filename);
-    if (!file.is_open()) {
-        std::cerr << "Error opening file:" << filename << std::endl;
-        return {}; // Indicate error
-    }
-    std::vector<patternMatrix> patterns;
-    std::string line;
-
-    while (std::getline(file, line)) {
-        // ignore comments
-        if (line[0] == '#') {
-            std::cout << "Ignoring comment: " << line << std::endl;
+void caseSubcaseMatch(int caseNum, bool validPatterns) {
+    std::string validityString = validPatterns ? "valid-patterns" : "invalid-patterns";
+    std::vector<std::ofstream> matchedCasesFiles;
+    std::vector<std::ofstream> matchedCasesFilesHumanReadable;
+    matchedCasesFiles.push_back(std::ofstream(matchedSubcasesDirectory+ "/" + validityString + "-case" + std::to_string(caseNum) + "-no-subcase-match.txt"));
+    matchedCasesFilesHumanReadable.push_back(std::ofstream(matchedSubcasesDirectory+ "/" + validityString + "-case" + std::to_string(caseNum) + "-no-subcase-matches-human-readable.txt"));
+    for (char subcase : caseSubcases[caseNum]) {
+        if (subcase == '-') {
             continue;
         }
-        int id = std::stoi(line.substr(0, line.find(' ')));
-        std::string p = line.substr(line.find(' ')+1);
-        patterns.push_back(patternMatrix(id, p, true));
+        std::string filename = matchedSubcasesDirectory+ "/" + validityString + "-case" + std::to_string(caseNum) + subcase + "-matches.txt";
+        matchedCasesFiles.push_back(std::ofstream(filename));
+        if (!matchedCasesFiles[matchedCasesFiles.size()-1].is_open()) {
+            std::cerr << "Error opening file:" << filename << std::endl;
+        }
+        matchedCasesFiles[matchedCasesFiles.size()-1] << "# Using the new encoding: 2y + x" << std::endl;
+
+        std::string filenameHumanReadable = matchedSubcasesDirectory+ "/" + validityString + "-case" + std::to_string(caseNum) + subcase + "-matches-human-readable.txt";
+        matchedCasesFilesHumanReadable.push_back(std::ofstream(filenameHumanReadable));
+        if (!matchedCasesFilesHumanReadable[matchedCasesFilesHumanReadable.size()-1].is_open()) {
+            std::cerr << "Error opening file:" << filenameHumanReadable << std::endl;
+        }
+        matchedCasesFilesHumanReadable[matchedCasesFilesHumanReadable.size()-1] << "# Using the new encoding: 2y + x" << std::endl;
     }
-    file.close();
-    return patterns;
+
+    for (const auto& pair : CASE_PATTERN_MAP_PATTERNS_928[caseNum]) {
+        int patternID = pair.first;
+        if (validPatterns && !PATTERN_928_VALIDITY[patternID]) {
+            continue;
+        }
+        if (!validPatterns && PATTERN_928_VALIDITY[patternID]) {
+            continue;
+        }
+        patternMatrix pm = patternMatrix(patternID);
+        pm.printOldEncoding = false;
+        pm.printID = true;
+        std::cout << "Pattern " << pm.id << std::endl;
+        if(!pm.matchesCase(caseNum)) {
+            std::cout << "Pattern " << pm.id << " does not match case " << caseNum << " and is in the part of the map" << std::endl;
+            std::cout << pm << std::endl;
+            continue;
+        }
+        //pm.caseMatch = caseNum;
+        if(pm.determineSubCase()) {
+            int index = pm.subCaseMatch - 'a' + 1;
+            if (pm.subCaseMatch == '-') {
+                index = 0;
+            }
+            std::cout << "Pattern " << pm.id << " matches case " << caseNum << " subcase " << pm.subCaseMatch << std::endl;
+            matchedCasesFiles[index] << pm << std::endl;
+            pm.multilineOutput = true;
+            matchedCasesFilesHumanReadable[index] << pm << std::endl;
+        } else {
+            std::cout << "Pattern " << pm.id << " matches case " << caseNum << " and has no subcase matches." << std::endl;
+            matchedCasesFiles[0] << pm << std::endl;
+            pm.multilineOutput = true;
+            matchedCasesFilesHumanReadable[0] << pm << std::endl;
+        }
+    }
+    for (std::ofstream& matchedCasesFile : matchedCasesFiles) matchedCasesFile.close();
+    for (std::ofstream& matchedCasesFile : matchedCasesFilesHumanReadable) matchedCasesFile.close();
 }
 
+
 int main(int argc, char **argv) {
-    std::filesystem::create_directory("matched-subcases");
-    std::map<int, std::string> patternFiles = {
-        // {1, matchedCasesDirectory + "/case1-matches-patterns928.txt"},  // No subcases
-        // {2, matchedCasesDirectory + "/case2-matches-patterns928.txt"},  // No subcases
-        {3, matchedCasesDirectory + "/case3-matches-patterns928.txt"},
-        //{4, matchedCasesDirectory + "/case4-matches-patterns928.txt"},
-        //{5, matchedCasesDirectory + "/case5-matches-patterns928.txt"},
-        //{6, matchedCasesDirectory + "/case6-matches-patterns928.txt"},
-        // {7, matchedCasesDirectory + "/case7-matches-patterns928.txt"},  // No subcases
-        //{8, matchedCasesDirectory + "/case8-matches-patterns928.txt"},
-        };
-    for (auto const& pair : patternFiles) {
-        int caseNumber = pair.first;
-        std::string patternFile = pair.second;
-        std::vector<patternMatrix> patterns = loadPatterns(patternFile);
-        std::vector<std::ofstream> matchedCasesFiles;
-        std::vector<std::ofstream> matchedCasesFilesHumanReadable;
-        matchedCasesFiles.push_back(std::ofstream(matchedSubcasesDirectory+ "/case" + std::to_string(caseNumber) + "-no-subcase-match.txt"));
-        matchedCasesFilesHumanReadable.push_back(std::ofstream(matchedSubcasesDirectory+ "/case" + std::to_string(caseNumber) + "-no-subcase-matches-human-readable.txt"));
-        for (char subcase : caseSubcases[caseNumber]) {
-            std::string filename = matchedSubcasesDirectory+ "/case" + std::to_string(caseNumber) + subcase + "-matches.txt";
-            matchedCasesFiles.push_back(std::ofstream(filename));
-            if (!matchedCasesFiles[matchedCasesFiles.size()-1].is_open()) {
-                std::cerr << "Error opening file:" << filename << std::endl;
-            }
-            matchedCasesFiles[matchedCasesFiles.size()-1] << "# Using the new encoding: 2y + x" << std::endl;
-
-            std::string filenameHumanReadable = matchedSubcasesDirectory+ "/case" + std::to_string(caseNumber) + subcase + "-matches-human-readable.txt";
-            matchedCasesFilesHumanReadable.push_back(std::ofstream(filenameHumanReadable));
-            if (!matchedCasesFilesHumanReadable[matchedCasesFilesHumanReadable.size()-1].is_open()) {
-                std::cerr << "Error opening file:" << filenameHumanReadable << std::endl;
-            }
-            matchedCasesFilesHumanReadable[matchedCasesFilesHumanReadable.size()-1] << "# Using the new encoding: 2y + x" << std::endl;
-        }
-
-        for (patternMatrix pm : patterns) {
-            std::cout << "Pattern " << pm.id << std::endl;
-            if(!pm.matchesCase(caseNumber)) {
-                std::cout << "Pattern " << pm.id << " does not match case " << caseNumber << " and is in the wrong file" << std::endl;
-                std::cout << pm << std::endl;
-                continue;
-            }
-            pm.caseMatch = caseNumber;
-            pm.printID = true;
-            
-            if(pm.determineSubCase()) {
-                int index = pm.subCaseMatch - 'a' + 1;
-                matchedCasesFiles[index] << pm << std::endl;
-                pm.multilineOutput = true;
-                matchedCasesFilesHumanReadable[index] << pm << std::endl;
-            } else {
-                std::cout << "Pattern " << pm.id << " has no subcase matches." << std::endl;
-                matchedCasesFiles[0] << pm << std::endl;
-                pm.multilineOutput = true;
-                matchedCasesFilesHumanReadable[0] << pm << std::endl;
-            
-            }
-        }
-        for (std::ofstream& matchedCasesFile : matchedCasesFiles) matchedCasesFile.close();
-        for (std::ofstream& matchedCasesFile : matchedCasesFilesHumanReadable) matchedCasesFile.close();
+    std::filesystem::create_directory(matchedCasesDirectory);
+    std::filesystem::create_directory(matchedSubcasesDirectory);
+    std::cout << "Matching valid patterns" << std::endl;
+    for (int i = 1; i <= 8; i++) {
+        caseSubcaseMatch(i, true);
     }
+    std::cout << "Matching invalid patterns" << std::endl;
+    for (int i = 1; i <= 8; i++) {
+        caseSubcaseMatch(i, false);
+    }
+    std::cout << "Done matching cases and subcases" << std::endl;
+    std::cout << "All matched cases and subcases are in the directory: " << matchedSubcasesDirectory << std::endl;
+    std::cout << "All matched cases are in the directory: " << matchedCasesDirectory << std::endl;
     return 0;
 }
