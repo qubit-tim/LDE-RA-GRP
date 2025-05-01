@@ -10,6 +10,7 @@
 #include <map>
 #include <regex>
 #include <future>
+#include <set>
 
 #include "LDE-Matrix/pattern-matrix.hpp"
 #include "LDE-Matrix/zmatrix.hpp"
@@ -253,6 +254,12 @@ void dedupPossiblePatternAllGatesRunByCase(int caseNumber) {
     }
     for (const auto& pair : CASE_PATTERN_MAP_PATTERNS_928[caseNumber]) {
         int patternID = pair.first;
+        if (!PATTERN_928_VALIDITY[patternID]) {
+            std::cout << "Pattern " << patternID << " is not valid, skipping." << std::endl;
+            ppLogOutput << "Pattern " << patternID << " is not valid, skipping." << std::endl;
+            ppHumanOutput << "Pattern " << patternID << " is not valid, skipping." << std::endl;
+            continue;
+        }
         patternMatrix getGates = patternMatrix(patternID);
         if (getGates.findAllTGateOptions()) {
             std::cout << "Found T-Gate options for pattern " << patternID << std::endl;
@@ -341,6 +348,8 @@ void dedupPossiblePatternAllGatesRunByCase(int caseNumber) {
                 pPatternCount++;
                 possiblePatternMatrix ppmTest = possiblePatternMatrix(pPatternCount, ppmString.str(), !test.printOldEncoding);
                 ppmTest.origins.push_back(patternIDandTGateOps);
+                ppmTest.patternOrigins.insert(patternID);
+                //std::sort(ppmTest.patternOrigins.begin(), ppmTest.patternOrigins.end());
                 ppmTest.printID = true;
                 ppmTest.printOrigins = true;
                 ppmTest.printLeadsToPatternIDs = true;
@@ -434,6 +443,13 @@ void dedupPossiblePatternAllGatesRunByCase(int caseNumber) {
 }
 
 int main(int argc, char **argv) {
+    // Create subcase groupings of patterns based on both the valid patterns and invalid patterns
+    //   An example is of case 2 in the overleaf document where c2 g1 -> all c2
+
+    // Next up would be to create a graph of patterns -> possible pattern -> patterns
+
+
+    /*
     // TODOs:
     //  [{0,2,1,3},{0,2,1,3},{0,2,1,3},{0,2,1,3},{0,2},{0,2}][{0,2,1,3},{0,2,1,3},{0,2,1,3},{0,2,1,3},{0,2},{0,2}][{0,2,1,3},{0,2,1,3},{0,2,1,3},{0,2,1,3},{0,2},{0,2}][{0,2,1,3},{0,2,1,3},{0,2,1,3},{0,2,1,3},{0,2},{0,2}][{0,2,1,3},{0,2,1,3},{0,2,1,3},{0,2,1,3},{0,2},{1,3}][{0,2,1,3},{0,2,1,3},{0,2,1,3},{0,2,1,3},{1,3},{0,2}] Origins: p578-xT12-xT34  Leads to no valid patterns
     //  [{0,2},{0,2},{0,2},{0,2},{0},{0}][{1,3},{1,3},{1,3},{1,3},{0},{0}][{0,2},{0,2},{0,2},{0,2},{2},{2}][{1,3},{1,3},{1,3},{1,3},{2},{2}][{0,2},{0,2},{0,2},{0,2},{0},{0}][{0,2},{0,2},{0,2},{0,2},{0},{0}] Origins: p63-xT13-xT24, p63-xT14-xT23, p64-xT13-xT24, p64-xT14-xT23, p65-xT13-xT24, p65-xT14-xT23, p81-xT12-xT34, p81-xT13-xT24, p82-xT12-xT34, p82-xT13-xT24, p83-xT12-xT34, p83-xT13-xT24, p314-xT12-xT34, p315-xT12-xT34, p316-xT12-xT34, p316-T12x-T34x, p317-xT12-xT34, p317-T12x-T34x, p334-xT12-xT34, p335-xT12-xT34, p410-T13x-T24x, p410-T14x-T23x, p413-T13x-T24x, p413-T14x-T23x, p415-T12x-T34x, p415-T13x-T24x, p416-T12x-T34x, p416-T13x-T24x, p418-T13x-T24x, p418-T14x-T23x, p420-T12x-T34x, p420-T13x-T24x  Leads to no valid patterns 
@@ -465,7 +481,7 @@ int main(int argc, char **argv) {
     std::cout << "done generating all possible values" << std::endl;
     ppLogOutput.close();
     return 0;
-
+    */
     std::vector<std::future<void>> futures;
     for (int i = 1; i <= 8; i++) {
         std::cout << "Running case " << i << std::endl;

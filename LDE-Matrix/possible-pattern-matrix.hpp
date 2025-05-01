@@ -1,6 +1,7 @@
 #ifndef POSSIBLE_PATTERN_MATRIX_HPP
 #define POSSIBLE_PATTERN_MATRIX_HPP
 
+#include <set>
 #include "zmatrix.hpp"
 
 class possiblePatternMatrix {
@@ -14,6 +15,7 @@ class possiblePatternMatrix {
         zmatrix ppT;  // This is the transposed possible pattern matrix
         std::string originalMatrix; // This is the original matrix string
         std::vector<std::string> origins; // This is the list of patterns and gates that this possible pattern was derived from
+        std::set<int> patternOrigins;  // This is the list of patterns that this possible pattern was derived from
         std::unordered_map<int, bool> leadsToPatternIDs;
         std::ostream* debugOutput;  // WIP...does this work???
         std::vector<std::vector<int>> rowPairCounts;  // This is the row pair counts for the pattern

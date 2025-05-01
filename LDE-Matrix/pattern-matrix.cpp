@@ -1431,6 +1431,7 @@ bool patternMatrix::allTGatesCase8() {
     //   and assume that anything left over is case 8a
     switch (id)
     {
+        // All of these are case 8b
         case 880: // M880 : xT13, xT24 followed by T35x, T46x.
             tGateOperationSets.push_back({"xT13", "xT24", "T35x", "T46x"});
             break;
@@ -1455,7 +1456,8 @@ bool patternMatrix::allTGatesCase8() {
         case 927: // M927 : xT13, xT24 followed by T35x, T46x.
             tGateOperationSets.push_back({"xT13", "xT24", "T35x", "T46x"});
             break;
-        default:  // Assuming that we only have case 8a left
+        // Assuming that we only have case 8a left
+        default:
             // 8: V11, V12 have the same parity -> right T(1,2) T(3,4) T(5,6)
             if (p.z[0][0] % 2 == p.z[0][1] % 2) {
                 tGateOperationSets.push_back({"xT12", "xT34", "xT56"});

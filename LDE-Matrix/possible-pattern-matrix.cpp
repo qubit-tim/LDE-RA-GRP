@@ -1,9 +1,11 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 #include <sstream>
 #include <map>
 #include <unordered_map>
+#include <set>
 
 #include "possible-pattern-matrix.hpp"
 #include "zmatrix.hpp"
@@ -297,6 +299,17 @@ std::ostream& operator<<(std::ostream &os,const possiblePatternMatrix &ppm) {
         for (int i = 0; i < ppm.origins.size(); i++) {
             os << ppm.origins[i];
             if (i != ppm.origins.size()-1) os << ", ";
+        }
+        if (ppm.multilineOutput) os << std::endl;
+        else os << " ";
+    }
+    if (ppm.printOrigins && ppm.patternOrigins.size() > 0) {
+        os << " Pattern Origins: ";
+        for (auto it = ppm.patternOrigins.begin(); it != ppm.patternOrigins.end(); ++it) {
+            os << *it;
+            if (std::next(it) != ppm.patternOrigins.end()) {
+                os << ",";
+            }
         }
         if (ppm.multilineOutput) os << std::endl;
         else os << " ";

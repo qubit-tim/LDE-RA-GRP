@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <algorithm>
 
 #include "possible-pattern-matrix.hpp"
 #include "possible-pattern-deduper.hpp"
@@ -23,6 +24,9 @@ bool possiblePatternDeduper::isDuplicate(possiblePatternMatrix possiblePattern, 
                 duplicateID = ppm.id;
                 for (auto const& origin : possiblePattern.origins) {
                     ppm.origins.push_back(origin);
+                }
+                for (auto const& patternOrigin : possiblePattern.patternOrigins) {
+                    ppm.patternOrigins.insert(patternOrigin);
                 }
                 return true;
         }
