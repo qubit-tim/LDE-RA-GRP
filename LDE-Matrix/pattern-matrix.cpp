@@ -481,17 +481,17 @@ bool patternMatrix::is23SwapT(patternMatrix other) {
 }
 
 void patternMatrix::printDebug(std::ostream& os) {
-    std::cout << "Pattern Number: " << id << std::endl;
-    std::cout << "Matched Case Number: " << caseMatch << std::endl;
-    std::cout << "Pattern Matrix Debug:" << std::endl;
+    os << "Pattern Number: " << id << std::endl;
+    os << "Matched Case Number: " << caseMatch << std::endl;
+    os << "Pattern Matrix Debug:" << std::endl;
     p.printDebug(os);
-    std::cout << "Transposed Pattern Matrix Debug:" << std::endl;
+    os << "Transposed Pattern Matrix Debug:" << std::endl;
     pT.printDebug(os);
-    std::cout << "Swapped 2s and 3s Pattern Matrix Debug:" << std::endl;
+    os << "Swapped 2s and 3s Pattern Matrix Debug:" << std::endl;
     swap23.printDebug(os);
-    std::cout << "Case Style Pattern Matrix Debug:" << std::endl;
+    os << "Case Style Pattern Matrix Debug:" << std::endl;
     cV.printDebug(os);
-    std::cout << "Transposed Case Style Pattern Matrix Debug:" << std::endl;
+    os << "Transposed Case Style Pattern Matrix Debug:" << std::endl;
     cVT.printDebug(os);
 }
 
@@ -619,6 +619,18 @@ std::string patternMatrix::printTGateOperations() {
     return os.str();
 }
 
+std::string patternMatrix::printTGateOperationSets() {
+    std::ostringstream os;
+    for (int i = 0; i < tGateOperationSets.size(); i++) {
+        for (int j = 0; j < tGateOperationSets[i].size(); j++) {
+            os << tGateOperationSets[i][j];
+            if(j != tGateOperationSets[i].size()-1) os << ",";
+        }
+        if(i != tGateOperationSets.size()-1) os << " ";
+    }
+    return os.str();
+}
+
 std::string patternMatrix::getMaxOfPossibleValues() {
     std::string maxValues = "";
     for (int i = 0; i < rows; i++) {
@@ -666,6 +678,10 @@ void patternMatrix::generateAllPossibleValuePatterns() {
 }
 
 void patternMatrix::recursiveAllPossibleValueSet(int position, zmatrix z) {
+    if (singleValidPattern && allPossibleValuePatterns.size() > 0) {
+        // If we have a single valid pattern, then we can skip this
+        return;
+    }
     if (position == rows*cols) return;
     for (int i = 0; i < possibleValues[position / cols][position % cols].size(); i++) {
         z.z[position / cols][position % cols] = possibleValues[position / cols][position % cols][i];
@@ -703,6 +719,11 @@ void patternMatrix::optimizedGenerateAllPossibleValuePatterns() {
 }
 
 void patternMatrix::optimizedAllPossibleValuePatterns(int position, zmatrix z) {
+    // If we only want to find a single valid pattern and exit, this handles that
+    if (singleValidPattern && allPossibleValuePatterns.size() > 0) {
+        // If we have a single valid pattern, then we can skip this
+        return;
+    }
     // pick rows / columns with fewest possible values (2 preferred)
     // check normality on a per row / row or column / column
     //check if row is normalized, if not, it's not a valid set
@@ -754,9 +775,12 @@ void patternMatrix::generateRowSet(int pvRow, int rsPos, std::vector<int> newRow
         if (isRowNormalized(newRow)) {
             possiblePatternRowSets[rsPos].push_back(newRow);
             if (printDebugInfo) {
-                *debugOutput << "Row Set: " << rsPos << " Row: " << possiblePatternRowSets[rsPos].size() << " [";
+                // using size minus one to get the index of the last element for the row output
+                *debugOutput << "Row Set: " << rsPos << " Row: " << possiblePatternRowSets[rsPos].size() - 1 << " [";
                 for (int i = 0; i < newRow.size(); i++) {
-                    *debugOutput << newRow[i];
+                    int v = newRow[i];
+                    if (!printOldEncoding) v = (v == 1) ? 2 : (v == 2) ? 1 : v;
+                    *debugOutput << v;
                     if (i != newRow.size()-1) *debugOutput << ",";
                 }
                 *debugOutput << "]" << std::endl;
@@ -811,6 +835,7 @@ void patternMatrix::opt2GenerateAllPossibleValuePatterns() {
             for (int ri = 0; ri < possiblePatternRowSets[rsi].size(); ri++) {
                 for (int rj = 0; rj < possiblePatternRowSets[rsj].size(); rj++) {
                     // skip if the comparison has already been done
+                    // TODO: This isn't correct as it's still doing a comparison to all rows
                     if (rsj < rsi && rj < ri) continue;
                     std::string lhs = std::to_string(rsi) + "-" + std::to_string(ri);
                     std::string rhs = std::to_string(rsj) + "-" + std::to_string(rj);
@@ -827,14 +852,18 @@ void patternMatrix::opt2GenerateAllPossibleValuePatterns() {
                     if (printDebugInfo) {
                         *debugOutput << "Row Set: " << rsi << " Row: " << ri << " [";
                         for (int i = 0; i < possiblePatternRowSets[rsi][ri].size(); i++) {
-                            *debugOutput << possiblePatternRowSets[rsi][ri][i];
+                            int v = possiblePatternRowSets[rsi][ri][i];
+                            if (!printOldEncoding) v = (v == 1) ? 2 : (v == 2) ? 1 : v;
+                            *debugOutput << v;
                             if (i != possiblePatternRowSets[rsi][ri].size()-1) *debugOutput << ",";
                         }
                         *debugOutput << "] is ";
                         *debugOutput << " " << (isOrthogonal ? "Orthogonal" : "Not Orthogonal") << " to ";
                         *debugOutput << "Row Set: " << rsj << " Row: " << rj << " [";
                         for (int j = 0; j < possiblePatternRowSets[rsj][rj].size(); j++) {
-                            *debugOutput << possiblePatternRowSets[rsj][rj][j];
+                            int v = possiblePatternRowSets[rsj][rj][j];
+                            if (!printOldEncoding) v = (v == 1) ? 2 : (v == 2) ? 1 : v;
+                            *debugOutput << v;
                             if (j != possiblePatternRowSets[rsj][rj].size()-1) *debugOutput << ",";
                         }
                         *debugOutput << "]" << std::endl;
@@ -852,6 +881,11 @@ void patternMatrix::opt2GenerateAllPossibleValuePatterns() {
 }
 
 void patternMatrix::recursiveRowSetPatternGeneration(int curRow, std::vector<std::string> rowSelections) {
+    // If we only want to find a single valid pattern and exit, this handles that
+    if (singleValidPattern && allPossibleValuePatterns.size() > 0) {
+        // If we have a single valid pattern, then we can skip this
+        return;
+    }
     if (curRow == rows) return;
     for (int i = 0; i < possiblePatternRowSets[rowToRowSet[curRow]].size(); i++) {
         rowSelections[curRow] = std::to_string(rowToRowSet[curRow]) + "-" + std::to_string(i);
@@ -1405,29 +1439,48 @@ bool patternMatrix::allTGatesCase7() {
 }
 
 bool patternMatrix::allTGatesCase8() {
-    return false; // check for symmetric patterns, if they are, then xT12 == T12x
-    bool optionsFound = false;
-    // 8: V11, V12 have the same parity -> right T(1,2) T(3,4) T(5,6)
-    if (p.z[0][0] % 2 == p.z[0][1] % 2) {
-        tGateOperationSets.push_back({"xT12", "xT34", "xT56"});
-        optionsFound = true;
-    }
-    // 8: V11, V21 have the same parity -> left T(1,2) T(3,4) T(5,6)
-    if (!isSymmetric()) {
-        if (p.z[0][0] % 2 != p.z[1][0] % 2) {
-            tGateOperationSets.push_back({"T12x", "T34x", "T56x"});
-            optionsFound = true;
-        }
-    }
-    // 8: V11, V12 have different parity and V11, V21 have different parity
-    if (!optionsFound) {
-        // We don't have a concrete set of operations for this yet, but I think it might be xT13, xT24
-        //  Still going to return false until this is verified
-        // tGateOperationSets.push_back({"xT13", "xT24"});
-        //============
-        //INSERT CODE HERE
-        //============
-        return false;
+    // Using the id to determine what to do with individual case 8b's
+    //   and assume that anything left over is case 8a
+    switch (id)
+    {
+        // All of these are case 8b
+        case 880: // M880 : xT13, xT24 followed by T35x, T46x.
+            tGateOperationSets.push_back({"xT13", "xT24", "T35x", "T46x"});
+            break;
+        case 881: // M881 : xT13, xT24 followed by T35x, T46x.
+            tGateOperationSets.push_back({"xT13", "xT24", "T35x", "T46x"});
+            break;
+        case 882: // M882 : xT13, xT24 followed by T35x, T46x.
+            tGateOperationSets.push_back({"xT13", "xT24", "T35x", "T46x"});
+            break;
+        case 883: // M883 : xT13, xT24 followed by T35x, T46x.
+            tGateOperationSets.push_back({"xT13", "xT24", "T35x", "T46x"});
+            break;
+        case 884: // M884 : xT13, xT24 followed by T36x, T45x.
+            tGateOperationSets.push_back({"xT13", "xT24", "T36x", "T45x"});
+            break;
+        case 885: // M885 : xT13, xT24 followed by T36X, T45X.
+            tGateOperationSets.push_back({"xT13", "xT24", "T36x", "T45x"});
+            break;
+        case 926: // M926 : xT13, xT24 followed by T35x, T46x.
+            tGateOperationSets.push_back({"xT13", "xT24", "T35x", "T46x"});
+            break;
+        case 927: // M927 : xT13, xT24 followed by T35x, T46x.
+            tGateOperationSets.push_back({"xT13", "xT24", "T35x", "T46x"});
+            break;
+        // Assuming that we only have case 8a left
+        default:
+            // 8: V11, V12 have the same parity -> right T(1,2) T(3,4) T(5,6)
+            if (p.z[0][0] % 2 == p.z[0][1] % 2) {
+                tGateOperationSets.push_back({"xT12", "xT34", "xT56"});
+            }
+            // 8: V11, V21 have the same parity -> left T(1,2) T(3,4) T(5,6)
+            if (!isSymmetric()) {
+                if (p.z[0][0] % 2 != p.z[1][0] % 2) {
+                    tGateOperationSets.push_back({"T12x", "T34x", "T56x"});
+                }
+            }
+            break;
     }
     return true;
 }
@@ -1643,8 +1696,10 @@ void patternMatrix::loadCases() {
 // TODO - Refactor this to output either the new or old encoding
 //  it might be betteer to have a function for toStringOldEncoding and toStringNewEncoding
 std::string patternMatrix::toString() {
+    // TODO - this needs to be split to old and new encoding as things use it and want the implied old encoding :(
     std::ostringstream os;
-    os << p;
+    if(toStringOldEncoding) os << p;
+    else os << pNewEncoding;
     return os.str();
 }
 
@@ -1875,7 +1930,7 @@ bool patternMatrix::isRowNormalized(int row, zmatrix z) {
             *debugOutput << "Row " << row + 1 << " is not normalized: [";
             for (int j = 0; j < z.z[row].size(); j++) {
                 int v = z.z[row][j];
-                v = (v == 1) ? 2 : (v == 2) ? 1 : v;
+                if (!printOldEncoding) v = (v == 1) ? 2 : (v == 2) ? 1 : v;
                 *debugOutput << v;
                 if (j < z.z[row].size() - 1) *debugOutput << ",";
             }
@@ -1910,7 +1965,7 @@ bool patternMatrix::isRowNormalized(std::vector<int> row) {
             *debugOutput << "Row is not normalized: [";
             for (int j = 0; j < row.size(); j++) {
                 int v = row[j];
-                v = (v == 1) ? 2 : (v == 2) ? 1 : v;
+                if (!printOldEncoding) v = (v == 1) ? 2 : (v == 2) ? 1 : v;
                 *debugOutput << v;
                 if (j < row.size() - 1) *debugOutput << ",";
             }
@@ -1947,7 +2002,7 @@ bool patternMatrix::areRowsOrthogonal(int row1, int row2, zmatrix z) {
                 *debugOutput << "Row " << k+1 << ": [";
                 for (int n = 0; n < z.z[k].size(); n++) {
                     int v = z.z[k][n];
-                    v = (v == 1) ? 2 : (v == 2) ? 1 : v;
+                    if (!printOldEncoding) v = (v == 1) ? 2 : (v == 2) ? 1 : v;
                     *debugOutput << v;
                     //std::cout << z.z[k][n];
                     if (n < z.z[k].size() - 1) *debugOutput << ",";

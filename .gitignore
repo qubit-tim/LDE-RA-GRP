@@ -88,6 +88,9 @@ MODULE.bazel.lock
 # Ignore local temp directory
 /temp/
 
+# Ignore coverage reports - I'm going to keep these for now as it could be useful to check between merges
+# coverage/
+
 # Ignore user output
 user-output/
 tfc-output/

@@ -3,10 +3,20 @@ test --test_output=all
 build --verbose_failures --compilation_mode opt
 
 # MacOS configuration
-build:macos --cxxopt="-std=c++20" --copt=-O3
+build:macos --cxxopt="-std=c++20" --copt=-O3  #--copt=--coverage
 
 # Linux configuration
 build:linux --cxxopt="-std=c++20"
 
 # Windows Configuration
 build:windows --cxxopt='/std:c++20' --copt='/O2' --copt='/GL' --linkopt='/LTCG'
+
+# Coverage is borked on macOS and these fix it (see https://github.com/bazelbuild/bazel/issues/14970)
+coverage --experimental_generate_llvm_lcov
+coverage --test_env=COVERAGE_GCOV_PATH=/Library/Developer/CommandLineTools/usr/bin/llvm-profdata
+coverage --test_env=LLVM_COV=/Library/Developer/CommandLineTools/usr/bin/llvm-cov
+coverage --copt=-ffile-compilation-dir=.
+coverage --repo_env=GCOV=/Library/Developer/CommandLineTools/usr/bin/llvm-profdata
+coverage --repo_env=BAZEL_LLVM_COV=/Library/Developer/CommandLineTools/usr/bin/llvm-cov
+coverage --repo_env=BAZEL_LLVM_PROFDATA=/Library/Developer/CommandLineTools/usr/bin/llvm-profdata
+coverage --test_env=GENERATE_LLVM_LCOV=1

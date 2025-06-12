@@ -36,6 +36,7 @@ cc_test(
     deps = [
         "@googletest//:gtest_main",
         ":case-matrix",
+        ":lde-matrix-test-utils",
     ],
 )
 
@@ -76,6 +77,18 @@ cc_test(
     deps = [
       "@googletest//:gtest_main",
       ":pattern-matrix",
+      ":lde-matrix-test-utils",
+    ],
+)
+
+cc_test(
+    name = "pattern-matrix_test-tgates",
+    size = "large",
+    srcs = ["pattern-matrix_test-tgates.cpp"],
+    deps = [
+      "@googletest//:gtest_main",
+      ":pattern-matrix",
+      ":lde-matrix-test-utils",
     ],
 )
 
@@ -95,6 +108,47 @@ cc_test(
       "@googletest//:gtest",
       "@googletest//:gtest_main",
       ":pattern-deduper",
+      ":lde-matrix-test-utils",
+    ],
+)
+
+cc_library(
+    name = "possible-pattern-matrix",
+    srcs = ["possible-pattern-matrix.cpp"],
+    hdrs = ["possible-pattern-matrix.hpp"],
+    deps = [
+        ":zmatrix",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+cc_test(
+    name = "possible-pattern-matrix_test",
+    size = "small",
+    srcs = ["possible-pattern-matrix_test.cpp"],
+    deps = [
+      "@googletest//:gtest_main",
+      ":possible-pattern-matrix",
+      ":lde-matrix-test-utils",
+    ],
+)
+
+cc_library(
+    name = "possible-pattern-deduper",
+    srcs = ["possible-pattern-deduper.cpp"],
+    hdrs = ["possible-pattern-deduper.hpp"],
+    deps = [":possible-pattern-matrix"],
+    visibility = ["//visibility:public"],
+)
+
+cc_test(
+    name = "possible-pattern-deduper_test",
+    size = "small",
+    srcs = ["possible-pattern-deduper_test.cpp"],
+    deps = [
+      "@googletest//:gtest",
+      "@googletest//:gtest_main",
+      ":possible-pattern-deduper",
       ":lde-matrix-test-utils",
     ],
 )

@@ -8,6 +8,7 @@ std::string TOO_FEW_ROWS = "[0 0,0 0,0 0,0 0,0 0,0 0]";
 std::string TOO_FEW_COLUMNS = "[0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0]";
 std::string VALID_BINARY_PATTERN = "[0 0,0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0,0 0][0 0,0 0,0 0,0 0,0 0,0 0][0 1,0 1,0 1,0 1,0 1,0 1][1 0,1 0,1 0,1 0,1 0,1 0][1 1,1 1,1 1,1 1,1 1,1 1]";
 std::string VALID_BINARY_PATTERN_IN_NUMERICAL_FORM = "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][1,1,1,1,1,1][2,2,2,2,2,2][3,3,3,3,3,3]";
+std::string VALID_BINARY_PATTERN_IN_NUMERICAL_FORM_NEW_ENCODING = "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][2,2,2,2,2,2][1,1,1,1,1,1][3,3,3,3,3,3]";
 std::string VALID_NUMERICAL_PATTERN = "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][1,1,1,1,1,1][2,2,2,2,2,2][3,3,3,3,3,3]";
 std::string ALL_ZEROS_PATTERN = "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]";
 
@@ -268,7 +269,7 @@ std::map <bool, std::vector<std::string>> ORTHONORMAL_PATTERN_CHECKS = {
 };
 
 
-TEST(PatternMatrixTest, PatternDefaultMatrixConstructor) {
+TEST(PatternMatrixTest, DefaultMatrixConstructor) {
     patternMatrix pm = patternMatrix();
     zmatrix pmz = zmatrix(6,6,3);
     zmatrix cz = zmatrix(6,6,1);
@@ -292,7 +293,7 @@ TEST(PatternMatrixTest, PatternDefaultMatrixConstructor) {
     EXPECT_EQ(pm.pGroupings, groupings);
 }
 
-TEST(PatternMatrixTest, PatternMatrixLoadFromString) {
+TEST(PatternMatrixTest, LoadFromString) {
     patternMatrix pm = patternMatrix();
     EXPECT_THROW(pm.loadFromString(""),std::runtime_error);
     EXPECT_THROW(pm.loadFromString(TOO_FEW_ROWS),std::runtime_error);
@@ -305,8 +306,9 @@ TEST(PatternMatrixTest, PatternMatrixLoadFromString) {
 
 // TODO - Add a few more test cases and verify that the entire data structure is populated correctly
 //  I found that possible values wasn't but has been fixed so there might be more issues
-TEST(PatternMatrixTest, PatternMatrixLoadFrom928Pattern) {
+TEST(PatternMatrixTest, LoadFrom928Pattern) {
     patternMatrix pm = patternMatrix(1);
+    pm.printOldEncoding = false;
     EXPECT_EQ(pm.id, 1);
     EXPECT_EQ(pm.id2704, 0);
     EXPECT_EQ(pm.id928, 1);
@@ -319,7 +321,7 @@ TEST(PatternMatrixTest, PatternMatrixLoadFrom928Pattern) {
     EXPECT_EQ(pm.originalMatrix, "[2,2,0,1,0,0][2,2,0,1,0,0][0,0,0,0,0,0][1,1,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]");
 }
 
-TEST(PatternMatrixTest,PatternMatrixStringConstructor) {
+TEST(PatternMatrixTest, StringConstructor) {
     patternMatrix pm = patternMatrix(1, ALL_ZEROS_PATTERN);
     zmatrix pmz = zmatrix(6,6,3);
     pmz.updateMetadata();
@@ -349,7 +351,7 @@ TEST(PatternMatrixTest,PatternMatrixStringConstructor) {
 }
 
 // TODO - Add a few more test cases
-TEST(PatternMatrixTest,PatternMatrixNewEncodingConstructor) {
+TEST(PatternMatrixTest, NewEncodingConstructor) {
     // Using a case match from the 928 group to test the new encoding
     // Case 2 - 27 [1,1,0,2,0,0][1,1,2,0,0,0][1,1,0,0,0,2][1,1,2,2,0,2][0,0,0,0,0,0][0,0,0,0,0,0]
     patternMatrix pm = patternMatrix(27, "[1,1,0,2,0,0][1,1,2,0,0,0][1,1,0,0,0,2][1,1,2,2,0,2][0,0,0,0,0,0][0,0,0,0,0,0]", true);
@@ -361,7 +363,7 @@ TEST(PatternMatrixTest,PatternMatrixNewEncodingConstructor) {
     EXPECT_EQ(pm.subCaseMatch, '-');
 }
 
-TEST(PatternMatrixTest,PatternMatrixIsTranspose) {
+TEST(PatternMatrixTest, IsTranspose) {
     patternMatrix pm1 = patternMatrix(1, "[1,1,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]");
     patternMatrix pm2 = patternMatrix(1, "[1,0,0,0,0,0][1,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]");
     patternMatrix pm3 = patternMatrix(1, "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]");
@@ -376,7 +378,7 @@ TEST(PatternMatrixTest,PatternMatrixIsTranspose) {
     EXPECT_FALSE(pm1.isTranspose(pm5));
 }
 
-TEST(PatternMatrixTest,PatternMatrixIs23Swap) {
+TEST(PatternMatrixTest, Is23Swap) {
     patternMatrix pm1 = patternMatrix(1, "[2,3,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]");
     patternMatrix pm2 = patternMatrix(1, "[3,3,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]");
     patternMatrix pm3 = patternMatrix(1, "[2,2,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]");
@@ -402,7 +404,7 @@ TEST(PatternMatrixTest,PatternMatrixIs23Swap) {
     EXPECT_TRUE(pm2.is23Swap(pm3));
 }
 
-TEST(PatternMatrixTest,PatternMatrixIs23SwapT) {
+TEST(PatternMatrixTest, Is23SwapT) {
     patternMatrix pm1 = patternMatrix(1, "[2,3,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]");
     patternMatrix pm2 = patternMatrix(1, "[3,0,0,0,0,0][3,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]");
     patternMatrix pm3 = patternMatrix(1, "[2,0,0,0,0,0][2,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0]");
@@ -423,7 +425,7 @@ TEST(PatternMatrixTest,PatternMatrixIs23SwapT) {
     EXPECT_TRUE(pm1.is23SwapT(pm8));
 }
 
-TEST(PatternMatrixTest,PatternMatrixLoadCases) {
+TEST(PatternMatrixTest, LoadCases) {
     patternMatrix pm1 = patternMatrix(1, ALL_ZEROS_PATTERN);
     // These are the cases we expect to have and the test is to ensure we load all the cases we intend to
     std::vector<caseMatrix> baseCases;
@@ -444,7 +446,7 @@ TEST(PatternMatrixTest,PatternMatrixLoadCases) {
 }
 
 // TODO - Use the test data as well
-TEST(PatternMatrixTest,PatternMatrixMatchesCase) {
+TEST(PatternMatrixTest, MatchesCase) {
     for (auto const& [caseNumber, patterns] : CASE_TO_VALID_PATTERN_MAP) {
         // Skip cases that are not valid here
         if (caseNumber == -1) {
@@ -458,7 +460,7 @@ TEST(PatternMatrixTest,PatternMatrixMatchesCase) {
 }
 
 // TODO - Use the test data as well
-TEST(PatternMatrixTest,PatternMatrixMatchOnCases) {
+TEST(PatternMatrixTest, MatchOnCases) {
     for (auto const& [caseNumber, patterns] : CASE_TO_VALID_PATTERN_MAP) {
         for (auto const& pattern : patterns) {
             patternMatrix pm = patternMatrix(1, pattern);
@@ -468,7 +470,7 @@ TEST(PatternMatrixTest,PatternMatrixMatchOnCases) {
     }
 }
 
-TEST(PatternMatrixTest,PatternMatrixDetermineSubCase) {
+TEST(PatternMatrixTest, DetermineSubCase) {
     for (auto const& [caseNumber, subcases] : SUBCASE_NEW_ENCODING_MAP) {
         for (auto const& [subcase, pattern] : subcases) {
             patternMatrix pm = patternMatrix(1, pattern, true);
@@ -484,7 +486,7 @@ TEST(PatternMatrixTest,PatternMatrixDetermineSubCase) {
 // TODO - Rearrangement Refactor + Test Overhaul
 //  This is a shortened version of the rearrangement test
 //  To do a full up test, run the test file dedicated to rearrangements
-TEST(PatternMatrixTest,PatternMatrixRearrangeMatrixShort) {
+TEST(PatternMatrixTest, RearrangeMatrixShort) {
     // Test all of the possible rearrangements but for a limited set of cases
     for (auto const& [caseNumber, patterns] : REARRANGE_CASES_SHORT) {
         if (caseNumber == -1 || caseNumber == 0) {
@@ -524,12 +526,12 @@ TEST(PatternMatrixTest,PatternMatrixRearrangeMatrixShort) {
 }
 
 // TODO - Rearrangement Refactor + Test Overhaul
-TEST(PatternMatrixTest,PatternMatrixOptimalCaseRearrangements) {
+TEST(PatternMatrixTest, OptimalCaseRearrangements) {
     GTEST_SKIP() << "Not implemented yet";
 }
 
 // TODO: Implement the following tests
-TEST(PatternMatrixTest,PatternMatrixLeftTGateMultiply) {
+TEST(PatternMatrixTest, LeftTGateMultiply) {
     /*
     patternMatrix pm1 = patternMatrix(1, "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,1,1][0,0,0,1,2,2][0,0,0,1,2,2]");
     if(!pm1.rearrangeMatrix()) FAIL() << "Failed to rearrange matrix";
@@ -560,7 +562,7 @@ TEST(PatternMatrixTest,PatternMatrixLeftTGateMultiply) {
     GTEST_SKIP() << "Not finished";
 }
 
-TEST(PatternMatrixTest,PatternMatrixRightTGateMultiply) {
+TEST(PatternMatrixTest, RightTGateMultiply) {
     /*
     patternMatrix pm1 = patternMatrix(1, "[0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,0,0][0,0,0,0,1,1][0,0,0,1,2,2][0,0,0,1,2,2]");
     if(!pm1.rearrangeMatrix()) FAIL() << "Failed to rearrange matrix";
@@ -594,7 +596,7 @@ TEST(PatternMatrixTest,PatternMatrixRightTGateMultiply) {
 
 // TODO - This might be better to put outside of the PatternMatrix and into another file
 //  But should be determined after figuring out how to handle LDEs
-TEST(PatternMatrixTest,PatternMatrixPatternElementAddition) {
+TEST(PatternMatrixTest, PatternElementAddition) {
     patternMatrix pm = patternMatrix(1, ALL_ZEROS_PATTERN);
     //GTEST_SKIP() << "Not implemented yet";
     // Pattern addition properties based on above:
@@ -618,7 +620,7 @@ TEST(PatternMatrixTest,PatternMatrixPatternElementAddition) {
 }
 
 // TODO: Split this into 2 tests, one for isNormalized and one for isOrthogonal
-TEST(PatternMatrixTest,PatternMatrixIsOrthonormal) {
+TEST(PatternMatrixTest, IsOrthonormal) {
     for (auto const& [expected, patterns] : ORTHONORMAL_PATTERN_CHECKS) {
         for (auto const& pattern : patterns) {
             patternMatrix pm = patternMatrix(1, pattern);
@@ -640,10 +642,112 @@ TEST(PatternMatrixTest,PatternMatrixIsOrthonormal) {
     }
 }
 
-TEST(PatternMatrixTest,PatternMatrixGenerateAllPossibleValuePatterns) {
+TEST(PatternMatrixTest, GenerateAllPossibleValuePatterns) {
     GTEST_SKIP() << "Not finished";
 }
 
-TEST(PatternMatrixTest,PatternMatrixDoLDEReduction) {
+TEST(PatternMatrixTest, DoLDEReduction) {
     GTEST_SKIP() << "Not finished";
 }
+
+TEST(PatternMatrixTest, GetMaxOfPossibleValues) {
+    //patternMatrix pm = patternMatrix(1);
+    //std::vector<std::vector<std::vector<int>>> possibleValues;
+    //pm.possibleValues = {};
+    //std::string got = pm.getMaxOfPossibleValues();
+    GTEST_SKIP() << "Not finished";
+}
+
+/*
+Check these off based on test status
+void loadFromString(std::string m);
+void updatePairCounts();
+// Case Matching Functions
+void matchOnCases();
+bool matchesCase(int caseIndex);
+bool determineSubCase();
+bool case1SubCaseMatch();
+bool case2SubCaseMatch();
+bool case3SubCaseMatch();
+bool case3aSubCaseCheck();
+bool case3bSubCaseCheck();
+bool case3cSubCaseCheck();
+bool case4SubCaseMatch();
+bool case5SubCaseMatch();
+bool case6SubCaseMatch();
+bool case7SubCaseMatch();
+bool case8SubCaseMatch();
+std::string getFirstCaseRearrangement();
+
+// Duplicate Pattern Checks
+bool isDuplicate(patternMatrix other);
+bool isTranspose(patternMatrix other);
+bool is23Swap(patternMatrix other);
+bool is23SwapT(patternMatrix other);
+// Extra Printing Functions
+void printDebug(std::ostream& os);
+void printLDEs(std::ostream& os);
+std::string rowPossibleValueToString(int row);
+void printPossibleValues(std::ostream& os);
+void printPairCounts(std::ostream& os);
+void printRowPairCounts(std::ostream& os);
+void printColPairCounts(std::ostream& os);
+void printCounts(std::ostream& os);
+void printRowCounts(std::ostream& os);
+void printColCounts(std::ostream& os);
+void printCountRows(std::ostream& os);
+void printCountCols(std::ostream& os);
+// Get a list of T-Gate operations applied
+std::string printTGateOperations();
+
+bool ;
+void generateAllPossibleValuePatterns();
+void optimizedGenerateAllPossibleValuePatterns();
+void generateRowSet(int pvRow, int rsPos, std::vector<int> newRow, int pos);
+void opt2GenerateAllPossibleValuePatterns();
+void recursiveRowSetPatternGeneration(int curRow, std::vector<std::string> rowSelections);
+void recursiveAllPossibleValueSet(int position, zmatrix z);
+void optimizedAllPossibleValuePatterns(int position, zmatrix z);
+// T-Gate Multiplication Functions
+void leftTGateMultiply(int p, int q);
+void rightTGateMultiply(int p, int q);
+int patternElementAddition(int a, int b);
+bool findOptimalTGateOperations();
+bool optimalTGatesCase1();
+bool optimalTGatesCase2();
+bool optimalTGatesCase3();
+bool optimalTGatesCase4();
+bool optimalTGatesCase5();
+bool optimalTGatesCase6();
+bool optimalTGatesCase7();
+bool optimalTGatesCase8();
+bool findAllTGateOptions();
+bool allTGatesCase1();
+bool allTGatesCase2();
+bool allTGatesCase3();
+bool allTGatesCase4();
+bool allTGatesCase5();
+bool allTGatesCase6();
+bool allTGatesCase7();
+bool allTGatesCase8();
+// LDE Reduction Functions
+void ldeReductionOnEntry(int row, int col, int ldeReduction);
+void ldeReductionOnEntryToTarget(int row, int col, int ldeReduction, int target);
+void ldeReductionOnPattern(int ldeValue);
+bool canFullyReduceLDE();  // This will check if the LDE can be fully reduced for the whole pattern
+int getMaxLDEValue();
+void doLDEReduction();
+// These could be private but are public for testing
+bool rearrangeMatrix();
+void rearrangeColumns(zmatrix patternVersion, zmatrix caseVersion, int currentColumn);
+void rearrangeRows(zmatrix patternVersion, zmatrix caseVersion, int currentRow);
+std::string toString();
+// TODO: Add a csv output for the pattern matrix
+bool isSymmetric();
+bool isNormalized();
+bool isOrthogonal();
+bool isRowNormalized(int row, zmatrix z);
+bool isRowNormalized(std::vector<int> row);
+bool areRowsOrthogonal(int row1, int row2, zmatrix z);
+bool areRowsOrthogonal(std::vector<int> row1, std::vector<int> row2);
+*/

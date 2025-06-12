@@ -1,4 +1,5 @@
 #include <map>
+#include <vector>
 #include <string>
 
 #include "patterns928.hpp"
@@ -2021,4 +2022,6581 @@ std::map <int, std::map <int, std::map <int, std::string>>> CASE_SUM_MAP_PATTERN
             {928, "[2,2,2,2,1,1][2,2,2,2,1,1][2,2,1,1,3,3][2,2,1,1,3,3][1,1,3,3,3,3][1,1,3,3,3,3]"},
         }},
     }},
+};
+
+std::map <int, std::map <int, bool>> CASE_PATTERN_MAP_PATTERNS_928 {
+    {-1, {
+        {240, true},
+    }},
+    {1, {
+        {1, true},
+        {2, true},
+        {13, true},
+        {14, true},
+        {17, true},
+        {18, true},
+        {23, true},
+        {97, true},
+        {112, true},
+        {113, true},
+        {114, true},
+        {122, true},
+        {123, true},
+        {124, true},
+        {125, true},
+        {126, true},
+        {127, true},
+        {131, true},
+        {132, true},
+        {156, true},
+        {157, true},
+        {158, true},
+        {159, true},
+        {164, true},
+        {165, true},
+        {166, true},
+        {167, true},
+        {170, true},
+        {171, true},
+        {174, true},
+        {182, true},
+        {200, true},
+        {201, true},
+        {204, true},
+        {205, true},
+        {244, true},
+        {253, true},
+        {254, true},
+        {255, true},
+        {256, true},
+        {267, true},
+        {283, true},
+        {367, true},
+        {389, true},
+        {390, true},
+        {435, true},
+        {436, true},
+        {437, true},
+        {441, true},
+        {442, true},
+        {443, true},
+        {444, true},
+        {461, true},
+        {463, true},
+        {464, true},
+        {480, true},
+        {494, true},
+        {499, true},
+        {500, true},
+        {504, true},
+        {505, true},
+        {506, true},
+        {507, true},
+        {511, true},
+        {551, true},
+        {552, true},
+        {553, true},
+        {554, true},
+        {555, true},
+        {577, true},
+        {580, true},
+        {581, true},
+        {582, true},
+        {583, true},
+        {584, true},
+        {585, true},
+        {586, true},
+        {587, true},
+        {588, true},
+        {596, true},
+        {606, true},
+        {620, true},
+        {684, true},
+        {695, true},
+        {703, true},
+        {743, true},
+        {744, true},
+        {745, true},
+        {900, true},
+        
+    }}, 
+    {2, {
+        {3, true},
+        {4, true},
+        {5, true},
+        {6, true},
+        {7, true},
+        {8, true},
+        {9, true},
+        {10, true},
+        {11, true},
+        {12, true},
+        {15, true},
+        {16, true},
+        {19, true},
+        {20, true},
+        {21, true},
+        {22, true},
+        {24, true},
+        {25, true},
+        {27, true},
+        {28, true},
+        {29, true},
+        {30, true},
+        {34, true},
+        {35, true},
+        {38, true},
+        {39, true},
+        {48, true},
+        {49, true},
+        {50, true},
+        {54, true},
+        {55, true},
+        {71, true},
+        {72, true},
+        {73, true},
+        {93, true},
+        {94, true},
+        {95, true},
+        {96, true},
+        {98, true},
+        {115, true},
+        {116, true},
+        {117, true},
+        {118, true},
+        {119, true},
+        {120, true},
+        {121, true},
+        {128, true},
+        {129, true},
+        {130, true},
+        {133, true},
+        {134, true},
+        {135, true},
+        {140, true},
+        {141, true},
+        {142, true},
+        {145, true},
+        {146, true},
+        {147, true},
+        {148, true},
+        {149, true},
+        {150, true},
+        {153, true},
+        {154, true},
+        {155, true},
+        {188, true},
+        {189, true},
+        {190, true},
+        {191, true},
+        {192, true},
+        {193, true},
+        {194, true},
+        {195, true},
+        {196, true},
+        {197, true},
+        {198, true},
+        {199, true},
+        {208, true},
+        {209, true},
+        {241, true},
+        {242, true},
+        {243, true},
+        {245, true},
+        {246, true},
+        {247, true},
+        {248, true},
+        {249, true},
+        {250, true},
+        {251, true},
+        {252, true},
+        {260, true},
+        {261, true},
+        {268, true},
+        {269, true},
+        {270, true},
+        {271, true},
+        {272, true},
+        {273, true},
+        {274, true},
+        {275, true},
+        {276, true},
+        {277, true},
+        {278, true},
+        {279, true},
+        {280, true},
+        {281, true},
+        {282, true},
+        {286, true},
+        {287, true},
+        {288, true},
+        {289, true},
+        {292, true},
+        {293, true},
+        {294, true},
+        {295, true},
+        {296, true},
+        {297, true},
+        {298, true},
+        {299, true},
+        {300, true},
+        {301, true},
+        {305, true},
+        {306, true},
+        {330, true},
+        {331, true},
+        {344, true},
+        {345, true},
+        {361, true},
+        {362, true},
+        {363, true},
+        {364, true},
+        {365, true},
+        {366, true},
+        {368, true},
+        {373, true},
+        {374, true},
+        {375, true},
+        {376, true},
+        {377, true},
+        {378, true},
+        {379, true},
+        {380, true},
+        {381, true},
+        {382, true},
+        {387, true},
+        {388, true},
+        {391, true},
+        {392, true},
+        {393, true},
+        {394, true},
+        {403, true},
+        {404, true},
+        {405, true},
+        {438, true},
+        {439, true},
+        {440, true},
+        {452, true},
+        {453, true},
+        {454, true},
+        {455, true},
+        {456, true},
+        {457, true},
+        {458, true},
+        {459, true},
+        {460, true},
+        {466, true},
+        {467, true},
+        {468, true},
+        {477, true},
+        {478, true},
+        {479, true},
+        {481, true},
+        {482, true},
+        {483, true},
+        {484, true},
+        {485, true},
+        {486, true},
+        {487, true},
+        {488, true},
+        {489, true},
+        {490, true},
+        {491, true},
+        {492, true},
+        {493, true},
+        {495, true},
+        {496, true},
+        {497, true},
+        {498, true},
+        {508, true},
+        {509, true},
+        {510, true},
+        {548, true},
+        {549, true},
+        {550, true},
+        {567, true},
+        {568, true},
+        {616, true},
+        {617, true},
+        {618, true},
+        {619, true},
+        {640, true},
+        {641, true},
+        {649, true},
+        {650, true},
+        {651, true},
+        {652, true},
+        {656, true},
+        {657, true},
+        {658, true},
+        {659, true},
+        {663, true},
+        {664, true},
+        {665, true},
+        {666, true},
+        {685, true},
+        {686, true},
+        {687, true},
+        {688, true},
+        {689, true},
+        {690, true},
+        {698, true},
+        {699, true},
+        {700, true},
+        {701, true},
+        {702, true},
+        {746, true},
+        {747, true},
+        {748, true},
+        {772, true},
+        {778, true},
+        {839, true},
+        {842, true},
+        {845, true},
+    }}, 
+    {3, {
+        {51, true},
+        {52, true},
+        {53, true},
+        {56, true},
+        {57, true},
+        {58, true},
+        {59, true},
+        {60, true},
+        {63, true},
+        {64, true},
+        {65, true},
+        {66, true},
+        {67, true},
+        {70, true},
+        {74, true},
+        {75, true},
+        {76, true},
+        {77, true},
+        {78, true},
+        {81, true},
+        {82, true},
+        {83, true},
+        {84, true},
+        {85, true},
+        {86, true},
+        {103, true},
+        {104, true},
+        {105, true},
+        {106, true},
+        {107, true},
+        {108, true},
+        {109, true},
+        {110, true},
+        {111, true},
+        {307, true},
+        {308, true},
+        {309, true},
+        {310, true},
+        {311, true},
+        {312, true},
+        {313, true},
+        {314, true},
+        {315, true},
+        {316, true},
+        {317, true},
+        {318, true},
+        {319, true},
+        {320, true},
+        {321, true},
+        {322, true},
+        {323, true},
+        {332, true},
+        {333, true},
+        {334, true},
+        {335, true},
+        {336, true},
+        {337, true},
+        {338, true},
+        {348, true},
+        {349, true},
+        {350, true},
+        {351, true},
+        {352, true},
+        {408, true},
+        {409, true},
+        {410, true},
+        {411, true},
+        {412, true},
+        {413, true},
+        {414, true},
+        {415, true},
+        {416, true},
+        {417, true},
+        {418, true},
+        {419, true},
+        {420, true},
+        {421, true},
+        {422, true},
+        {423, true},
+        {424, true},
+        {425, true},
+        {426, true},
+        {427, true},
+        {428, true},
+        {429, true},
+        {430, true},
+        {431, true},
+        {432, true},
+        {433, true},
+        {434, true},
+        {708, true},
+        {709, true},
+        {710, true},
+        {711, true},
+        {712, true},
+        {713, true},
+        {714, true},
+        {723, true},
+        {724, true},
+        {725, true},
+        {726, true},
+        {727, true},
+        {728, true},
+        {729, true},
+        {730, true},
+        {731, true},
+        {732, true},
+        {733, true},
+        {734, true},
+        {735, true},
+        {738, true},
+        {739, true},
+        {740, true},
+        {741, true},
+        {742, true},
+        {757, true},
+        {758, true},
+        {759, true},
+        {760, true},
+        {761, true},
+        {762, true},
+        {763, true},
+        {764, true},
+        {771, true},
+        {773, true},
+        {774, true},
+        {775, true},
+        {776, true},
+        {777, true},
+        {799, true},
+        {800, true},
+        {801, true},
+        {802, true},
+        {803, true},
+        {804, true},
+        {805, true},
+        {806, true},
+        {807, true},
+        {808, true},
+        {809, true},
+        {810, true},
+        {811, true},
+        {812, true},
+        {813, true},
+        {814, true},
+        {815, true},
+        {816, true},
+        {817, true},
+        {818, true},
+        {819, true},
+        {831, true},
+        {832, true},
+        {833, true},
+        {834, true},
+        {840, true},
+        {841, true},
+        {843, true},
+        {844, true},
+        {867, true},
+        {868, true},
+        {869, true},
+        {870, true},
+        {871, true},
+        {872, true},
+        {875, true},
+        {876, true},
+        {877, true},
+        {878, true},
+        {879, true},
+        {908, true},
+        {909, true},
+        {910, true},
+        {911, true},
+        {912, true},
+        {913, true},
+        {914, true},        
+    }}, 
+    {4, {
+        {33, true},
+        {36, true},
+        {41, true},
+        {42, true},
+        {43, true},
+        {44, true},
+        {61, true},
+        {62, true},
+        {79, true},
+        {80, true},
+        {100, true},
+        {101, true},
+        {136, true},
+        {137, true},
+        {138, true},
+        {139, true},
+        {143, true},
+        {144, true},
+        {151, true},
+        {152, true},
+        {160, true},
+        {161, true},
+        {162, true},
+        {163, true},
+        {168, true},
+        {169, true},
+        {175, true},
+        {176, true},
+        {177, true},
+        {178, true},
+        {236, true},
+        {237, true},
+        {259, true},
+        {264, true},
+        {265, true},
+        {266, true},
+        {290, true},
+        {291, true},
+        {303, true},
+        {304, true},
+        {346, true},
+        {347, true},
+        {371, true},
+        {372, true},
+        {383, true},
+        {384, true},
+        {386, true},
+        {396, true},
+        {397, true},
+        {398, true},
+        {400, true},
+        {401, true},
+        {406, true},
+        {407, true},
+        {448, true},
+        {449, true},
+        {450, true},
+        {501, true},
+        {502, true},
+        {503, true},
+        {557, true},
+        {558, true},
+        {560, true},
+        {561, true},
+        {562, true},
+        {563, true},
+        {589, true},
+        {590, true},
+        {591, true},
+        {592, true},
+        {600, true},
+        {601, true},
+        {602, true},
+        {604, true},
+        {605, true},
+        {607, true},
+        {608, true},
+        {611, true},
+        {612, true},
+        {655, true},
+        {660, true},
+        {661, true},
+        {668, true},
+        {669, true},
+        {670, true},
+        {671, true},
+        {679, true},
+        {680, true},
+        {681, true},
+        {693, true},
+        {694, true},
+        {705, true},
+        {706, true},
+        {721, true},
+        {722, true},
+        {765, true},
+        {766, true},
+        {767, true},
+        {768, true},
+        {769, true},
+        {770, true},
+        {835, true},
+        {836, true},
+        {837, true},
+        {838, true},
+        {873, true},
+        {874, true},
+        {896, true},
+        {897, true},
+        {898, true},
+        {902, true},
+        {906, true},
+    }}, 
+    {5, {
+        {26, true},
+        {31, true},
+        {32, true},
+        {37, true},
+        {40, true},
+        {45, true},
+        {46, true},
+        {47, true},
+        {99, true},
+        {102, true},
+        {172, true},
+        {173, true},
+        {179, true},
+        {180, true},
+        {181, true},
+        {183, true},
+        {184, true},
+        {185, true},
+        {186, true},
+        {187, true},
+        {202, true},
+        {203, true},
+        {206, true},
+        {207, true},
+        {238, true},
+        {239, true},
+        {257, true},
+        {258, true},
+        {262, true},
+        {263, true},
+        {284, true},
+        {285, true},
+        {302, true},
+        {357, true},
+        {369, true},
+        {370, true},
+        {385, true},
+        {395, true},
+        {399, true},
+        {402, true},
+        {445, true},
+        {446, true},
+        {447, true},
+        {451, true},
+        {462, true},
+        {465, true},
+        {556, true},
+        {559, true},
+        {564, true},
+        {565, true},
+        {566, true},
+        {578, true},
+        {593, true},
+        {594, true},
+        {595, true},
+        {597, true},
+        {598, true},
+        {599, true},
+        {603, true},
+        {609, true},
+        {610, true},
+        {613, true},
+        {614, true},
+        {615, true},
+        {648, true},
+        {653, true},
+        {654, true},
+        {662, true},
+        {667, true},
+        {672, true},
+        {673, true},
+        {674, true},
+        {675, true},
+        {682, true},
+        {683, true},
+        {691, true},
+        {692, true},
+        {696, true},
+        {697, true},
+        {704, true},
+        {707, true},
+        {894, true},
+        {895, true},
+        {899, true},
+        {901, true},
+        {903, true},
+        {904, true},
+        {905, true},
+        {907, true},
+    }}, 
+    {6, {
+        {68, true},
+        {69, true},
+        {87, true},
+        {88, true},
+        {89, true},
+        {90, true},
+        {91, true},
+        {92, true},
+        {210, true},
+        {211, true},
+        {212, true},
+        {213, true},
+        {214, true},
+        {215, true},
+        {216, true},
+        {217, true},
+        {218, true},
+        {219, true},
+        {220, true},
+        {221, true},
+        {222, true},
+        {223, true},
+        {224, true},
+        {225, true},
+        {226, true},
+        {227, true},
+        {228, true},
+        {229, true},
+        {230, true},
+        {231, true},
+        {232, true},
+        {233, true},
+        {234, true},
+        {235, true},
+        {324, true},
+        {325, true},
+        {326, true},
+        {327, true},
+        {328, true},
+        {329, true},
+        {339, true},
+        {340, true},
+        {341, true},
+        {342, true},
+        {343, true},
+        {353, true},
+        {354, true},
+        {355, true},
+        {356, true},
+        {358, true},
+        {359, true},
+        {360, true},
+        {469, true},
+        {470, true},
+        {471, true},
+        {472, true},
+        {473, true},
+        {474, true},
+        {475, true},
+        {476, true},
+        {512, true},
+        {513, true},
+        {514, true},
+        {515, true},
+        {516, true},
+        {517, true},
+        {518, true},
+        {519, true},
+        {520, true},
+        {521, true},
+        {522, true},
+        {523, true},
+        {524, true},
+        {525, true},
+        {526, true},
+        {527, true},
+        {528, true},
+        {529, true},
+        {530, true},
+        {531, true},
+        {532, true},
+        {533, true},
+        {534, true},
+        {535, true},
+        {536, true},
+        {537, true},
+        {538, true},
+        {539, true},
+        {540, true},
+        {541, true},
+        {542, true},
+        {543, true},
+        {544, true},
+        {545, true},
+        {546, true},
+        {547, true},
+        {569, true},
+        {570, true},
+        {571, true},
+        {572, true},
+        {573, true},
+        {574, true},
+        {575, true},
+        {576, true},
+        {621, true},
+        {622, true},
+        {623, true},
+        {624, true},
+        {625, true},
+        {626, true},
+        {627, true},
+        {628, true},
+        {629, true},
+        {630, true},
+        {631, true},
+        {632, true},
+        {633, true},
+        {634, true},
+        {635, true},
+        {636, true},
+        {637, true},
+        {638, true},
+        {639, true},
+        {642, true},
+        {643, true},
+        {644, true},
+        {645, true},
+        {646, true},
+        {647, true},
+        {676, true},
+        {677, true},
+        {678, true},
+        {715, true},
+        {716, true},
+        {717, true},
+        {718, true},
+        {719, true},
+        {720, true},
+        {736, true},
+        {737, true},
+        {749, true},
+        {750, true},
+        {751, true},
+        {752, true},
+        {753, true},
+        {754, true},
+        {755, true},
+        {756, true},
+        {829, true},
+        {830, true},
+        {886, true},
+        {887, true},
+        {888, true},
+        {889, true},
+        {890, true},
+        {893, true},
+    }}, 
+    {7, {
+        {579, true},
+    }}, 
+    {8, {
+        {779, true},
+        {780, true},
+        {781, true},
+        {782, true},
+        {783, true},
+        {784, true},
+        {785, true},
+        {786, true},
+        {787, true},
+        {788, true},
+        {789, true},
+        {790, true},
+        {791, true},
+        {792, true},
+        {793, true},
+        {794, true},
+        {795, true},
+        {796, true},
+        {797, true},
+        {798, true},
+        {820, true},
+        {821, true},
+        {822, true},
+        {823, true},
+        {824, true},
+        {825, true},
+        {826, true},
+        {827, true},
+        {828, true},
+        {846, true},
+        {847, true},
+        {848, true},
+        {849, true},
+        {850, true},
+        {851, true},
+        {852, true},
+        {853, true},
+        {854, true},
+        {855, true},
+        {856, true},
+        {857, true},
+        {858, true},
+        {859, true},
+        {860, true},
+        {861, true},
+        {862, true},
+        {863, true},
+        {864, true},
+        {865, true},
+        {866, true},
+        {880, true},
+        {881, true},
+        {882, true},
+        {883, true},
+        {884, true},
+        {885, true},
+        {891, true},
+        {892, true},
+        {915, true},
+        {916, true},
+        {917, true},
+        {918, true},
+        {919, true},
+        {920, true},
+        {921, true},
+        {922, true},
+        {923, true},
+        {924, true},
+        {925, true},
+        {926, true},
+        {927, true},
+        {928, true},
+    }}, 
+};
+
+
+std::map <int, bool> PATTERN_928_VALIDITY {
+    {1, true},
+    {2, true},
+    {3, true},
+    {4, true},
+    {5, true},
+    {6, true},
+    {7, true},
+    {8, true},
+    {9, true},
+    {10, true},
+    {11, true},
+    {12, true},
+    {13, true},
+    {14, true},
+    {15, false},
+    {16, false},
+    {17, true},
+    {18, true},
+    {19, true},
+    {20, true},
+    {21, false},
+    {22, false},
+    {23, false},
+    {24, true},
+    {25, false},
+    {26, true},
+    {27, false},
+    {28, false},
+    {29, false},
+    {30, false},
+    {31, true},
+    {32, true},
+    {33, true},
+    {34, false},
+    {35, false},
+    {36, true},
+    {37, true},
+    {38, false},
+    {39, false},
+    {40, true},
+    {41, true},
+    {42, true},
+    {43, true},
+    {44, true},
+    {45, true},
+    {46, true},
+    {47, true},
+    {48, true},
+    {49, true},
+    {50, true},
+    {51, true},
+    {52, true},
+    {53, true},
+    {54, false},
+    {55, true},
+    {56, true},
+    {57, true},
+    {58, false},
+    {59, true},
+    {60, true},
+    {61, true},
+    {62, true},
+    {63, false},
+    {64, false},
+    {65, false},
+    {66, false},
+    {67, true},
+    {68, true},
+    {69, true},
+    {70, true},
+    {71, false},
+    {72, true},
+    {73, true},
+    {74, true},
+    {75, true},
+    {76, true},
+    {77, false},
+    {78, true},
+    {79, true},
+    {80, true},
+    {81, false},
+    {82, false},
+    {83, false},
+    {84, true},
+    {85, false},
+    {86, true},
+    {87, true},
+    {88, true},
+    {89, true},
+    {90, true},
+    {91, true},
+    {92, true},
+    {93, true},
+    {94, true},
+    {95, true},
+    {96, true},
+    {97, false},
+    {98, true},
+    {99, true},
+    {100, true},
+    {101, true},
+    {102, true},
+    {103, true},
+    {104, true},
+    {105, true},
+    {106, true},
+    {107, true},
+    {108, true},
+    {109, true},
+    {110, true},
+    {111, true},
+    {112, true},
+    {113, true},
+    {114, true},
+    {115, true},
+    {116, true},
+    {117, true},
+    {118, false},
+    {119, false},
+    {120, false},
+    {121, false},
+    {122, false},
+    {123, false},
+    {124, false},
+    {125, true},
+    {126, false},
+    {127, false},
+    {128, false},
+    {129, false},
+    {130, false},
+    {131, true},
+    {132, true},
+    {133, false},
+    {134, false},
+    {135, false},
+    {136, true},
+    {137, true},
+    {138, true},
+    {139, true},
+    {140, false},
+    {141, false},
+    {142, false},
+    {143, true},
+    {144, true},
+    {145, false},
+    {146, false},
+    {147, false},
+    {148, false},
+    {149, false},
+    {150, false},
+    {151, true},
+    {152, true},
+    {153, false},
+    {154, false},
+    {155, false},
+    {156, false},
+    {157, false},
+    {158, false},
+    {159, false},
+    {160, true},
+    {161, true},
+    {162, true},
+    {163, true},
+    {164, false},
+    {165, false},
+    {166, false},
+    {167, false},
+    {168, true},
+    {169, true},
+    {170, false},
+    {171, false},
+    {172, true},
+    {173, true},
+    {174, false},
+    {175, true},
+    {176, true},
+    {177, true},
+    {178, true},
+    {179, true},
+    {180, true},
+    {181, true},
+    {182, false},
+    {183, true},
+    {184, true},
+    {185, true},
+    {186, true},
+    {187, true},
+    {188, true},
+    {189, true},
+    {190, true},
+    {191, true},
+    {192, true},
+    {193, false},
+    {194, true},
+    {195, false},
+    {196, false},
+    {197, true},
+    {198, true},
+    {199, false},
+    {200, false},
+    {201, false},
+    {202, true},
+    {203, true},
+    {204, false},
+    {205, false},
+    {206, true},
+    {207, true},
+    {208, false},
+    {209, false},
+    {210, true},
+    {211, true},
+    {212, true},
+    {213, true},
+    {214, true},
+    {215, true},
+    {216, true},
+    {217, true},
+    {218, true},
+    {219, true},
+    {220, true},
+    {221, true},
+    {222, true},
+    {223, true},
+    {224, true},
+    {225, true},
+    {226, true},
+    {227, true},
+    {228, true},
+    {229, true},
+    {230, true},
+    {231, true},
+    {232, true},
+    {233, true},
+    {234, true},
+    {235, true},
+    {236, true},
+    {237, true},
+    {238, true},
+    {239, true},
+    {240, true},
+    {241, false},
+    {242, false},
+    {243, false},
+    {244, false},
+    {245, false},
+    {246, false},
+    {247, false},
+    {248, false},
+    {249, false},
+    {250, false},
+    {251, false},
+    {252, false},
+    {253, false},
+    {254, false},
+    {255, false},
+    {256, false},
+    {257, true},
+    {258, true},
+    {259, true},
+    {260, false},
+    {261, false},
+    {262, true},
+    {263, true},
+    {264, true},
+    {265, true},
+    {266, true},
+    {267, true},
+    {268, false},
+    {269, false},
+    {270, false},
+    {271, false},
+    {272, false},
+    {273, false},
+    {274, false},
+    {275, false},
+    {276, false},
+    {277, false},
+    {278, false},
+    {279, false},
+    {280, false},
+    {281, false},
+    {282, false},
+    {283, false},
+    {284, true},
+    {285, true},
+    {286, false},
+    {287, false},
+    {288, false},
+    {289, false},
+    {290, true},
+    {291, true},
+    {292, false},
+    {293, false},
+    {294, false},
+    {295, false},
+    {296, false},
+    {297, false},
+    {298, false},
+    {299, false},
+    {300, false},
+    {301, false},
+    {302, true},
+    {303, true},
+    {304, true},
+    {305, false},
+    {306, false},
+    {307, true},
+    {308, true},
+    {309, false},
+    {310, true},
+    {311, false},
+    {312, false},
+    {313, false},
+    {314, false},
+    {315, false},
+    {316, false},
+    {317, false},
+    {318, false},
+    {319, false},
+    {320, false},
+    {321, false},
+    {322, true},
+    {323, false},
+    {324, true},
+    {325, true},
+    {326, true},
+    {327, true},
+    {328, true},
+    {329, true},
+    {330, false},
+    {331, false},
+    {332, false},
+    {333, true},
+    {334, false},
+    {335, false},
+    {336, true},
+    {337, false},
+    {338, false},
+    {339, true},
+    {340, true},
+    {341, true},
+    {342, true},
+    {343, true},
+    {344, false},
+    {345, false},
+    {346, true},
+    {347, true},
+    {348, false},
+    {349, false},
+    {350, false},
+    {351, false},
+    {352, true},
+    {353, true},
+    {354, true},
+    {355, true},
+    {356, true},
+    {357, true},
+    {358, true},
+    {359, true},
+    {360, true},
+    {361, false},
+    {362, false},
+    {363, false},
+    {364, false},
+    {365, true},
+    {366, true},
+    {367, false},
+    {368, true},
+    {369, true},
+    {370, true},
+    {371, true},
+    {372, true},
+    {373, false},
+    {374, false},
+    {375, false},
+    {376, false},
+    {377, false},
+    {378, false},
+    {379, false},
+    {380, false},
+    {381, false},
+    {382, false},
+    {383, true},
+    {384, true},
+    {385, true},
+    {386, true},
+    {387, false},
+    {388, false},
+    {389, false},
+    {390, false},
+    {391, false},
+    {392, false},
+    {393, false},
+    {394, false},
+    {395, true},
+    {396, true},
+    {397, true},
+    {398, true},
+    {399, true},
+    {400, true},
+    {401, true},
+    {402, true},
+    {403, true},
+    {404, true},
+    {405, true},
+    {406, true},
+    {407, true},
+    {408, true},
+    {409, true},
+    {410, false},
+    {411, true},
+    {412, true},
+    {413, false},
+    {414, true},
+    {415, false},
+    {416, false},
+    {417, false},
+    {418, false},
+    {419, false},
+    {420, false},
+    {421, false},
+    {422, true},
+    {423, true},
+    {424, false},
+    {425, true},
+    {426, false},
+    {427, false},
+    {428, false},
+    {429, true},
+    {430, false},
+    {431, false},
+    {432, true},
+    {433, false},
+    {434, true},
+    {435, false},
+    {436, false},
+    {437, false},
+    {438, false},
+    {439, false},
+    {440, false},
+    {441, false},
+    {442, false},
+    {443, false},
+    {444, false},
+    {445, true},
+    {446, true},
+    {447, true},
+    {448, true},
+    {449, true},
+    {450, true},
+    {451, true},
+    {452, false},
+    {453, false},
+    {454, false},
+    {455, false},
+    {456, false},
+    {457, false},
+    {458, false},
+    {459, false},
+    {460, false},
+    {461, false},
+    {462, true},
+    {463, false},
+    {464, false},
+    {465, true},
+    {466, false},
+    {467, false},
+    {468, false},
+    {469, true},
+    {470, true},
+    {471, true},
+    {472, true},
+    {473, true},
+    {474, true},
+    {475, true},
+    {476, true},
+    {477, false},
+    {478, false},
+    {479, false},
+    {480, false},
+    {481, false},
+    {482, false},
+    {483, false},
+    {484, false},
+    {485, false},
+    {486, false},
+    {487, false},
+    {488, false},
+    {489, false},
+    {490, false},
+    {491, false},
+    {492, false},
+    {493, false},
+    {494, false},
+    {495, false},
+    {496, false},
+    {497, false},
+    {498, false},
+    {499, false},
+    {500, false},
+    {501, true},
+    {502, true},
+    {503, true},
+    {504, false},
+    {505, false},
+    {506, false},
+    {507, false},
+    {508, false},
+    {509, false},
+    {510, false},
+    {511, false},
+    {512, true},
+    {513, true},
+    {514, true},
+    {515, true},
+    {516, true},
+    {517, true},
+    {518, true},
+    {519, true},
+    {520, true},
+    {521, true},
+    {522, true},
+    {523, true},
+    {524, true},
+    {525, true},
+    {526, true},
+    {527, true},
+    {528, true},
+    {529, true},
+    {530, true},
+    {531, true},
+    {532, true},
+    {533, true},
+    {534, true},
+    {535, true},
+    {536, true},
+    {537, true},
+    {538, true},
+    {539, true},
+    {540, true},
+    {541, true},
+    {542, true},
+    {543, true},
+    {544, true},
+    {545, true},
+    {546, true},
+    {547, true},
+    {548, false},
+    {549, false},
+    {550, false},
+    {551, false},
+    {552, false},
+    {553, false},
+    {554, false},
+    {555, false},
+    {556, true},
+    {557, true},
+    {558, true},
+    {559, true},
+    {560, true},
+    {561, true},
+    {562, true},
+    {563, true},
+    {564, false},
+    {565, false},
+    {566, false},
+    {567, false},
+    {568, false},
+    {569, true},
+    {570, true},
+    {571, true},
+    {572, true},
+    {573, true},
+    {574, true},
+    {575, true},
+    {576, true},
+    {577, false},
+    {578, false},
+    {579, true},
+    {580, false},
+    {581, false},
+    {582, false},
+    {583, false},
+    {584, false},
+    {585, false},
+    {586, false},
+    {587, false},
+    {588, false},
+    {589, true},
+    {590, true},
+    {591, true},
+    {592, true},
+    {593, false},
+    {594, false},
+    {595, false},
+    {596, false},
+    {597, true},
+    {598, true},
+    {599, true},
+    {600, true},
+    {601, true},
+    {602, true},
+    {603, false},
+    {604, true},
+    {605, true},
+    {606, false},
+    {607, true},
+    {608, true},
+    {609, false},
+    {610, true},
+    {611, true},
+    {612, true},
+    {613, false},
+    {614, false},
+    {615, false},
+    {616, false},
+    {617, false},
+    {618, false},
+    {619, false},
+    {620, false},
+    {621, true},
+    {622, true},
+    {623, true},
+    {624, true},
+    {625, true},
+    {626, true},
+    {627, true},
+    {628, true},
+    {629, true},
+    {630, true},
+    {631, true},
+    {632, true},
+    {633, true},
+    {634, true},
+    {635, true},
+    {636, true},
+    {637, true},
+    {638, true},
+    {639, true},
+    {640, false},
+    {641, false},
+    {642, true},
+    {643, true},
+    {644, true},
+    {645, true},
+    {646, true},
+    {647, true},
+    {648, true},
+    {649, false},
+    {650, false},
+    {651, false},
+    {652, false},
+    {653, true},
+    {654, true},
+    {655, true},
+    {656, false},
+    {657, false},
+    {658, false},
+    {659, false},
+    {660, true},
+    {661, true},
+    {662, true},
+    {663, false},
+    {664, false},
+    {665, false},
+    {666, false},
+    {667, true},
+    {668, true},
+    {669, true},
+    {670, true},
+    {671, true},
+    {672, false},
+    {673, true},
+    {674, false},
+    {675, false},
+    {676, true},
+    {677, true},
+    {678, true},
+    {679, true},
+    {680, true},
+    {681, true},
+    {682, true},
+    {683, true},
+    {684, false},
+    {685, false},
+    {686, false},
+    {687, false},
+    {688, false},
+    {689, false},
+    {690, false},
+    {691, true},
+    {692, true},
+    {693, true},
+    {694, true},
+    {695, false},
+    {696, true},
+    {697, true},
+    {698, false},
+    {699, false},
+    {700, true},
+    {701, true},
+    {702, true},
+    {703, false},
+    {704, true},
+    {705, true},
+    {706, true},
+    {707, true},
+    {708, true},
+    {709, true},
+    {710, true},
+    {711, true},
+    {712, true},
+    {713, true},
+    {714, true},
+    {715, true},
+    {716, true},
+    {717, true},
+    {718, true},
+    {719, true},
+    {720, true},
+    {721, true},
+    {722, true},
+    {723, false},
+    {724, false},
+    {725, false},
+    {726, false},
+    {727, false},
+    {728, false},
+    {729, false},
+    {730, false},
+    {731, false},
+    {732, false},
+    {733, false},
+    {734, false},
+    {735, false},
+    {736, true},
+    {737, true},
+    {738, false},
+    {739, true},
+    {740, true},
+    {741, false},
+    {742, true},
+    {743, false},
+    {744, false},
+    {745, false},
+    {746, false},
+    {747, false},
+    {748, false},
+    {749, true},
+    {750, true},
+    {751, true},
+    {752, true},
+    {753, true},
+    {754, true},
+    {755, true},
+    {756, true},
+    {757, true},
+    {758, true},
+    {759, true},
+    {760, true},
+    {761, false},
+    {762, true},
+    {763, true},
+    {764, true},
+    {765, true},
+    {766, true},
+    {767, true},
+    {768, true},
+    {769, true},
+    {770, true},
+    {771, false},
+    {772, false},
+    {773, true},
+    {774, true},
+    {775, false},
+    {776, true},
+    {777, false},
+    {778, false},
+    {779, true},
+    {780, true},
+    {781, true},
+    {782, true},
+    {783, true},
+    {784, true},
+    {785, true},
+    {786, true},
+    {787, true},
+    {788, true},
+    {789, true},
+    {790, true},
+    {791, true},
+    {792, true},
+    {793, true},
+    {794, true},
+    {795, true},
+    {796, true},
+    {797, true},
+    {798, true},
+    {799, true},
+    {800, false},
+    {801, false},
+    {802, true},
+    {803, true},
+    {804, false},
+    {805, false},
+    {806, false},
+    {807, false},
+    {808, false},
+    {809, false},
+    {810, false},
+    {811, false},
+    {812, false},
+    {813, false},
+    {814, false},
+    {815, false},
+    {816, true},
+    {817, false},
+    {818, true},
+    {819, false},
+    {820, true},
+    {821, true},
+    {822, true},
+    {823, true},
+    {824, true},
+    {825, true},
+    {826, true},
+    {827, true},
+    {828, true},
+    {829, true},
+    {830, true},
+    {831, true},
+    {832, true},
+    {833, false},
+    {834, false},
+    {835, true},
+    {836, true},
+    {837, true},
+    {838, true},
+    {839, false},
+    {840, false},
+    {841, true},
+    {842, false},
+    {843, true},
+    {844, false},
+    {845, false},
+    {846, true},
+    {847, true},
+    {848, true},
+    {849, true},
+    {850, true},
+    {851, true},
+    {852, true},
+    {853, true},
+    {854, true},
+    {855, true},
+    {856, true},
+    {857, true},
+    {858, true},
+    {859, true},
+    {860, true},
+    {861, true},
+    {862, true},
+    {863, true},
+    {864, true},
+    {865, true},
+    {866, true},
+    {867, true},
+    {868, false},
+    {869, true},
+    {870, false},
+    {871, false},
+    {872, false},
+    {873, true},
+    {874, true},
+    {875, false},
+    {876, false},
+    {877, false},
+    {878, false},
+    {879, true},
+    {880, true},
+    {881, true},
+    {882, true},
+    {883, true},
+    {884, true},
+    {885, true},
+    {886, true},
+    {887, true},
+    {888, true},
+    {889, true},
+    {890, true},
+    {891, true},
+    {892, true},
+    {893, true},
+    {894, false},
+    {895, false},
+    {896, true},
+    {897, true},
+    {898, true},
+    {899, true},
+    {900, false},
+    {901, true},
+    {902, true},
+    {903, false},
+    {904, false},
+    {905, true},
+    {906, true},
+    {907, true},
+    {908, false},
+    {909, false},
+    {910, false},
+    {911, true},
+    {912, false},
+    {913, false},
+    {914, true},
+    {915, true},
+    {916, true},
+    {917, true},
+    {918, true},
+    {919, true},
+    {920, true},
+    {921, true},
+    {922, true},
+    {923, true},
+    {924, true},
+    {925, true},
+    {926, true},
+    {927, true},
+    {928, true},
+};
+
+std::map <int, std::vector<std::vector<std::string>>> PATTERN_928_T_GATE_MAP = {
+    {1,	{
+            {"xT12"},
+        }
+    },
+    {2,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {3,	{
+            {"xT12"},
+        }
+    },
+    {4,	{
+            {"xT12"},
+        }
+    },
+    {5,	{
+            {"xT12"},
+        }
+    },
+    {6,	{
+            {"xT12"},
+        }
+    },
+    {7,	{
+            {"xT12"},
+        }
+    },
+    {8,	{
+            {"xT12"},
+        }
+    },
+    {9,	{
+            {"xT12"},
+        }
+    },
+    {10,	{
+            {"xT12"},
+        }
+    },
+    {11,	{
+            {"xT12"},
+        }
+    },
+    {12,	{
+            {"xT12"},
+        }
+    },
+    {13,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {14,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {15,	{
+            /* Invalid Pattern */
+        }
+    },
+    {16,	{
+            /* Invalid Pattern */
+        }
+    },
+    {17,	{
+            {"xT12"},
+        }
+    },
+    {18,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {19,	{
+            {"xT12"},
+        }
+    },
+    {20,	{
+            {"xT12"},
+        }
+    },
+    {21,	{
+            /* Invalid Pattern */
+        }
+    },
+    {22,	{
+            /* Invalid Pattern */
+        }
+    },
+    {23,	{
+            /* Invalid Pattern */
+        }
+    },
+    {24,	{
+            {"xT12"},
+        }
+    },
+    {25,	{
+            /* Invalid Pattern */
+        }
+    },
+    {26,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {27,	{
+            /* Invalid Pattern */
+        }
+    },
+    {28,	{
+            /* Invalid Pattern */
+        }
+    },
+    {29,	{
+            /* Invalid Pattern */
+        }
+    },
+    {30,	{
+            /* Invalid Pattern */
+        }
+    },
+    {31,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {32,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {33,	{
+            {"xT12"},
+        }
+    },
+    {34,	{
+            /* Invalid Pattern */
+        }
+    },
+    {35,	{
+            /* Invalid Pattern */
+        }
+    },
+    {36,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {37,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {38,	{
+            /* Invalid Pattern */
+        }
+    },
+    {39,	{
+            /* Invalid Pattern */
+        }
+    },
+    {40,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {41,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {42,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {43,	{
+            {"xT12"},
+        }
+    },
+    {44,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {45,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {46,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {47,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {48,	{
+            {"xT12"},
+        }
+    },
+    {49,	{
+            {"xT12"},
+        }
+    },
+    {50,	{
+            {"xT12"},
+        }
+    },
+    {51,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {52,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {53,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {54,	{
+            /* Invalid Pattern */
+        }
+    },
+    {55,	{
+            {"xT12"},
+        }
+    },
+    {56,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {57,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {58,	{
+            /* Invalid Pattern */
+        }
+    },
+    {59,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {60,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {61,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {62,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {63,	{
+            /* Invalid Pattern */
+        }
+    },
+    {64,	{
+            /* Invalid Pattern */
+        }
+    },
+    {65,	{
+            /* Invalid Pattern */
+        }
+    },
+    {66,	{
+            /* Invalid Pattern */
+        }
+    },
+    {67,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {68,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {69,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {70,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {71,	{
+            /* Invalid Pattern */
+        }
+    },
+    {72,	{
+            {"xT12"},
+        }
+    },
+    {73,	{
+            {"xT12"},
+        }
+    },
+    {74,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {75,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {76,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {77,	{
+            /* Invalid Pattern */
+        }
+    },
+    {78,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {79,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {80,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {81,	{
+            /* Invalid Pattern */
+        }
+    },
+    {82,	{
+            /* Invalid Pattern */
+        }
+    },
+    {83,	{
+            /* Invalid Pattern */
+        }
+    },
+    {84,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {85,	{
+            /* Invalid Pattern */
+        }
+    },
+    {86,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {87,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {88,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {89,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {90,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {91,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {92,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {93,	{
+            {"xT12"},
+        }
+    },
+    {94,	{
+            {"xT12"},
+        }
+    },
+    {95,	{
+            {"xT12"},
+        }
+    },
+    {96,	{
+            {"xT12"},
+        }
+    },
+    {97,	{
+            /* Invalid Pattern */
+        }
+    },
+    {98,	{
+            {"xT12"},
+        }
+    },
+    {99,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {100,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {101,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {102,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {103,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {104,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {105,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {106,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {107,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {108,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {109,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {110,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {111,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {112,	{
+            {"xT12"},
+        }
+    },
+    {113,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {114,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {115,	{
+            {"xT12"},
+        }
+    },
+    {116,	{
+            {"xT12"},
+        }
+    },
+    {117,	{
+            {"xT12"},
+        }
+    },
+    {118,	{
+            /* Invalid Pattern */
+        }
+    },
+    {119,	{
+            /* Invalid Pattern */
+        }
+    },
+    {120,	{
+            /* Invalid Pattern */
+        }
+    },
+    {121,	{
+            /* Invalid Pattern */
+        }
+    },
+    {122,	{
+            /* Invalid Pattern */
+        }
+    },
+    {123,	{
+            /* Invalid Pattern */
+        }
+    },
+    {124,	{
+            /* Invalid Pattern */
+        }
+    },
+    {125,	{
+            {"xT12"},
+        }
+    },
+    {126,	{
+            /* Invalid Pattern */
+        }
+    },
+    {127,	{
+            /* Invalid Pattern */
+        }
+    },
+    {128,	{
+            /* Invalid Pattern */
+        }
+    },
+    {129,	{
+            /* Invalid Pattern */
+        }
+    },
+    {130,	{
+            /* Invalid Pattern */
+        }
+    },
+    {131,	{
+            {"xT12"},
+        }
+    },
+    {132,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {133,	{
+            /* Invalid Pattern */
+        }
+    },
+    {134,	{
+            /* Invalid Pattern */
+        }
+    },
+    {135,	{
+            /* Invalid Pattern */
+        }
+    },
+    {136,	{
+            {"xT12"},
+        }
+    },
+    {137,	{
+            {"xT12"},
+        }
+    },
+    {138,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {139,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {140,	{
+            /* Invalid Pattern */
+        }
+    },
+    {141,	{
+            /* Invalid Pattern */
+        }
+    },
+    {142,	{
+            /* Invalid Pattern */
+        }
+    },
+    {143,	{
+            {"xT12"},
+        }
+    },
+    {144,	{
+            {"xT12"},
+        }
+    },
+    {145,	{
+            /* Invalid Pattern */
+        }
+    },
+    {146,	{
+            /* Invalid Pattern */
+        }
+    },
+    {147,	{
+            /* Invalid Pattern */
+        }
+    },
+    {148,	{
+            /* Invalid Pattern */
+        }
+    },
+    {149,	{
+            /* Invalid Pattern */
+        }
+    },
+    {150,	{
+            /* Invalid Pattern */
+        }
+    },
+    {151,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {152,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {153,	{
+            /* Invalid Pattern */
+        }
+    },
+    {154,	{
+            /* Invalid Pattern */
+        }
+    },
+    {155,	{
+            /* Invalid Pattern */
+        }
+    },
+    {156,	{
+            /* Invalid Pattern */
+        }
+    },
+    {157,	{
+            /* Invalid Pattern */
+        }
+    },
+    {158,	{
+            /* Invalid Pattern */
+        }
+    },
+    {159,	{
+            /* Invalid Pattern */
+        }
+    },
+    {160,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {161,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {162,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {163,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {164,	{
+            /* Invalid Pattern */
+        }
+    },
+    {165,	{
+            /* Invalid Pattern */
+        }
+    },
+    {166,	{
+            /* Invalid Pattern */
+        }
+    },
+    {167,	{
+            /* Invalid Pattern */
+        }
+    },
+    {168,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {169,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {170,	{
+            /* Invalid Pattern */
+        }
+    },
+    {171,	{
+            /* Invalid Pattern */
+        }
+    },
+    {172,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {173,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {174,	{
+            /* Invalid Pattern */
+        }
+    },
+    {175,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {176,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {177,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {178,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {179,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {180,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {181,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {182,	{
+            /* Invalid Pattern */
+        }
+    },
+    {183,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {184,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {185,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {186,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {187,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {188,	{
+            {"xT12"},
+        }
+    },
+    {189,	{
+            {"xT12"},
+        }
+    },
+    {190,	{
+            {"xT12"},
+        }
+    },
+    {191,	{
+            {"xT12"},
+        }
+    },
+    {192,	{
+            {"xT12"},
+        }
+    },
+    {193,	{
+            /* Invalid Pattern */
+        }
+    },
+    {194,	{
+            {"xT12"},
+        }
+    },
+    {195,	{
+            /* Invalid Pattern */
+        }
+    },
+    {196,	{
+            /* Invalid Pattern */
+        }
+    },
+    {197,	{
+            {"xT12"},
+        }
+    },
+    {198,	{
+            {"xT12"},
+        }
+    },
+    {199,	{
+            /* Invalid Pattern */
+        }
+    },
+    {200,	{
+            /* Invalid Pattern */
+        }
+    },
+    {201,	{
+            /* Invalid Pattern */
+        }
+    },
+    {202,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {203,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {204,	{
+            /* Invalid Pattern */
+        }
+    },
+    {205,	{
+            /* Invalid Pattern */
+        }
+    },
+    {206,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {207,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {208,	{
+            /* Invalid Pattern */
+        }
+    },
+    {209,	{
+            /* Invalid Pattern */
+        }
+    },
+    {210,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {211,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {212,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {213,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {214,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {215,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {216,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {217,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {218,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {219,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {220,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {221,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {222,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {223,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {224,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {225,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {226,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {227,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {228,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {229,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {230,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {231,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {232,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {233,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {234,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {235,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {236,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {237,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {238,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {239,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {240,	{
+            /* Invalid Pattern */
+        }
+    },
+    {241,	{
+            /* Invalid Pattern */
+        }
+    },
+    {242,	{
+            /* Invalid Pattern */
+        }
+    },
+    {243,	{
+            /* Invalid Pattern */
+        }
+    },
+    {244,	{
+            /* Invalid Pattern */
+        }
+    },
+    {245,	{
+            /* Invalid Pattern */
+        }
+    },
+    {246,	{
+            /* Invalid Pattern */
+        }
+    },
+    {247,	{
+            /* Invalid Pattern */
+        }
+    },
+    {248,	{
+            /* Invalid Pattern */
+        }
+    },
+    {249,	{
+            /* Invalid Pattern */
+        }
+    },
+    {250,	{
+            /* Invalid Pattern */
+        }
+    },
+    {251,	{
+            /* Invalid Pattern */
+        }
+    },
+    {252,	{
+            /* Invalid Pattern */
+        }
+    },
+    {253,	{
+            /* Invalid Pattern */
+        }
+    },
+    {254,	{
+            /* Invalid Pattern */
+        }
+    },
+    {255,	{
+            /* Invalid Pattern */
+        }
+    },
+    {256,	{
+            /* Invalid Pattern */
+        }
+    },
+    {257,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {258,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {259,	{
+            {"xT12"},
+        }
+    },
+    {260,	{
+            /* Invalid Pattern */
+        }
+    },
+    {261,	{
+            /* Invalid Pattern */
+        }
+    },
+    {262,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {263,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {264,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {265,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {266,	{
+            {"xT12"},
+        }
+    },
+    {267,	{
+            {"xT12"},
+        }
+    },
+    {268,	{
+            /* Invalid Pattern */
+        }
+    },
+    {269,	{
+            /* Invalid Pattern */
+        }
+    },
+    {270,	{
+            /* Invalid Pattern */
+        }
+    },
+    {271,	{
+            /* Invalid Pattern */
+        }
+    },
+    {272,	{
+            /* Invalid Pattern */
+        }
+    },
+    {273,	{
+            /* Invalid Pattern */
+        }
+    },
+    {274,	{
+            /* Invalid Pattern */
+        }
+    },
+    {275,	{
+            /* Invalid Pattern */
+        }
+    },
+    {276,	{
+            /* Invalid Pattern */
+        }
+    },
+    {277,	{
+            /* Invalid Pattern */
+        }
+    },
+    {278,	{
+            /* Invalid Pattern */
+        }
+    },
+    {279,	{
+            /* Invalid Pattern */
+        }
+    },
+    {280,	{
+            /* Invalid Pattern */
+        }
+    },
+    {281,	{
+            /* Invalid Pattern */
+        }
+    },
+    {282,	{
+            /* Invalid Pattern */
+        }
+    },
+    {283,	{
+            /* Invalid Pattern */
+        }
+    },
+    {284,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {285,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {286,	{
+            /* Invalid Pattern */
+        }
+    },
+    {287,	{
+            /* Invalid Pattern */
+        }
+    },
+    {288,	{
+            /* Invalid Pattern */
+        }
+    },
+    {289,	{
+            /* Invalid Pattern */
+        }
+    },
+    {290,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {291,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {292,	{
+            /* Invalid Pattern */
+        }
+    },
+    {293,	{
+            /* Invalid Pattern */
+        }
+    },
+    {294,	{
+            /* Invalid Pattern */
+        }
+    },
+    {295,	{
+            /* Invalid Pattern */
+        }
+    },
+    {296,	{
+            /* Invalid Pattern */
+        }
+    },
+    {297,	{
+            /* Invalid Pattern */
+        }
+    },
+    {298,	{
+            /* Invalid Pattern */
+        }
+    },
+    {299,	{
+            /* Invalid Pattern */
+        }
+    },
+    {300,	{
+            /* Invalid Pattern */
+        }
+    },
+    {301,	{
+            /* Invalid Pattern */
+        }
+    },
+    {302,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {303,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {304,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {305,	{
+            /* Invalid Pattern */
+        }
+    },
+    {306,	{
+            /* Invalid Pattern */
+        }
+    },
+    {307,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {308,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {309,	{
+            /* Invalid Pattern */
+        }
+    },
+    {310,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {311,	{
+            /* Invalid Pattern */
+        }
+    },
+    {312,	{
+            /* Invalid Pattern */
+        }
+    },
+    {313,	{
+            /* Invalid Pattern */
+        }
+    },
+    {314,	{
+            /* Invalid Pattern */
+        }
+    },
+    {315,	{
+            /* Invalid Pattern */
+        }
+    },
+    {316,	{
+            /* Invalid Pattern */
+        }
+    },
+    {317,	{
+            /* Invalid Pattern */
+        }
+    },
+    {318,	{
+            /* Invalid Pattern */
+        }
+    },
+    {319,	{
+            /* Invalid Pattern */
+        }
+    },
+    {320,	{
+            /* Invalid Pattern */
+        }
+    },
+    {321,	{
+            /* Invalid Pattern */
+        }
+    },
+    {322,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {323,	{
+            /* Invalid Pattern */
+        }
+    },
+    {324,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {325,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {326,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {327,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {328,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {329,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {330,	{
+            /* Invalid Pattern */
+        }
+    },
+    {331,	{
+            /* Invalid Pattern */
+        }
+    },
+    {332,	{
+            /* Invalid Pattern */
+        }
+    },
+    {333,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {334,	{
+            /* Invalid Pattern */
+        }
+    },
+    {335,	{
+            /* Invalid Pattern */
+        }
+    },
+    {336,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {337,	{
+            /* Invalid Pattern */
+        }
+    },
+    {338,	{
+            /* Invalid Pattern */
+        }
+    },
+    {339,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {340,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {341,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {342,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {343,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {344,	{
+            /* Invalid Pattern */
+        }
+    },
+    {345,	{
+            /* Invalid Pattern */
+        }
+    },
+    {346,	{
+            {"xT12"},
+        }
+    },
+    {347,	{
+            {"xT12"},
+        }
+    },
+    {348,	{
+            /* Invalid Pattern */
+        }
+    },
+    {349,	{
+            /* Invalid Pattern */
+        }
+    },
+    {350,	{
+            /* Invalid Pattern */
+        }
+    },
+    {351,	{
+            /* Invalid Pattern */
+        }
+    },
+    {352,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {353,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {354,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {355,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {356,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {357,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {358,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {359,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {360,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {361,	{
+            /* Invalid Pattern */
+        }
+    },
+    {362,	{
+            /* Invalid Pattern */
+        }
+    },
+    {363,	{
+            /* Invalid Pattern */
+        }
+    },
+    {364,	{
+            /* Invalid Pattern */
+        }
+    },
+    {365,	{
+            {"xT12"},
+        }
+    },
+    {366,	{
+            {"xT12"},
+        }
+    },
+    {367,	{
+            /* Invalid Pattern */
+        }
+    },
+    {368,	{
+            {"xT12"},
+        }
+    },
+    {369,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {370,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {371,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {372,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {373,	{
+            /* Invalid Pattern */
+        }
+    },
+    {374,	{
+            /* Invalid Pattern */
+        }
+    },
+    {375,	{
+            /* Invalid Pattern */
+        }
+    },
+    {376,	{
+            /* Invalid Pattern */
+        }
+    },
+    {377,	{
+            /* Invalid Pattern */
+        }
+    },
+    {378,	{
+            /* Invalid Pattern */
+        }
+    },
+    {379,	{
+            /* Invalid Pattern */
+        }
+    },
+    {380,	{
+            /* Invalid Pattern */
+        }
+    },
+    {381,	{
+            /* Invalid Pattern */
+        }
+    },
+    {382,	{
+            /* Invalid Pattern */
+        }
+    },
+    {383,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {384,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {385,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {386,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {387,	{
+            /* Invalid Pattern */
+        }
+    },
+    {388,	{
+            /* Invalid Pattern */
+        }
+    },
+    {389,	{
+            /* Invalid Pattern */
+        }
+    },
+    {390,	{
+            /* Invalid Pattern */
+        }
+    },
+    {391,	{
+            /* Invalid Pattern */
+        }
+    },
+    {392,	{
+            /* Invalid Pattern */
+        }
+    },
+    {393,	{
+            /* Invalid Pattern */
+        }
+    },
+    {394,	{
+            /* Invalid Pattern */
+        }
+    },
+    {395,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {396,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {397,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {398,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {399,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {400,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {401,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {402,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {403,	{
+            {"xT12"},
+        }
+    },
+    {404,	{
+            {"xT12"},
+        }
+    },
+    {405,	{
+            {"xT12"},
+        }
+    },
+    {406,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {407,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {408,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {409,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {410,	{
+            /* Invalid Pattern */
+        }
+    },
+    {411,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {412,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {413,	{
+            /* Invalid Pattern */
+        }
+    },
+    {414,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {415,	{
+            /* Invalid Pattern */
+        }
+    },
+    {416,	{
+            /* Invalid Pattern */
+        }
+    },
+    {417,	{
+            /* Invalid Pattern */
+        }
+    },
+    {418,	{
+            /* Invalid Pattern */
+        }
+    },
+    {419,	{
+            /* Invalid Pattern */
+        }
+    },
+    {420,	{
+            /* Invalid Pattern */
+        }
+    },
+    {421,	{
+            /* Invalid Pattern */
+        }
+    },
+    {422,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {423,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {424,	{
+            /* Invalid Pattern */
+        }
+    },
+    {425,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {426,	{
+            /* Invalid Pattern */
+        }
+    },
+    {427,	{
+            /* Invalid Pattern */
+        }
+    },
+    {428,	{
+            /* Invalid Pattern */
+        }
+    },
+    {429,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {430,	{
+            /* Invalid Pattern */
+        }
+    },
+    {431,	{
+            /* Invalid Pattern */
+        }
+    },
+    {432,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {433,	{
+            /* Invalid Pattern */
+        }
+    },
+    {434,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {435,	{
+            /* Invalid Pattern */
+        }
+    },
+    {436,	{
+            /* Invalid Pattern */
+        }
+    },
+    {437,	{
+            /* Invalid Pattern */
+        }
+    },
+    {438,	{
+            /* Invalid Pattern */
+        }
+    },
+    {439,	{
+            /* Invalid Pattern */
+        }
+    },
+    {440,	{
+            /* Invalid Pattern */
+        }
+    },
+    {441,	{
+            /* Invalid Pattern */
+        }
+    },
+    {442,	{
+            /* Invalid Pattern */
+        }
+    },
+    {443,	{
+            /* Invalid Pattern */
+        }
+    },
+    {444,	{
+            /* Invalid Pattern */
+        }
+    },
+    {445,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {446,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {447,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {448,	{
+            {"xT12"},
+        }
+    },
+    {449,	{
+            {"xT12"},
+        }
+    },
+    {450,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {451,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {452,	{
+            /* Invalid Pattern */
+        }
+    },
+    {453,	{
+            /* Invalid Pattern */
+        }
+    },
+    {454,	{
+            /* Invalid Pattern */
+        }
+    },
+    {455,	{
+            /* Invalid Pattern */
+        }
+    },
+    {456,	{
+            /* Invalid Pattern */
+        }
+    },
+    {457,	{
+            /* Invalid Pattern */
+        }
+    },
+    {458,	{
+            /* Invalid Pattern */
+        }
+    },
+    {459,	{
+            /* Invalid Pattern */
+        }
+    },
+    {460,	{
+            /* Invalid Pattern */
+        }
+    },
+    {461,	{
+            /* Invalid Pattern */
+        }
+    },
+    {462,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {463,	{
+            /* Invalid Pattern */
+        }
+    },
+    {464,	{
+            /* Invalid Pattern */
+        }
+    },
+    {465,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {466,	{
+            /* Invalid Pattern */
+        }
+    },
+    {467,	{
+            /* Invalid Pattern */
+        }
+    },
+    {468,	{
+            /* Invalid Pattern */
+        }
+    },
+    {469,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {470,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {471,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {472,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {473,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {474,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {475,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {476,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {477,	{
+            /* Invalid Pattern */
+        }
+    },
+    {478,	{
+            /* Invalid Pattern */
+        }
+    },
+    {479,	{
+            /* Invalid Pattern */
+        }
+    },
+    {480,	{
+            /* Invalid Pattern */
+        }
+    },
+    {481,	{
+            /* Invalid Pattern */
+        }
+    },
+    {482,	{
+            /* Invalid Pattern */
+        }
+    },
+    {483,	{
+            /* Invalid Pattern */
+        }
+    },
+    {484,	{
+            /* Invalid Pattern */
+        }
+    },
+    {485,	{
+            /* Invalid Pattern */
+        }
+    },
+    {486,	{
+            /* Invalid Pattern */
+        }
+    },
+    {487,	{
+            /* Invalid Pattern */
+        }
+    },
+    {488,	{
+            /* Invalid Pattern */
+        }
+    },
+    {489,	{
+            /* Invalid Pattern */
+        }
+    },
+    {490,	{
+            /* Invalid Pattern */
+        }
+    },
+    {491,	{
+            /* Invalid Pattern */
+        }
+    },
+    {492,	{
+            /* Invalid Pattern */
+        }
+    },
+    {493,	{
+            /* Invalid Pattern */
+        }
+    },
+    {494,	{
+            /* Invalid Pattern */
+        }
+    },
+    {495,	{
+            /* Invalid Pattern */
+        }
+    },
+    {496,	{
+            /* Invalid Pattern */
+        }
+    },
+    {497,	{
+            /* Invalid Pattern */
+        }
+    },
+    {498,	{
+            /* Invalid Pattern */
+        }
+    },
+    {499,	{
+            /* Invalid Pattern */
+        }
+    },
+    {500,	{
+            /* Invalid Pattern */
+        }
+    },
+    {501,	{
+            {"xT12"},
+        }
+    },
+    {502,	{
+            {"xT12"},
+        }
+    },
+    {503,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {504,	{
+            /* Invalid Pattern */
+        }
+    },
+    {505,	{
+            /* Invalid Pattern */
+        }
+    },
+    {506,	{
+            /* Invalid Pattern */
+        }
+    },
+    {507,	{
+            /* Invalid Pattern */
+        }
+    },
+    {508,	{
+            /* Invalid Pattern */
+        }
+    },
+    {509,	{
+            /* Invalid Pattern */
+        }
+    },
+    {510,	{
+            /* Invalid Pattern */
+        }
+    },
+    {511,	{
+            /* Invalid Pattern */
+        }
+    },
+    {512,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {513,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {514,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {515,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {516,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {517,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {518,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {519,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {520,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {521,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {522,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {523,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {524,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {525,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {526,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {527,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {528,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {529,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {530,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {531,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {532,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {533,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {534,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {535,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {536,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {537,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {538,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {539,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {540,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {541,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {542,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {543,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {544,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {545,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {546,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {547,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {548,	{
+            /* Invalid Pattern */
+        }
+    },
+    {549,	{
+            /* Invalid Pattern */
+        }
+    },
+    {550,	{
+            /* Invalid Pattern */
+        }
+    },
+    {551,	{
+            /* Invalid Pattern */
+        }
+    },
+    {552,	{
+            /* Invalid Pattern */
+        }
+    },
+    {553,	{
+            /* Invalid Pattern */
+        }
+    },
+    {554,	{
+            /* Invalid Pattern */
+        }
+    },
+    {555,	{
+            /* Invalid Pattern */
+        }
+    },
+    {556,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {557,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {558,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {559,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {560,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {561,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {562,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {563,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {564,	{
+            /* Invalid Pattern */
+        }
+    },
+    {565,	{
+            /* Invalid Pattern */
+        }
+    },
+    {566,	{
+            /* Invalid Pattern */
+        }
+    },
+    {567,	{
+            /* Invalid Pattern */
+        }
+    },
+    {568,	{
+            /* Invalid Pattern */
+        }
+    },
+    {569,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {570,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {571,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {572,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {573,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {574,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {575,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {576,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {577,	{
+            /* Invalid Pattern */
+        }
+    },
+    {578,	{
+            /* Invalid Pattern */
+        }
+    },
+    {579,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT56"},
+        }
+    },
+    {580,	{
+            /* Invalid Pattern */
+        }
+    },
+    {581,	{
+            /* Invalid Pattern */
+        }
+    },
+    {582,	{
+            /* Invalid Pattern */
+        }
+    },
+    {583,	{
+            /* Invalid Pattern */
+        }
+    },
+    {584,	{
+            /* Invalid Pattern */
+        }
+    },
+    {585,	{
+            /* Invalid Pattern */
+        }
+    },
+    {586,	{
+            /* Invalid Pattern */
+        }
+    },
+    {587,	{
+            /* Invalid Pattern */
+        }
+    },
+    {588,	{
+            /* Invalid Pattern */
+        }
+    },
+    {589,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {590,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {591,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {592,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {593,	{
+            /* Invalid Pattern */
+        }
+    },
+    {594,	{
+            /* Invalid Pattern */
+        }
+    },
+    {595,	{
+            /* Invalid Pattern */
+        }
+    },
+    {596,	{
+            /* Invalid Pattern */
+        }
+    },
+    {597,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {598,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {599,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {600,	{
+            {"xT12"},
+        }
+    },
+    {601,	{
+            {"xT12"},
+        }
+    },
+    {602,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {603,	{
+            /* Invalid Pattern */
+        }
+    },
+    {604,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {605,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {606,	{
+            /* Invalid Pattern */
+        }
+    },
+    {607,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {608,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {609,	{
+            /* Invalid Pattern */
+        }
+    },
+    {610,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {611,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {612,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {613,	{
+            /* Invalid Pattern */
+        }
+    },
+    {614,	{
+            /* Invalid Pattern */
+        }
+    },
+    {615,	{
+            /* Invalid Pattern */
+        }
+    },
+    {616,	{
+            /* Invalid Pattern */
+        }
+    },
+    {617,	{
+            /* Invalid Pattern */
+        }
+    },
+    {618,	{
+            /* Invalid Pattern */
+        }
+    },
+    {619,	{
+            /* Invalid Pattern */
+        }
+    },
+    {620,	{
+            /* Invalid Pattern */
+        }
+    },
+    {621,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {622,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {623,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {624,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {625,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {626,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {627,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {628,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {629,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {630,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {631,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {632,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {633,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {634,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {635,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {636,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {637,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {638,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {639,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {640,	{
+            /* Invalid Pattern */
+        }
+    },
+    {641,	{
+            /* Invalid Pattern */
+        }
+    },
+    {642,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {643,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {644,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {645,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {646,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {647,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {648,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {649,	{
+            /* Invalid Pattern */
+        }
+    },
+    {650,	{
+            /* Invalid Pattern */
+        }
+    },
+    {651,	{
+            /* Invalid Pattern */
+        }
+    },
+    {652,	{
+            /* Invalid Pattern */
+        }
+    },
+    {653,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {654,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {655,	{
+            {"xT12"},
+        }
+    },
+    {656,	{
+            /* Invalid Pattern */
+        }
+    },
+    {657,	{
+            /* Invalid Pattern */
+        }
+    },
+    {658,	{
+            /* Invalid Pattern */
+        }
+    },
+    {659,	{
+            /* Invalid Pattern */
+        }
+    },
+    {660,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {661,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {662,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {663,	{
+            /* Invalid Pattern */
+        }
+    },
+    {664,	{
+            /* Invalid Pattern */
+        }
+    },
+    {665,	{
+            /* Invalid Pattern */
+        }
+    },
+    {666,	{
+            /* Invalid Pattern */
+        }
+    },
+    {667,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {668,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {669,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {670,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {671,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {672,	{
+            /* Invalid Pattern */
+        }
+    },
+    {673,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {674,	{
+            /* Invalid Pattern */
+        }
+    },
+    {675,	{
+            /* Invalid Pattern */
+        }
+    },
+    {676,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {677,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {678,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {679,	{
+            {"xT12"},
+        }
+    },
+    {680,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {681,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {682,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {683,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {684,	{
+            /* Invalid Pattern */
+        }
+    },
+    {685,	{
+            /* Invalid Pattern */
+        }
+    },
+    {686,	{
+            /* Invalid Pattern */
+        }
+    },
+    {687,	{
+            /* Invalid Pattern */
+        }
+    },
+    {688,	{
+            /* Invalid Pattern */
+        }
+    },
+    {689,	{
+            /* Invalid Pattern */
+        }
+    },
+    {690,	{
+            /* Invalid Pattern */
+        }
+    },
+    {691,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {692,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+            {"T12x"},
+            {"T34x"},
+            {"T12x", "T34x"},
+        }
+    },
+    {693,	{
+            {"xT12"},
+        }
+    },
+    {694,	{
+            {"xT12"},
+        }
+    },
+    {695,	{
+            /* Invalid Pattern */
+        }
+    },
+    {696,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {697,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {698,	{
+            /* Invalid Pattern */
+        }
+    },
+    {699,	{
+            /* Invalid Pattern */
+        }
+    },
+    {700,	{
+            {"xT12"},
+        }
+    },
+    {701,	{
+            {"xT12"},
+        }
+    },
+    {702,	{
+            {"xT12"},
+        }
+    },
+    {703,	{
+            /* Invalid Pattern */
+        }
+    },
+    {704,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {705,	{
+            {"xT12"},
+        }
+    },
+    {706,	{
+            {"xT12"},
+        }
+    },
+    {707,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {708,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {709,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {710,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {711,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {712,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {713,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {714,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {715,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {716,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {717,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {718,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {719,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {720,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {721,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {722,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {723,	{
+            /* Invalid Pattern */
+        }
+    },
+    {724,	{
+            /* Invalid Pattern */
+        }
+    },
+    {725,	{
+            /* Invalid Pattern */
+        }
+    },
+    {726,	{
+            /* Invalid Pattern */
+        }
+    },
+    {727,	{
+            /* Invalid Pattern */
+        }
+    },
+    {728,	{
+            /* Invalid Pattern */
+        }
+    },
+    {729,	{
+            /* Invalid Pattern */
+        }
+    },
+    {730,	{
+            /* Invalid Pattern */
+        }
+    },
+    {731,	{
+            /* Invalid Pattern */
+        }
+    },
+    {732,	{
+            /* Invalid Pattern */
+        }
+    },
+    {733,	{
+            /* Invalid Pattern */
+        }
+    },
+    {734,	{
+            /* Invalid Pattern */
+        }
+    },
+    {735,	{
+            /* Invalid Pattern */
+        }
+    },
+    {736,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {737,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {738,	{
+            /* Invalid Pattern */
+        }
+    },
+    {739,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {740,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {741,	{
+            /* Invalid Pattern */
+        }
+    },
+    {742,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {743,	{
+            /* Invalid Pattern */
+        }
+    },
+    {744,	{
+            /* Invalid Pattern */
+        }
+    },
+    {745,	{
+            /* Invalid Pattern */
+        }
+    },
+    {746,	{
+            /* Invalid Pattern */
+        }
+    },
+    {747,	{
+            /* Invalid Pattern */
+        }
+    },
+    {748,	{
+            /* Invalid Pattern */
+        }
+    },
+    {749,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {750,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {751,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {752,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {753,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {754,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {755,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {756,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {757,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {758,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {759,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {760,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {761,	{
+            /* Invalid Pattern */
+        }
+    },
+    {762,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {763,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {764,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {765,	{
+            {"xT12"},
+        }
+    },
+    {766,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {767,	{
+            {"xT12"},
+        }
+    },
+    {768,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {769,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {770,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {771,	{
+            /* Invalid Pattern */
+        }
+    },
+    {772,	{
+            /* Invalid Pattern */
+        }
+    },
+    {773,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {774,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {775,	{
+            /* Invalid Pattern */
+        }
+    },
+    {776,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {777,	{
+            /* Invalid Pattern */
+        }
+    },
+    {778,	{
+            /* Invalid Pattern */
+        }
+    },
+    {779,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {780,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {781,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {782,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {783,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {784,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {785,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {786,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {787,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {788,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {789,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {790,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {791,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {792,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {793,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {794,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {795,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {796,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {797,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {798,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {799,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {800,	{
+            /* Invalid Pattern */
+        }
+    },
+    {801,	{
+            /* Invalid Pattern */
+        }
+    },
+    {802,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {803,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {804,	{
+            /* Invalid Pattern */
+        }
+    },
+    {805,	{
+            /* Invalid Pattern */
+        }
+    },
+    {806,	{
+            /* Invalid Pattern */
+        }
+    },
+    {807,	{
+            /* Invalid Pattern */
+        }
+    },
+    {808,	{
+            /* Invalid Pattern */
+        }
+    },
+    {809,	{
+            /* Invalid Pattern */
+        }
+    },
+    {810,	{
+            /* Invalid Pattern */
+        }
+    },
+    {811,	{
+            /* Invalid Pattern */
+        }
+    },
+    {812,	{
+            /* Invalid Pattern */
+        }
+    },
+    {813,	{
+            /* Invalid Pattern */
+        }
+    },
+    {814,	{
+            /* Invalid Pattern */
+        }
+    },
+    {815,	{
+            /* Invalid Pattern */
+        }
+    },
+    {816,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {817,	{
+            /* Invalid Pattern */
+        }
+    },
+    {818,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {819,	{
+            /* Invalid Pattern */
+        }
+    },
+    {820,	{
+            {"xT12", "xT34", "xT56"},
+            {"T12x", "T34x", "T56x"},
+        }
+    },
+    {821,	{
+            {"xT12", "xT34", "xT56"},
+            {"T12x", "T34x", "T56x"},
+        }
+    },
+    {822,	{
+            {"xT12", "xT34", "xT56"},
+            {"T12x", "T34x", "T56x"},
+        }
+    },
+    {823,	{
+            {"xT12", "xT34", "xT56"},
+            {"T12x", "T34x", "T56x"},
+        }
+    },
+    {824,	{
+            {"xT12", "xT34", "xT56"},
+            {"T12x", "T34x", "T56x"},
+        }
+    },
+    {825,	{
+            {"xT12", "xT34", "xT56"},
+            {"T12x", "T34x", "T56x"},
+        }
+    },
+    {826,	{
+            {"xT12", "xT34", "xT56"},
+            {"T12x", "T34x", "T56x"},
+        }
+    },
+    {827,	{
+            {"xT12", "xT34", "xT56"},
+            {"T12x", "T34x", "T56x"},
+        }
+    },
+    {828,	{
+            {"xT12", "xT34", "xT56"},
+            {"T12x", "T34x", "T56x"},
+        }
+    },
+    {829,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {830,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {831,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {832,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {833,	{
+            /* Invalid Pattern */
+        }
+    },
+    {834,	{
+            /* Invalid Pattern */
+        }
+    },
+    {835,	{
+            {"xT12"},
+        }
+    },
+    {836,	{
+            {"xT12"},
+        }
+    },
+    {837,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {838,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {839,	{
+            /* Invalid Pattern */
+        }
+    },
+    {840,	{
+            /* Invalid Pattern */
+        }
+    },
+    {841,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {842,	{
+            /* Invalid Pattern */
+        }
+    },
+    {843,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {844,	{
+            /* Invalid Pattern */
+        }
+    },
+    {845,	{
+            /* Invalid Pattern */
+        }
+    },
+    {846,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {847,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {848,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {849,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {850,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {851,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {852,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {853,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {854,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {855,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {856,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {857,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {858,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {859,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {860,	{
+            /* FILL THESE IN */
+        }
+    },
+    {861,	{
+            /* FILL THESE IN */
+        }
+    },
+    {862,	{
+            /* FILL THESE IN */
+        }
+    },
+    {863,	{
+            /* FILL THESE IN */
+        }
+    },
+    {864,	{
+            /* FILL THESE IN */
+        }
+    },
+    {865,	{
+            /* FILL THESE IN */
+        }
+    },
+    {866,	{
+            /* FILL THESE IN */
+        }
+    },
+    {867,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {868,	{
+            /* Invalid Pattern */
+        }
+    },
+    {869,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+            {"T12x", "T34x"},
+            {"T13x", "T24x"},
+            {"T14x", "T23x"},
+        }
+    },
+    {870,	{
+            /* Invalid Pattern */
+        }
+    },
+    {871,	{
+            /* Invalid Pattern */
+        }
+    },
+    {872,	{
+            /* Invalid Pattern */
+        }
+    },
+    {873,	{
+            {"xT12"},
+        }
+    },
+    {874,	{
+            {"xT12"},
+        }
+    },
+    {875,	{
+            /* Invalid Pattern */
+        }
+    },
+    {876,	{
+            /* Invalid Pattern */
+        }
+    },
+    {877,	{
+            /* Invalid Pattern */
+        }
+    },
+    {878,	{
+            /* Invalid Pattern */
+        }
+    },
+    {879,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {880,	{
+            {"xT13", "xT24", "T35x", "T46x"},
+        }
+    },
+    {881,	{
+            {"xT13", "xT24", "T35x", "T46x"},
+        }
+    },
+    {882,	{
+            {"xT13", "xT24", "T35x", "T46x"},
+        }
+    },
+    {883,	{
+            {"xT13", "xT24", "T35x", "T46x"},
+        }
+    },
+    {884,	{
+            {"xT13", "xT24", "T36x", "T45x"},
+        }
+    },
+    {885,	{
+            {"xT13", "xT24", "T36x", "T45x"},
+        }
+    },
+    {886,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {887,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {888,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {889,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {890,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {891,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {892,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {893,	{
+            {"T12x"},
+            {"T34x"},
+            {"xT12"},
+        }
+    },
+    {894,	{
+            /* Invalid Pattern */
+        }
+    },
+    {895,	{
+            /* Invalid Pattern */
+        }
+    },
+    {896,	{
+            {"xT12"},
+        }
+    },
+    {897,	{
+            {"xT12"},
+        }
+    },
+    {898,	{
+            {"xT12"},
+            {"T12x"},
+        }
+    },
+    {899,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {900,	{
+            /* Invalid Pattern */
+        }
+    },
+    {901,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {902,	{
+            {"xT12"},
+        }
+    },
+    {903,	{
+            /* Invalid Pattern */
+        }
+    },
+    {904,	{
+            /* Invalid Pattern */
+        }
+    },
+    {905,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {906,	{
+            {"xT12"},
+        }
+    },
+    {907,	{
+            {"xT12"},
+            {"xT34"},
+            {"xT12", "xT34"},
+        }
+    },
+    {908,	{
+            /* Invalid Pattern */
+        }
+    },
+    {909,	{
+            /* Invalid Pattern */
+        }
+    },
+    {910,	{
+            /* Invalid Pattern */
+        }
+    },
+    {911,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {912,	{
+            /* Invalid Pattern */
+        }
+    },
+    {913,	{
+            /* Invalid Pattern */
+        }
+    },
+    {914,	{
+            {"xT12", "xT34"},
+            {"xT13", "xT24"},
+            {"xT14", "xT23"},
+        }
+    },
+    {915,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {916,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {917,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {918,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {919,	{
+            {"xT12", "xT34", "xT56"},
+            {"T12x", "T34x", "T56x"},
+        }
+    },
+    {920,	{
+            {"xT12", "xT34", "xT56"},
+            {"T12x", "T34x", "T56x"},
+        }
+    },
+    {921,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {922,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {923,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
+    {924,	{
+            /* FILL THESE IN */
+        }
+    },
+    {925,	{
+            /* FILL THESE IN */
+        }
+    },
+    {926,	{
+            {"xT13", "xT24", "T35x", "T46x"},
+        }
+    },
+    {927,	{
+            {"xT13", "xT24", "T35x", "T46x"},
+        }
+    },
+    {928,	{
+            {"xT12", "xT34", "xT56"},
+        }
+    },
 };
