@@ -120,6 +120,7 @@ class patternMatrix {
         void printCountCols(std::ostream& os);
         // Get a list of T-Gate operations applied
         std::string printTGateOperations();
+        std::string printTGateOperationSets();
         std::string getMaxOfPossibleValues();
         bool possibleValuesLeadToAllPatterns();
         void generateAllPossibleValuePatterns();

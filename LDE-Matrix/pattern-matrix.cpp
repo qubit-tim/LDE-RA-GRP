@@ -619,6 +619,18 @@ std::string patternMatrix::printTGateOperations() {
     return os.str();
 }
 
+std::string patternMatrix::printTGateOperationSets() {
+    std::ostringstream os;
+    for (int i = 0; i < tGateOperationSets.size(); i++) {
+        for (int j = 0; j < tGateOperationSets[i].size(); j++) {
+            os << tGateOperationSets[i][j];
+            if(j != tGateOperationSets[i].size()-1) os << ",";
+        }
+        if(i != tGateOperationSets.size()-1) os << " ";
+    }
+    return os.str();
+}
+
 std::string patternMatrix::getMaxOfPossibleValues() {
     std::string maxValues = "";
     for (int i = 0; i < rows; i++) {

@@ -443,6 +443,41 @@ void dedupPossiblePatternAllGatesRunByCase(int caseNumber) {
 }
 
 int main(int argc, char **argv) {
+    for (int i = 1; i <= 928; i++) {
+        patternMatrix pm = patternMatrix(i);
+        if (pm.findAllTGateOptions()) {
+            std::cout << "{" << i << ",\t{" << std::endl;
+            if (PATTERN_928_VALIDITY[i]) {
+                if (pm.tGateOperationSets.size() > 0) {
+                    for (auto tGateOps : pm.tGateOperationSets) {
+                        std::cout << "\t\t{";
+                        for (size_t j = 0; j < tGateOps.size(); j++) {
+                            std::cout << "\"" << tGateOps[j] << "\"";
+                            if (j < tGateOps.size() - 1) {
+                                std::cout << ", ";
+                            }
+                        }
+                        std::cout << "}," << std::endl;
+                    }
+                } else {
+                    std::cout << "\t\t/* FILL THESE IN */" << std::endl;
+                }
+            } else {
+                std::cout << "\t\t/* Invalid Pattern */" << std::endl;
+            }
+            std::cout << "\t}" << std::endl;
+            std::cout << "}," << std::endl;
+        } else {
+            std::cout << "Pattern " << i << " does not have T-Gate options." << std::endl;
+        }
+        // Needs to look like this:
+        /*
+        {1, {
+                {"xT12"},
+            }
+        },
+        */
+    }
     // Create subcase groupings of patterns based on both the valid patterns and invalid patterns
     //   An example is of case 2 in the overleaf document where c2 g1 -> all c2
 
@@ -482,6 +517,7 @@ int main(int argc, char **argv) {
     ppLogOutput.close();
     return 0;
     */
+    /*
     std::vector<std::future<void>> futures;
     for (int i = 1; i <= 8; i++) {
         std::cout << "Running case " << i << std::endl;
@@ -491,6 +527,7 @@ int main(int argc, char **argv) {
     for (auto &f : futures) {
         f.wait();
     }
+    */
     /*
     for (int i=1; i <= 8; i++) {
         std::string caseString = "Case: " + std::to_string(i);
